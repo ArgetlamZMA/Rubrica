@@ -117,6 +117,8 @@ internal sealed class LocalServer : IDisposable
         IOException when ex.HResult == unchecked((int)0x80070020) => "El archivo está abierto en otro programa. Ciérrelo e intente de nuevo.",
         UnauthorizedAccessException => "Windows no permite escribir en esa ubicación.",
         CryptographicException => "Error del certificado: " + ex.Message,
+        TaskCanceledException => "El servidor de marca de tiempo no respondió a tiempo.",
+        HttpRequestException when ex.InnerException != null => "No se pudo contactar el servidor de marca de tiempo: " + ex.InnerException.Message,
         _ => ex.Message,
     };
 
@@ -243,6 +245,15 @@ internal sealed class LocalServer : IDisposable
                 var data = await ReadBodyAsync(req);
                 var cms = await Task.Run(() => CertStore.Sign(data, tp));
                 await WriteBytesAsync(res, cms, "application/pkcs7-signature");
+                break;
+            }
+
+            case "tsa":
+            {
+                var url = req.Headers["X-Tsa-Url"];
+                if (string.IsNullOrWhiteSpace(url) || req.HttpMethod != "POST") { res.StatusCode = 400; return; }
+                var reply = await Tsa.RequestAsync(url, await ReadBodyAsync(req), req.Headers["X-Tsa-Auth"]);
+                await WriteBytesAsync(res, reply, "application/timestamp-reply");
                 break;
             }
 

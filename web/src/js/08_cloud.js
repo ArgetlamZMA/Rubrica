@@ -339,6 +339,8 @@ async function settingsDialog(focus) {
     ok: 'Guardar', wide: true, extra: () => CAP ? el('div', { class: 'hint', html: 'En Android, «Abrir» y «Guardar» usan el selector del sistema, que incluye Google Drive, OneDrive (si su app está instalada) y el almacenamiento del teléfono.<br>Para usar Aptos u otra fuente, copie el archivo .ttf al teléfono y use «Agregar fuente…».' }) : guide, extraButtons: [
       ...(!NATIVE && 'queryLocalFonts' in window ? [{ label: 'Cargar fuentes del equipo', onClick: async () => { await loadLocalFonts(false); return false; } }] : []),
       { label: 'Agregar fuente…', onClick: async () => { await addUserFont(); return false; } },
+      { label: 'Preferencias de firma…', onClick: async () => { await signPrefsDialog(); return false; } },
+      ...(CAP ? [] : [{ label: 'Atajos de teclado', onClick: async () => { await shortcutsDialog(); return false; } }]),
       ...(NATIVE ? [{ label: 'Buscar actualizaciones', onClick: async () => { await nativeCheckUpdates(true); return false; } }] : [])]
   });
   if (!v) return;

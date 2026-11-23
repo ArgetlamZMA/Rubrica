@@ -48,6 +48,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
@@ -439,6 +441,40 @@ public class RubricaPlugin extends Plugin {
         }
     }
 
+    // ---------- Servidor de marca de tiempo (RFC 3161) ----------
+    // La interfaz arma la solicitud; aquí solo se reenvía (el WebView no puede por CORS / http).
+
+    @PluginMethod
+    public void tsaRequest(PluginCall call) {
+        String url = call.getString("url"), data = call.getString("data"), auth = call.getString("auth", "");
+        if (url == null || data == null || !(url.startsWith("http://") || url.startsWith("https://"))) { call.reject("Servidor de marca de tiempo no válido"); return; }
+        new Thread(() -> {
+            HttpURLConnection c = null;
+            try {
+                byte[] q = Base64.decode(data, Base64.DEFAULT);
+                c = (HttpURLConnection) new URL(url).openConnection();
+                c.setConnectTimeout(20000); c.setReadTimeout(30000);
+                c.setRequestMethod("POST"); c.setDoOutput(true);
+                c.setRequestProperty("Content-Type", "application/timestamp-query");
+                c.setRequestProperty("Accept", "application/timestamp-reply");
+                if (auth != null && !auth.isEmpty()) c.setRequestProperty("Authorization", "Basic " + auth);
+                try (OutputStream os = c.getOutputStream()) { os.write(q); }
+                int code = c.getResponseCode();
+                if (code < 200 || code >= 300) throw new Exception("El servidor de marca de tiempo respondió " + code + ".");
+                byte[] body;
+                try (InputStream is = c.getInputStream()) { body = readAll(is); }
+                JSObject r = new JSObject();
+                r.put("data", Base64.encodeToString(body, Base64.NO_WRAP));
+                call.resolve(r);
+            } catch (Exception e) {
+                String m = e.getMessage();
+                call.reject(m != null && m.startsWith("El servidor") ? m : "No se pudo contactar el servidor de marca de tiempo" + (m == null ? "" : ": " + m), e);
+            } finally {
+                if (c != null) c.disconnect();
+            }
+        }).start();
+    }
+
     // ---------- Utilidades ----------
 
     private void persist(Uri uri) {
@@ -478,12 +514,16 @@ public class RubricaPlugin extends Plugin {
     private byte[] readAll(Uri uri) throws Exception {
         try (InputStream in = getContext().getContentResolver().openInputStream(uri)) {
             if (in == null) throw new Exception("No se pudo abrir " + uri);
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            byte[] buf = new byte[65536];
-            int n;
-            while ((n = in.read(buf)) > 0) out.write(buf, 0, n);
-            return out.toByteArray();
+            return readAll(in);
         }
+    }
+
+    private static byte[] readAll(InputStream in) throws java.io.IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        byte[] buf = new byte[65536];
+        int n;
+        while ((n = in.read(buf)) > 0) out.write(buf, 0, n);
+        return out.toByteArray();
     }
 
     private void writeTo(Uri uri, byte[] bytes) throws Exception {

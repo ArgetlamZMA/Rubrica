@@ -27,6 +27,7 @@ internal static class CertStore
                 serialNumber = SubjectSerial(c.Subject),
                 notBefore = c.NotBefore.ToUniversalTime().ToString("o"),
                 notAfter = c.NotAfter.ToUniversalTime().ToString("o"),
+                keyUsage = KeyUsage(c),
             })
             .ToArray();
     }
@@ -52,6 +53,16 @@ internal static class CertStore
         signer.SignedAttributes.Add(new Pkcs9SigningTime(DateTime.UtcNow));
         cms.ComputeSignature(signer, silent: false);
         return cms.Encode();
+    }
+
+    /// <summary>Usos de la clave (p. ej. DigitalSignature, NonRepudiation); vacío si el certificado no los restringe.</summary>
+    internal static string[] KeyUsage(X509Certificate2 c)
+    {
+        var ku = c.Extensions.OfType<X509KeyUsageExtension>().FirstOrDefault();
+        if (ku == null) return Array.Empty<string>();
+        return Enum.GetValues<X509KeyUsageFlags>()
+            .Where(f => f != X509KeyUsageFlags.None && ku.KeyUsages.HasFlag(f))
+            .Select(f => f.ToString()).ToArray();
     }
 
     internal static string SubjectSerial(string subject)

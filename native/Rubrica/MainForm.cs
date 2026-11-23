@@ -43,7 +43,10 @@ internal sealed class MainForm : Form
             var core = _web.CoreWebView2;
             core.Settings.IsStatusBarEnabled = false;
             core.Settings.IsZoomControlEnabled = false;
-            core.Settings.AreDevToolsEnabled = true; // F12 para revisar errores
+            core.Settings.AreDevToolsEnabled = true; // clic derecho → Inspeccionar, para revisar errores
+            // Sin atajos propios del navegador (F5/Ctrl+R recargan, Alt+← vuelve atrás, Ctrl+P/F abren los del
+            // navegador): la página recibe esas teclas y Rúbrica las usa como atajos de un editor PDF.
+            core.Settings.AreBrowserAcceleratorKeysEnabled = false;
             core.Settings.IsGeneralAutofillEnabled = false;
             core.Settings.IsPasswordAutosaveEnabled = false;
 

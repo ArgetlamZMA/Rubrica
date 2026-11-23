@@ -33,7 +33,13 @@ Detalles: [docs/firma-digital.md](docs/firma-digital.md) · [docs/configurar-nub
 - Firma CMS/PKCS#7 desacoplada con SHA‑256 (`adbe.pkcs7.detached`), validada por Adobe Acrobat/Reader, Poppler y pyHanko.
 - Se agrega como actualización incremental: firmar de nuevo o agregar comentarios **no invalida** las firmas anteriores.
 - El panel **Firmas** verifica la integridad de cada firma del documento y muestra titular, emisor, fecha, motivo y ubicación.
-- La contraseña del certificado nunca se guarda. La app puede recordar el archivo `.p12` (opcional).
+- **Marca de tiempo** de una autoridad TSA (RFC 3161); viene configurada la del SAR.
+- Lista de identificaciones digitales y **estilos de apariencia** del recuadro (Proteger → Preferencias de firma).
+- La contraseña del certificado nunca se guarda.
+
+## Atajos de teclado
+
+Los habituales de un editor PDF de escritorio: Ctrl+O/S/P/W, Ctrl+Tab, Ctrl+Z/Y, Ctrl+C/X/V, Ctrl+A, Ctrl+E (editar), Ctrl+F y F3, Ctrl+0/1/2 (vistas), Ctrl+R (girar), Ctrl+G (ir a página). Pulse **F1** en la app para ver la lista completa.
 
 ## Compilar desde el código
 

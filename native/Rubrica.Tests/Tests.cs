@@ -66,3 +66,17 @@ public class FontNamesTests
         finally { File.Delete(tmp); }
     }
 }
+
+public class TsaTests
+{
+    [Theory]
+    [InlineData("ftp://tsa.sar.gob.hn/tsa")]
+    [InlineData("file:///C:/Windows/win.ini")]
+    [InlineData("no es una url")]
+    public async Task RechazaDireccionesNoHttp(string url) =>
+        await Assert.ThrowsAsync<ArgumentException>(() => Tsa.RequestAsync(url, new byte[] { 0x30, 0x00 }, null));
+
+    [Fact]
+    public async Task RechazaSolicitudesQueNoSonDer() =>
+        await Assert.ThrowsAsync<ArgumentException>(() => Tsa.RequestAsync("http://tsa.sar.gob.hn/CryptosecOpenKey/tsa_service", new byte[] { 0x01, 0x02 }, null));
+}

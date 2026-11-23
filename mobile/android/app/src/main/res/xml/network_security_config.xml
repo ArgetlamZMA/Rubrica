@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Las autoridades de marca de tiempo (RFC 3161) suelen publicarse por http, p. ej. la TSA del SAR.
+     Solo se envía el resumen de la firma y la respuesta está firmada por la TSA, así que http es seguro para este uso. -->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false" />
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">sar.gob.hn</domain>
+    </domain-config>
+</network-security-config>

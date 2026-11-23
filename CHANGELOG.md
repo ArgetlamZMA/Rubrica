@@ -3,6 +3,10 @@
 ## 1.2.0 — 2026-11-23
 - **Android: firma digital con el certificado instalado en el teléfono** (por ejemplo, la firma electrónica del SAR importada desde su `.pfx` en *Ajustes → Seguridad*). La clave privada no sale del almacén de Android, la contraseña no se vuelve a escribir y Rúbrica recuerda el certificado elegido. Admite claves RSA y EC.
 - La firma generada es la misma que en Windows (CMS desacoplado, SHA-256, `adbe.pkcs7.detached`), validada por Adobe Acrobat/Reader.
+- **Marca de tiempo (RFC 3161)** en las firmas, con la TSA del SAR configurada y predeterminada (`http://tsa.sar.gob.hn/CryptosecOpenKey/tsa_service`); se pueden añadir y probar otros servidores. El panel de firmas muestra la hora y la autoridad del sello.
+- **Preferencias de firma** (como en PDFelement): lista de identificaciones digitales (archivos `.p12/.pfx` guardados sin contraseña, almacén de Windows y Android) con titular, emisor, vigencia y uso previsto; **estilos de apariencia** del recuadro (gráfico: nombre, imagen o ninguno; nombre, ubicación, nombre distinguido, logo, fecha, hora, razón, etiquetas; dirección del texto) con vista previa; servidores de marca de tiempo.
+- Nuevo diálogo de firma: «Firmar como», aspecto con vista previa y marca de tiempo.
+- **Atajos de teclado** de escritorio: Ctrl+W/Ctrl+F4 cerrar, Ctrl+Tab cambiar de documento, Ctrl+N nuevo, Ctrl+E editar, Ctrl+A seleccionar todo, Ctrl+C/X/V objetos, Ctrl+R girar, Ctrl+0/1/2 vistas, Ctrl+G ir a página, Ctrl+L/F11 pantalla completa, F3 siguiente resultado, F4 panel lateral y **F1** con la lista completa. En Windows se desactivan las teclas del navegador interno (F5 ya no recarga la app).
 
 ## 1.1.1 — 2026-11-23
 - Primera publicación del APK de Android firmado con la clave definitiva (la 1.1.0 solo incluyó Windows y web).

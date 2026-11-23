@@ -33,7 +33,7 @@ const RIBBON = [
     [{ icon: 'table', label: 'Exportar datos (CSV)', act: exportFormCsv }, { icon: 'rotate-ccw', label: 'Restablecer', act: resetForm }, { icon: 'highlighter', label: 'Resaltar campos', act: toggleFieldHighlight }]] },
   { id: 'protect', label: 'Proteger', groups: [
     [{ icon: 'lock', label: 'Contraseña', act: protectDialog }, { icon: 'lock-open', label: 'Quitar seguridad', act: removeSecurity }],
-    [{ icon: 'shield-check', label: 'Firma digital', act: digitalSignDialog }, { icon: 'signature', label: 'Firma manuscrita', act: signatureDialog }, { icon: 'file-badge', label: 'Ver firmas', act: () => { S.side = 'signatures'; S.sideOpen = true; renderSide(); } }],
+    [{ icon: 'shield-check', label: 'Firma digital', act: digitalSignDialog }, { icon: 'signature', label: 'Firma manuscrita', act: signatureDialog }, { icon: 'file-badge', label: 'Ver firmas', act: () => { S.side = 'signatures'; S.sideOpen = true; renderSide(); } }, { icon: 'sliders-horizontal', label: 'Preferencias de firma', act: () => signPrefsDialog(), nodoc: true }],
     [T('redact'), { icon: 'search', label: 'Buscar y redactar', act: () => { S.side = 'search'; S.sideOpen = true; renderSide(); } }]] }
 ];
 function renderRibbon() {
@@ -101,36 +101,104 @@ function renderHome() {
   const cfg = $('#home-cfg'); if (cfg) cfg.onclick = e => { e.preventDefault(); settingsDialog().then(renderHome); };
 }
 
-/* ---------- Atajos de teclado ---------- */
+/* ---------- Atajos de teclado ----------
+   Los de un editor PDF de escritorio (PDFelement / Acrobat). En la app de Windows también se
+   bloquean F5 y Ctrl+R del navegador interno, que recargarían la página y perderían el trabajo. */
+const SHORTCUTS = [
+  ['Archivo', [['Ctrl+N', 'Nuevo documento en blanco'], ['Ctrl+O', 'Abrir'], ['Ctrl+S', 'Guardar'], ['Ctrl+Mayús+S', 'Guardar como'], ['Ctrl+P', 'Imprimir'], ['Ctrl+W · Ctrl+F4', 'Cerrar el documento'], ['Ctrl+Tab · Ctrl+Mayús+Tab', 'Documento siguiente / anterior'], ['Ctrl+D', 'Propiedades del documento (o duplicar el objeto seleccionado)']]],
+  ['Edición', [['Ctrl+Z', 'Deshacer'], ['Ctrl+Y · Ctrl+Mayús+Z', 'Rehacer'], ['Ctrl+C · Ctrl+X · Ctrl+V', 'Copiar, cortar y pegar el objeto seleccionado'], ['Ctrl+A', 'Seleccionar todo el texto de la página (o todas las páginas en Organizar)'], ['Supr', 'Eliminar la selección (o las páginas en Organizar)'], ['Ctrl+E', 'Editar texto e imágenes'], ['Flechas · Mayús+Flechas', 'Mover el objeto 1 / 10 puntos'], ['Esc', 'Quitar la selección / volver a Seleccionar']]],
+  ['Buscar', [['Ctrl+F', 'Buscar'], ['F3 · Mayús+F3', 'Resultado siguiente / anterior']]],
+  ['Vista', [['Ctrl++ · Ctrl+-', 'Acercar / alejar'], ['Ctrl+0', 'Ajustar a la página'], ['Ctrl+1', 'Tamaño real (100 %)'], ['Ctrl+2', 'Ajustar al ancho'], ['Ctrl+R · Ctrl+Mayús+R', 'Girar la página a la derecha / izquierda'], ['Ctrl+G', 'Ir a la página…'], ['Inicio · Fin', 'Primera / última página'], ['RePág · AvPág', 'Página anterior / siguiente'], ['F4', 'Mostrar u ocultar el panel lateral'], ['Ctrl+L · F11', 'Pantalla completa']]],
+  ['Herramientas', [['V', 'Seleccionar'], ['H', 'Mano'], ['T', 'Texto'], ['N', 'Nota'], ['P', 'Lápiz'], ['R', 'Rectángulo']]],
+  ['Ayuda', [['F1 · Ctrl+/', 'Esta lista de atajos']]]
+];
+function shortcutsDialog() {
+  const box = el('div', { class: 'kbd-list' });
+  for (const [g, items] of SHORTCUTS) { box.append(el('h5', { text: g })); for (const [k, l] of items) box.append(el('div', {}, el('span', { text: l }), el('span', {}, ...k.split(' · ').flatMap((x, i) => [i ? ' ' : null, el('kbd', { text: x })]).filter(Boolean)))); }
+  return openModal({ title: 'Atajos de teclado', body: box, wide: true, buttons: [{ label: 'Cerrar', primary: true, value: true }] }).result;
+}
+function selectPageText(d) {
+  const p = d.pages[d.cur], parts = p && R.els.get(p.id), tl = parts && parts.pe.querySelector('.textLayer');
+  if (!tl || !tl.textContent.trim()) { toast('Esta página no tiene texto seleccionable (use OCR si es escaneada).', '', 4000); return; }
+  const sel = window.getSelection(); sel.removeAllRanges(); sel.selectAllChildren(tl);
+}
+function copySel(cut) {
+  const d = D(), o = selObj(); if (!o) return false;
+  S.clip = { obj: structuredClone(o), pid: S.sel.pid, n: 0 };
+  if (cut) deleteObj(S.sel.pid, S.sel.oid);
+  toast(cut ? 'Objeto cortado.' : 'Objeto copiado.', '', 1500); return true;
+}
+function pasteClip() {
+  const d = D(); if (!d || !S.clip) return false;
+  const p = d.pages[d.cur]; if (!p) return false;
+  d.checkpoint();
+  const c = structuredClone(S.clip.obj); c.id = uid();
+  if (S.clip.pid === p.id) { S.clip.n++; c.x += 12 * S.clip.n; c.y += 12 * S.clip.n; }
+  if (c.type === 'field') c.name = uniqueFieldName(d, c.name);
+  p.ov.push(c); selectObj(p.id, c.id); return true;
+}
+function switchDoc(step) {
+  if (S.docs.length < 2) return;
+  const i = S.docs.indexOf(S.active); activateDoc(S.docs[(i + step + S.docs.length) % S.docs.length]);
+}
+function toggleFullscreen() {
+  if (document.fullscreenElement) document.exitFullscreen().catch(() => { });
+  else document.documentElement.requestFullscreen().catch(() => toast('Pantalla completa no disponible.', 'err'));
+}
 function initKeys() {
   document.addEventListener('keydown', e => {
     if ($('#modal-root').children.length) return;
-    const k = e.key.toLowerCase(), ctrl = e.ctrlKey || e.metaKey;
+    const k = e.key.toLowerCase(), ctrl = e.ctrlKey || e.metaKey, shift = e.shiftKey;
     const inField = /INPUT|TEXTAREA|SELECT/.test(e.target.tagName) || e.target.isContentEditable;
-    const d = D();
-    if (ctrl && k === 'o') { e.preventDefault(); openLocal(); return; }
-    if (ctrl && k === 's') { e.preventDefault(); if (d) saveDoc(d, e.shiftKey); return; }
-    if (ctrl && k === 'p') { e.preventDefault(); if (d) printDoc(); return; }
-    if (ctrl && k === 'f') { e.preventDefault(); if (d) { S.side = 'search'; S.sideOpen = true; renderSide(); } return; }
-    if (ctrl && (k === '=' || k === '+')) { e.preventDefault(); setZoom('in'); return; }
-    if (ctrl && k === '-') { e.preventDefault(); setZoom('out'); return; }
-    if (ctrl && k === '0') { e.preventDefault(); setZoom('fitw'); return; }
+    const d = D(), stop = () => { e.preventDefault(); e.stopPropagation(); };
+    // recarga del navegador interno: haría perder el trabajo
+    if (NATIVE && (e.key === 'F5' || (ctrl && k === 'r' && !d))) { stop(); return; }
+    if (e.key === 'F1' || (ctrl && (k === '/' || e.code === 'Slash'))) { stop(); shortcutsDialog(); return; }
+    if (ctrl && !shift && k === 'o') { stop(); openLocal(); return; }
+    if (ctrl && !shift && k === 'n') { stop(); newBlankDialog(); return; }
+    if (ctrl && k === 's') { stop(); if (d) saveDoc(d, shift); return; }
+    if (ctrl && k === 'p') { stop(); if (d) printDoc(); return; }
+    if (ctrl && k === 'f') { stop(); if (d) { S.side = 'search'; S.sideOpen = true; renderSide(); } return; }
+    if (ctrl && (k === 'w' || e.key === 'F4')) { stop(); if (d) closeDoc(d); return; }
+    if (ctrl && e.key === 'Tab') { stop(); switchDoc(shift ? -1 : 1); return; }
+    if (ctrl && (e.key === 'PageDown' || e.key === 'PageUp')) { stop(); switchDoc(e.key === 'PageDown' ? 1 : -1); return; }
+    if (ctrl && (k === '=' || k === '+' || e.code === 'NumpadAdd')) { stop(); setZoom('in'); return; }
+    if (ctrl && (k === '-' || e.code === 'NumpadSubtract')) { stop(); setZoom('out'); return; }
+    if (ctrl && !shift && k === '0') { stop(); setZoom('fitp'); return; }
+    if (ctrl && !shift && k === '1') { stop(); setZoom(100); return; }
+    if (ctrl && !shift && k === '2') { stop(); setZoom('fitw'); return; }
+    if ((ctrl && k === 'l') || e.key === 'F11') { stop(); toggleFullscreen(); return; }
+    if (e.key === 'F3') { stop(); if (d && SR.hits.length) goToHit(SR.cur + (shift ? -1 : 1)); else if (d) { S.side = 'search'; S.sideOpen = true; renderSide(); } return; }
+    if (e.key === 'F4' && !ctrl) { stop(); if (d) { S.sideOpen = !S.sideOpen; renderSide(); renderViewer(true); } return; }
     if (inField) { if (e.key === 'Escape' && S.editing) { e.target.blur(); commitEditing(); } return; }
     if (!d) return;
-    if (ctrl && k === 'z') { e.preventDefault(); e.shiftKey ? redo() : undo(); return; }
-    if (ctrl && k === 'y') { e.preventDefault(); redo(); return; }
-    if (ctrl && k === 'd') { e.preventDefault(); duplicateSel(); return; }
+    if (ctrl && k === 'z') { stop(); shift ? redo() : undo(); return; }
+    if (ctrl && k === 'y') { stop(); redo(); return; }
+    if (ctrl && k === 'd') { stop(); if (S.sel) duplicateSel(); else propertiesDialog(); return; }
+    if (ctrl && k === 'e') { stop(); setTool(S.tool === 'edittext' ? 'select' : 'edittext'); return; }
+    if (ctrl && k === 'r') { stop(); const p = d.pages[d.cur]; if (d.view === 'organize' ? targetPages().length : p) rotatePages(d.view === 'organize' ? targetPages() : [p], shift ? -1 : 1); return; }
+    if (ctrl && k === 'g') { stop(); const i = $('#sb-page'); if (i) { i.focus(); i.select(); } return; }
+    if (ctrl && k === 'a') {
+      stop();
+      if (d.view === 'organize') { d.orgSel = new Set(d.pages.map(p => p.id)); renderOrganizer(); }
+      else selectPageText(d);
+      return;
+    }
+    const textSelected = () => { const s = window.getSelection(); return s && !s.isCollapsed && String(s).trim(); };
+    if (ctrl && (k === 'c' || k === 'x') && S.sel && !textSelected()) { stop(); copySel(k === 'x'); return; }
+    if (ctrl && k === 'v' && S.clip) { stop(); pasteClip(); return; }
     if (e.key === 'Escape') { if (S.sel) clearSel(); else if (S.tool !== 'select') setTool('select'); return; }
-    if ((e.key === 'Delete' || e.key === 'Backspace') && S.sel) { e.preventDefault(); deleteObj(S.sel.pid, S.sel.oid); return; }
+    if ((e.key === 'Delete' || e.key === 'Backspace') && S.sel) { stop(); deleteObj(S.sel.pid, S.sel.oid); return; }
+    if (e.key === 'Delete' && d.view === 'organize' && d.orgSel.size) { stop(); deletePages(targetPages()); return; }
     if (S.sel && e.key.startsWith('Arrow')) {
-      e.preventDefault(); const o = selObj(); const st = e.shiftKey ? 10 : 1; if (!S.propCk) { d.checkpoint(); S.propCk = true; }
+      e.preventDefault(); const o = selObj(); const st = shift ? 10 : 1; if (!S.propCk) { d.checkpoint(); S.propCk = true; }
       if (e.key === 'ArrowLeft') o.x -= st; if (e.key === 'ArrowRight') o.x += st; if (e.key === 'ArrowUp') o.y -= st; if (e.key === 'ArrowDown') o.y += st;
       renderOverlays(d.page(S.sel.pid)); return;
     }
     if (e.key === 'PageDown') { e.preventDefault(); goToPage(d.cur + 1); return; }
     if (e.key === 'PageUp') { e.preventDefault(); goToPage(d.cur - 1); return; }
-    if (e.key === 'Home' && ctrl) { goToPage(0); return; }
-    if (e.key === 'End' && ctrl) { goToPage(d.pages.length - 1); return; }
+    if (e.key === 'Home') { e.preventDefault(); goToPage(0); return; }
+    if (e.key === 'End') { e.preventDefault(); goToPage(d.pages.length - 1); return; }
     if (!ctrl && !e.altKey) { const map = { v: 'select', h: 'hand', t: 'text', n: 'note', p: 'ink', r: 'rect' }; if (map[k]) setTool(map[k]); }
   });
 }

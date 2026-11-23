@@ -12,12 +12,17 @@ const binToU8 = s => { const a = new Uint8Array(s.length); for (let i = 0; i < s
 const OID_NAMES = { '2.5.4.3': 'CN', '2.5.4.10': 'O', '2.5.4.11': 'OU', '2.5.4.5': 'serialNumber', '2.5.4.6': 'C', '1.2.840.113549.1.9.1': 'E' };
 function dnGet(attrs, short) { const a = (attrs || []).find(x => x.shortName === short || OID_NAMES[x.type] === short); return a ? String(a.value) : ''; }
 function certInfo(cert) {
+  let usage = [];
+  try { const ku = cert.getExtension('keyUsage'); if (ku) usage = ['digitalSignature', 'nonRepudiation', 'keyEncipherment', 'dataEncipherment', 'keyAgreement', 'keyCertSign', 'cRLSign'].filter(k => ku[k]); } catch { }
   return {
     cn: dnGet(cert.subject.attributes, 'CN') || dnGet(cert.subject.attributes, 'O'), org: dnGet(cert.subject.attributes, 'O'), serialNumber: dnGet(cert.subject.attributes, 'serialNumber'),
     email: dnGet(cert.subject.attributes, 'E'), issuer: dnGet(cert.issuer.attributes, 'CN') || dnGet(cert.issuer.attributes, 'O'),
-    notBefore: cert.validity.notBefore, notAfter: cert.validity.notAfter
+    dn: (cert.subject.attributes || []).map(a => (a.shortName || OID_NAMES[a.type] || a.type) + '=' + a.value).reverse().join(', '),
+    notBefore: cert.validity.notBefore, notAfter: cert.validity.notAfter, usage
   };
 }
+const KEY_USAGE_ES = { digitalsignature: 'Firma digital', nonrepudiation: 'No repudio', contentcommitment: 'No repudio', keyencipherment: 'Cifrado de clave', dataencipherment: 'Cifrado de datos', keyagreement: 'Acuerdo de claves', keycertsign: 'Firma de certificados', crlsign: 'Firma de CRL', encipheronly: 'Solo cifrado', decipheronly: 'Solo descifrado' };
+const usageText = u => (u || []).length ? [...new Set(u.map(x => KEY_USAGE_ES[String(x).toLowerCase()] || x))].join(', ') : 'No especificado';
 
 /* ---------- Firmantes ---------- */
 function p12Signer(bytes, password) {
@@ -48,7 +53,7 @@ function p12Signer(bytes, password) {
   };
 }
 function nativeStoreSigner(c) {
-  return { kind: 'store', info: { cn: c.name, issuer: c.issuer, notAfter: new Date(c.notAfter), notBefore: new Date(c.notBefore), serialNumber: c.serialNumber || '' }, async sign(data) { return natBytes('sign?thumbprint=' + encodeURIComponent(c.thumbprint), { method: 'POST', headers: { 'Content-Type': 'application/octet-stream' }, body: data }); } };
+  return { kind: 'store', info: { cn: c.name, issuer: c.issuer, dn: c.subject || '', usage: c.keyUsage || [], notAfter: new Date(c.notAfter), notBefore: new Date(c.notBefore), serialNumber: c.serialNumber || '' }, async sign(data) { return natBytes('sign?thumbprint=' + encodeURIComponent(c.thumbprint), { method: 'POST', headers: { 'Content-Type': 'application/octet-stream' }, body: data }); } };
 }
 
 /* ---------- Certificado instalado en Android (KeyChain) ----------
@@ -100,7 +105,7 @@ function androidCertInfo(c, chain) {
   try { return certInfo(forge.pki.certificateFromAsn1(forge.asn1.fromDer(u8ToBin(chain[0])))); }
   catch { // p. ej. claves EC, que node-forge no lee: se usan los datos del sistema
     const cn = dn => ((dn || '').match(/(?:^|,)\s*CN=((?:\\.|[^,])*)/) || [, dn || ''])[1].replace(/\\(.)/g, '$1');
-    return { cn: cn(c.subject), issuer: cn(c.issuer), serialNumber: '', notBefore: new Date(c.notBefore), notAfter: new Date(c.notAfter) };
+    return { cn: cn(c.subject), issuer: cn(c.issuer), dn: c.subject || '', usage: [], serialNumber: '', notBefore: new Date(c.notBefore), notAfter: new Date(c.notAfter) };
   }
 }
 function androidStoreSigner(c) {
@@ -117,42 +122,46 @@ function pdfDateStr(d) {
   const p = n => String(n).padStart(2, '0'), off = -d.getTimezoneOffset();
   return `${d.getFullYear()}.${p(d.getMonth() + 1)}.${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())} ${off >= 0 ? '+' : '-'}${p(Math.floor(Math.abs(off) / 60))}'${p(Math.abs(off) % 60)}'`;
 }
-async function buildSigAppearance(pdf, w, h, lines, imgBytes, rot) {
+/** Apariencia del recuadro de firma a partir de un estilo (ver 11b_sigprefs.js). */
+async function buildSigAppearance(pdf, w, h, st, data, imgBytes, rot) {
+  const ctx = pdf.context;
   const f1 = await pdf.embedFont(PL.StandardFonts.Helvetica), f2 = await pdf.embedFont(PL.StandardFonts.HelveticaBold);
-  const res = { Font: { F1: f1.ref, F2: f2.ref } }; const ops = [];
-  let tx = 4;
-  if (imgBytes) {
-    const img = await pdf.embedPng(imgBytes); res.XObject = { Im1: img.ref };
-    const iw = w * 0.42 - 6, ih = h - 8, k = Math.min(iw / img.width, ih / img.height), dw = img.width * k, dh = img.height * k;
-    ops.push(PL.pushGraphicsState(), PL.concatTransformationMatrix(dw, 0, 0, dh, 4 + (iw - dw) / 2, (h - dh) / 2), PL.drawObject('Im1'), PL.popGraphicsState());
-    tx = w * 0.42 + 2;
+  const res = { Font: { F1: f1.ref, F2: f2.ref } }, xo = {}, ops = [];
+  const font = b => b ? f2 : f1;
+  const clean = v => v ? safeText(f1, String(v)) : '';
+  const dat = { ...data, cn: clean(data.cn), dn: clean(data.dn), reason: clean(data.reason), location: clean(data.location) };
+  const measure = (t, b, size) => font(b).widthOfTextAtSize(t, size);
+  let img = null;
+  if (st.graphic === 'image' && imgBytes) img = (imgBytes[0] === 0xff && imgBytes[1] === 0xd8) ? await pdf.embedJpg(imgBytes) : await pdf.embedPng(imgBytes);
+  const L = sigLayout(st, dat, w, h, measure, img ? img.width / img.height : null);
+  if (L.logo) {
+    const lg = await pdf.embedPng(await brandPng()); xo.Lg = lg.ref;
+    res.ExtGState = { GSL: ctx.obj({ Type: 'ExtGState', ca: 0.13, CA: 0.13 }) };
+    ops.push(PL.pushGraphicsState(), PL.setGraphicsState('GSL'), PL.concatTransformationMatrix(L.logo.w, 0, 0, L.logo.h, L.logo.x, L.logo.y), PL.drawObject('Lg'), PL.popGraphicsState());
   }
-  const fonts = { F1: f1, F2: f2 };
-  const L = lines.map(l => ({ ...l, t: safeText(fonts[l.f], l.t) }));
-  const availW = Math.max(10, w - tx - 4);
-  let size = Math.min(11, (h - 6) / (L.length * 1.18));
-  for (const l of L) { const w1 = fonts[l.f].widthOfTextAtSize(l.t, 1) || 1; size = Math.min(size, availW / w1); }
-  size = Math.max(3.5, size);
-  let y = h - 3 - size * 0.95;
-  ops.push(PL.setFillingRgbColor(0, 0, 0));
-  for (const l of L) { ops.push(PL.beginText(), PL.setFontAndSize(l.f, size), PL.moveText(tx, y), PL.showText(fonts[l.f].encodeText(l.t)), PL.endText()); y -= size * 1.18; }
+  for (const it of L.items) {
+    if (it.kind === 'img') { xo.Im1 = img.ref; ops.push(PL.pushGraphicsState(), PL.concatTransformationMatrix(it.w, 0, 0, it.h, it.x, it.y), PL.drawObject('Im1'), PL.popGraphicsState()); }
+    else ops.push(PL.setFillingRgbColor(0, 0, 0), PL.beginText(), PL.setFontAndSize(it.bold ? 'F2' : 'F1', it.size), PL.moveText(it.x, it.y), PL.showText(font(it.bold).encodeText(it.t)), PL.endText());
+  }
+  if (Object.keys(xo).length) res.XObject = xo;
   const th = (rot || 0) * Math.PI / 180;
   const dict = { BBox: [0, 0, w, h], Resources: res };
   if (rot) dict.Matrix = [Math.round(Math.cos(th)), Math.round(Math.sin(th)), -Math.round(Math.sin(th)), Math.round(Math.cos(th)), 0, 0];
-  return pdf.context.register(pdf.context.formXObject(ops, dict));
+  return ctx.register(ctx.formXObject(ops, dict));
 }
 /**
- * Firma bytes PDF. o = { signer, reason, location, contact, visible:{pageIndex, rect:[x1,y1,x2,y2], w, h, rot, image} }
+ * Firma bytes PDF. o = { signer, reason, location, contact, tsa?: servidor de marca de tiempo,
+ *   visible:{pageIndex, rect:[x1,y1,x2,y2], w, h, rot, style?: estilo de apariencia, image?: bytes del gráfico} }
  */
 async function signPdfBytes(bytes, o) {
   const pdf = await PL.PDFDocument.load(bytes, { forIncrementalUpdate: true, updateMetadata: false });
-  const ctx = pdf.context, now = new Date();
+  const ctx = pdf.context, now = new Date(), sigHex = o.tsa ? SIG_HEX * 2 : SIG_HEX;
   const page = pdf.getPages()[o.visible ? o.visible.pageIndex : 0];
   const byteRange = PL.PDFArray.withContext(ctx);
   byteRange.push(PL.PDFNumber.of(0)); for (let k = 0; k < 3; k++) byteRange.push(PL.PDFName.of('**********'));
   const sigDict = ctx.obj({
     Type: 'Sig', Filter: 'Adobe.PPKLite', SubFilter: 'adbe.pkcs7.detached', ByteRange: byteRange,
-    Contents: PL.PDFHexString.of('0'.repeat(SIG_HEX)), M: PL.PDFString.fromDate(now),
+    Contents: PL.PDFHexString.of('0'.repeat(sigHex)), M: PL.PDFString.fromDate(now),
     Name: PL.PDFHexString.fromText(o.signer.info.cn || ''), Reason: PL.PDFHexString.fromText(o.reason || ''),
     Location: PL.PDFHexString.fromText(o.location || ''), ContactInfo: PL.PDFHexString.fromText(o.contact || ''),
     Prop_Build: { App: { Name: 'Rubrica' }, Filter: { Name: 'Adobe.PPKLite' } }
@@ -167,10 +176,9 @@ async function signPdfBytes(bytes, o) {
   let rect = [0, 0, 0, 0], ap;
   if (o.visible) {
     rect = o.visible.rect;
-    const lines = [{ t: 'Firmado digitalmente por:', f: 'F1' }, { t: o.signer.info.cn || '', f: 'F2' }, { t: 'Fecha: ' + pdfDateStr(now), f: 'F1' }];
-    if (o.reason) lines.push({ t: 'Motivo: ' + o.reason, f: 'F1' });
-    if (o.location) lines.push({ t: 'Ubicación: ' + o.location, f: 'F1' });
-    ap = await buildSigAppearance(pdf, o.visible.w, o.visible.h, lines, o.visible.image, o.visible.rot);
+    const st = o.visible.style || sigStyleById(S.settings.sigStyleDefault);
+    const data = { cn: o.signer.info.cn || '', dn: o.signer.info.dn || '', reason: o.reason, location: o.location, date: now };
+    ap = await buildSigAppearance(pdf, o.visible.w, o.visible.h, st, data, o.visible.image || (st.image ? dataUrlToBytes(st.image) : null), o.visible.rot);
   } else ap = ctx.register(ctx.formXObject([], { BBox: [0, 0, 0, 0], Resources: {} }));
   const widget = ctx.register(ctx.obj({ Type: 'Annot', Subtype: 'Widget', FT: 'Sig', Rect: rect, V: sigRef, T: PL.PDFHexString.fromText(fname), F: 132, P: page.ref, AP: { N: ap } }));
   let annots = page.node.lookupMaybe(PL.PDFName.of('Annots'), PL.PDFArray);
@@ -181,7 +189,7 @@ async function signPdfBytes(bytes, o) {
   const out = await pdf.save({ useObjectStreams: false });
   // completar ByteRange y Contents
   const s = u8ToBin(out);
-  const ph = '<' + '0'.repeat(SIG_HEX) + '>';
+  const ph = '<' + '0'.repeat(sigHex) + '>';
   const cStart = s.lastIndexOf(ph); if (cStart < 0) throw new Error('No se encontró el espacio de la firma.');
   const cEnd = cStart + ph.length;
   const brRe = /\/ByteRange\s*\[\s*0\s+\/\*{10}\s+\/\*{10}\s+\/\*{10}\s*\]/g; let m, last = null;
@@ -194,10 +202,11 @@ async function signPdfBytes(bytes, o) {
   const res = out.slice();
   res.set(binToU8(brTxt), last.index);
   const data = new Uint8Array(br[1] + br[3]); data.set(res.subarray(0, br[1]), 0); data.set(res.subarray(br[2]), br[1]);
-  const cms = await o.signer.sign(data);
+  let cms = await o.signer.sign(data);
+  if (o.tsa) cms = await addTimestampToCms(cms, o.tsa);
   let hex = ''; for (const b of cms) hex += b.toString(16).padStart(2, '0');
-  if (hex.length > SIG_HEX) throw new Error('La firma no cabe en el espacio reservado.');
-  res.set(binToU8(hex.padEnd(SIG_HEX, '0')), cStart + 1);
+  if (hex.length > sigHex) throw new Error('La firma no cabe en el espacio reservado.');
+  res.set(binToU8(hex.padEnd(sigHex, '0')), cStart + 1);
   return res;
 }
 
@@ -236,6 +245,10 @@ async function verifySignature(bytes, sig) {
     const attrs = si.value.find(n => n.tagClass === A.Class.CONTEXT_SPECIFIC && n.type === 0);
     const sigVal = si.value.find((n, k) => k > 3 && n.type === A.Type.OCTETSTRING && n.tagClass === A.Class.UNIVERSAL);
     const dg = DIGESTS[digOid]; if (!dg) throw new Error('Algoritmo de resumen no soportado');
+    const unsigned = si.value.find(n => n.tagClass === A.Class.CONTEXT_SPECIFIC && n.type === 1);
+    for (const at of (unsigned ? unsigned.value : [])) {
+      try { if (A.derToOid(at.value[0].value) === OID_TST && sigVal) r.timestamp = readTimestampToken(at.value[1].value[0], sigVal.value); } catch (e) { r.timestamp = { error: e.message }; }
+    }
     const data = new Uint8Array(sig.br[1] + sig.br[3]); data.set(bytes.subarray(sig.br[0], sig.br[0] + sig.br[1]), 0); data.set(bytes.subarray(sig.br[2], sig.br[2] + sig.br[3]), sig.br[1]);
     const digest = u8ToBin(new Uint8Array(await crypto.subtle.digest(dg[0], data)));
     let md = null;
@@ -268,76 +281,105 @@ async function verifySignature(bytes, sig) {
 async function digitalSignDialog() {
   const d = D(); if (!d) return;
   if (d.security && !d.security.inherited) { toast('Quite la contraseña antes de firmar (un PDF cifrado no se puede firmar aquí).', 'err', 6000); return; }
-  let signer = null;
-  const info = el('div', { class: 'hint', style: { minHeight: '40px', margin: '6px 0 10px' } });
+  let signer = null, ids = await loadIds(), winCerts = [], androidCert = null;
+  const info = el('div', { class: 'sp-info', style: { margin: '6px 0 10px' } });
+  const who = el('select', { 'aria-label': 'Firmar como' });
+  const pw = el('input', { type: 'password', placeholder: 'Contraseña del certificado', autocomplete: 'off' });
+  const verifyBtn = el('button', { class: 'btn sm', text: 'Verificar certificado' });
+  const pwRow = el('div', { class: 'row' }, el('label', { text: 'Contraseña' }), el('div', { style: { display: 'flex', gap: '8px' } }, pw, verifyBtn), el('div', { class: 'hint', text: 'La contraseña no se guarda: se pide en cada firma.' }));
+  const cur = () => who.value;
+  const fileEntry = () => ids.find(x => 'f:' + x.id === cur());
   const showInfo = () => {
-    if (!signer) { info.innerHTML = 'Ningún certificado cargado.'; return; }
-    const i = signer.info, exp = i.notAfter && i.notAfter < new Date();
-    info.innerHTML = `<b>${escapeHtml(i.cn)}</b>${i.serialNumber ? ' · ' + escapeHtml(i.serialNumber) : ''}<br>Emitido por: ${escapeHtml(i.issuer || '—')}<br>Válido hasta: <span style="color:${exp ? 'var(--danger)' : 'inherit'}">${i.notAfter ? i.notAfter.toLocaleDateString('es-HN') : '—'}${exp ? ' (VENCIDO)' : ''}</span>`;
+    info.innerHTML = '';
+    const i = signer ? signer.info : fileEntry() ? infoFromJson(fileEntry().info) : null;
+    info.append(i ? certInfoTable(i) : el('div', { class: 'hint', text: cur() === '' ? 'Añada su certificado .p12/.pfx o elija uno de la lista.' : 'Escriba la contraseña y pulse «Verificar certificado» para ver los datos.' }));
+    styleChanged();
   };
-  showInfo();
-  // archivo .p12
-  let p12 = null; const savedP12 = await idb.get('p12').catch(() => null);
-  if (savedP12) p12 = savedP12;
-  const fileLbl = el('span', { class: 'muted', text: p12 ? p12.name : 'Sin archivo' });
-  const pw = el('input', { type: 'password', placeholder: 'Contraseña del certificado' });
-  const remember = el('input', { type: 'checkbox' }); remember.checked = !!savedP12;
-  const loadP12 = () => { try { signer = p12Signer(p12.bytes, pw.value); showInfo(); return true; } catch (e) { signer = null; showInfo(); toast(e.message, 'err', 6000); return false; } };
-  const paneP12 = el('div', { class: 'fm' },
-    el('div', { class: 'inline', style: { display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '8px' } },
-      el('button', { class: 'btn', html: ic('folder-open') + 'Elegir .p12 / .pfx', onclick: async () => { const f = await pickLocal(CAP ? '' : '.p12,.pfx', false); if (!f.length) return; p12 = { name: f[0].name, bytes: await readFileBytes(f[0]) }; fileLbl.textContent = p12.name; signer = null; showInfo(); } }), fileLbl),
-    el('div', { class: 'row' }, pw),
-    el('div', { class: 'inline', style: { display: 'flex', gap: '8px' } }, el('button', { class: 'btn sm', text: 'Verificar certificado', onclick: () => p12 ? loadP12() : toast('Elija el archivo del certificado.', 'err') }),
-      el('label', { class: 'inline hint' }, remember, 'Recordar el archivo en este equipo (nunca la contraseña)')));
-  const panes = { p12: paneP12 };
-  // almacén de Windows (solo app nativa)
-  if (NATIVE) {
-    const list = el('div', { class: 'recent-list', style: { maxHeight: '180px', overflow: 'auto' } });
-    panes.store = el('div', {}, list);
-    natJson('certs').then(cs => {
-      if (!cs.length) list.append(el('div', { class: 'cb-empty', text: 'No hay certificados con clave privada en el almacén de Windows.' }));
-      for (const c of cs) list.append(el('div', { class: 'recent-row', onclick: e => { $$('.recent-row', list).forEach(x => x.style.background = ''); e.currentTarget.style.background = 'var(--accent2)'; signer = nativeStoreSigner(c); showInfo(); } }, icEl('badge-check'), el('span', { class: 'nm', text: c.name }), el('span', { class: 'src', text: 'vence ' + new Date(c.notAfter).toLocaleDateString('es-HN') })));
-    }).catch(e => list.append(el('div', { class: 'cb-empty', text: e.message })));
-  }
-  // certificado instalado en Android (solo app de Android)
-  if (PSN) {
-    const lbl = el('span', { class: 'muted', text: 'Ninguno elegido' });
-    const useCert = c => { signer = androidStoreSigner(c); lbl.textContent = signer.info.cn || c.alias; showInfo(); S.settings.androidCertAlias = c.alias; saveSettings(); };
-    panes.android = el('div', { class: 'fm' },
-      el('div', { class: 'inline', style: { display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '8px' } },
-        el('button', { class: 'btn', html: ic('badge-check') + 'Elegir certificado', onclick: async () => {
-          try { const c = await PSN.chooseCertificate({ alias: S.settings.androidCertAlias || '' }); if (c && c.alias) useCert(c); }
-          catch (e) { toast(e.message || String(e), 'err', 7000); }
-        } }), lbl),
-      el('div', { class: 'hint', html: 'Use el certificado que instaló en el teléfono en <b>Ajustes → Seguridad y privacidad → Más ajustes de seguridad → Instalar desde almacenamiento → Certificado de usuario de VPN y app</b>. La clave privada no sale del almacén de Android y la contraseña no se vuelve a pedir.' }));
-    if (S.settings.androidCertAlias) PSN.getCertificate({ alias: S.settings.androidCertAlias })
-      .then(c => { if (c && c.alias && !signer) useCert(c); }).catch(() => { /* permiso retirado o certificado eliminado: se elige de nuevo */ });
-  }
-  const tabs = el('div', { class: 'tabs2' }), paneBox = el('div');
-  const setPane = k => { $$('button', tabs).forEach(b => b.classList.toggle('on', b.dataset.k === k)); paneBox.innerHTML = ''; paneBox.append(panes[k]); };
-  if (PSN) tabs.append(el('button', { text: 'Certificado de Android', dataset: { k: 'android' }, onclick: () => setPane('android') }));
-  tabs.append(el('button', { text: 'Archivo .p12 / .pfx', dataset: { k: 'p12' }, onclick: () => setPane('p12') }));
-  if (NATIVE) tabs.append(el('button', { text: 'Almacén de Windows / token', dataset: { k: 'store' }, onclick: () => setPane('store') }));
-  setPane(PSN && !savedP12 ? 'android' : 'p12');
+  const fillWho = (selKey) => {
+    const prev = selKey ?? cur(); who.innerHTML = '';
+    const og = (label, opts) => { if (!opts.length) return; const g = el('optgroup', { label }); opts.forEach(o => g.append(el('option', { value: o[0], text: o[1] }))); who.append(g); };
+    const exp = t => t && new Date(t) < new Date() ? ' (VENCIDO)' : '';
+    og('Archivos .p12 / .pfx', ids.map(x => ['f:' + x.id, (x.info?.cn ? `${x.info.cn} · ${x.name}` : x.name) + exp(x.info?.notAfter)]));
+    og('Almacén de Windows / token', winCerts.map(c => ['s:' + c.thumbprint, `${c.name} · vence ${new Date(c.notAfter).toLocaleDateString('es-HN')}` + exp(c.notAfter)]));
+    if (PSN) og('Certificado de Android', [...(androidCert ? [['a:' + androidCert.alias, (androidCertInfo(androidCert, (androidCert.chain || []).map(b64ToU8)).cn || androidCert.alias) + ' (Android)']] : []), ['a:?', 'Elegir certificado de Android…']]);
+    og('Otro', [['+file', 'Añadir archivo .p12 / .pfx…']]);
+    const keys = [...who.options].map(o => o.value);
+    who.value = keys.includes(prev) ? prev : keys.includes(S.settings.sigIdDefault) ? S.settings.sigIdDefault : (keys.find(k => !/^\+|^a:\?$/.test(k)) || '');
+    onWho(false);
+  };
+  const onWho = async (user = true) => {
+    signer = null; pw.value = '';
+    const k = cur();
+    if (k === '+file') {
+      const f = await pickLocal(CAP ? '' : '.p12,.pfx', false);
+      if (!f.length) { fillWho(''); return; }
+      const r = await addIdFile(f[0]); if (!r) { fillWho(''); return; }
+      ids = await loadIds(); fillWho('f:' + r.entry.id); signer = r.signer; pwRow.style.display = 'none'; showInfo(); return;
+    }
+    if (k === 'a:?') {
+      try { const c = await PSN.chooseCertificate({ alias: S.settings.androidCertAlias || '' }); if (c && c.alias) { androidCert = c; S.settings.androidCertAlias = c.alias; saveSettings(); fillWho('a:' + c.alias); return; } }
+      catch (e) { toast(e.message || String(e), 'err', 7000); }
+      fillWho(androidCert ? 'a:' + androidCert.alias : ''); return;
+    }
+    if (k.startsWith('s:')) signer = nativeStoreSigner(winCerts.find(c => 's:' + c.thumbprint === k));
+    if (k.startsWith('a:') && androidCert) signer = androidStoreSigner(androidCert);
+    pwRow.style.display = k.startsWith('f:') ? '' : 'none';
+    showInfo(); if (user && k.startsWith('f:')) pw.focus();
+  };
+  who.onchange = () => onWho(true);
+  const loadP12 = () => {
+    const f = fileEntry(); if (!f) return false;
+    try {
+      signer = p12Signer(f.bytes, pw.value); showInfo();
+      if (!f.info) { f.info = infoToJson(signer.info); saveIds(ids); }
+      return true;
+    } catch (e) { signer = null; showInfo(); toast(e.message, 'err', 6000); return false; }
+  };
+  verifyBtn.onclick = loadP12;
+  // apariencia
+  const styleSel = el('select', { 'aria-label': 'Aspecto' });
+  const fillStyles = () => { const v = styleSel.value || S.settings.sigStyleDefault || 'std'; styleSel.innerHTML = ''; sigStyles().forEach(s => styleSel.append(el('option', { value: s.id, text: s.title }))); styleSel.append(el('option', { value: 'invisible', text: 'Invisible (solo en el panel de firmas)' })); styleSel.value = [...styleSel.options].some(o => o.value === v) ? v : 'std'; };
+  fillStyles();
+  const cv = el('canvas', { width: 720, height: 240, style: { width: '100%', maxWidth: '360px', border: '1px solid var(--line)', borderRadius: '6px', background: '#fff', display: 'block' } });
   const reason = el('select'); for (const r of ['Soy el autor de este documento', 'Apruebo este documento', 'He revisado este documento', 'Certifico la exactitud e integridad de este documento', 'Acepto los términos definidos']) reason.append(el('option', { value: r, text: r }));
   const location = el('input', { type: 'text', value: S.settings.sigLocation || 'San Pedro Sula, Honduras' });
-  const contact = el('input', { type: 'text', value: S.settings.sigContact || '' , placeholder: 'correo o teléfono (opcional)' });
-  const vis = el('select'); for (const [v, l] of [['visible', 'Visible: dibujar el recuadro en la página'], ['invisible', 'Invisible (solo en el panel de firmas)']]) vis.append(el('option', { value: v, text: l }));
-  const useImg = el('select'); useImg.append(el('option', { value: '', text: 'Sin firma manuscrita' }));
-  store.get('sigs', []).forEach((s, k) => useImg.append(el('option', { value: String(k), text: 'Firma manuscrita guardada #' + (k + 1) })));
-  const body = el('div', { class: 'fm' }, tabs, paneBox, info,
+  const contact = el('input', { type: 'text', value: S.settings.sigContact || '', placeholder: 'correo o teléfono (opcional)' });
+  function styleChanged() {
+    const inv = styleSel.value === 'invisible'; cv.style.display = inv ? 'none' : 'block'; if (inv) return;
+    drawSigPreview(cv, sigStyleById(styleSel.value), { ...sigSample(signer), reason: reason.value, location: location.value });
+  }
+  styleSel.onchange = reason.onchange = styleChanged; location.oninput = styleChanged;
+  // marca de tiempo
+  const tsaSel = el('select', { 'aria-label': 'Marca de tiempo' }); tsaSel.append(el('option', { value: '', text: 'Sin marca de tiempo (hora de este equipo)' }));
+  tsaServers().forEach(t => tsaSel.append(el('option', { value: t.id, text: t.name + ' · ' + t.url })));
+  tsaSel.value = TSA_BRIDGE() && tsaById(S.settings.tsaDefault) ? S.settings.tsaDefault : '';
+  const prefsBtn = el('button', { class: 'btn sm', html: ic('sliders-horizontal') + 'Preferencias de firma…', onclick: async () => {
+    await signPrefsDialog(); ids = await loadIds(); fillWho(); fillStyles(); styleChanged();
+    const tv = tsaSel.value; tsaSel.length = 1; tsaServers().forEach(t => tsaSel.append(el('option', { value: t.id, text: t.name + ' · ' + t.url }))); tsaSel.value = tsaById(tv) ? tv : '';
+  } });
+  const body = el('div', { class: 'fm' },
+    el('div', { class: 'row' }, el('label', { text: 'Firmar como' }), who), pwRow, info,
     el('div', { class: 'cols' }, el('div', { class: 'row' }, el('label', { text: 'Motivo' }), reason), el('div', { class: 'row' }, el('label', { text: 'Ubicación' }), location)),
-    el('div', { class: 'cols' }, el('div', { class: 'row' }, el('label', { text: 'Contacto' }), contact), el('div', { class: 'row' }, el('label', { text: 'Apariencia' }), vis)),
-    el('div', { class: 'row' }, el('label', { text: 'Imagen en el recuadro' }), useImg),
-    el('div', { class: 'hint', html: 'Al firmar se aplican primero todos los cambios del documento y luego se le pedirá dónde guardar el PDF firmado. Cualquier cambio posterior quedará fuera de la firma.' }));
-  const ok = await openModal({ title: 'Firma digital', body, wide: true, buttons: [{ label: 'Cancelar', value: null }, { label: 'Continuar', primary: true, onClick: () => { if (!signer && p12) loadP12(); if (!signer) { toast('Cargue un certificado válido.', 'err'); return false; } if (signer.info.notAfter && signer.info.notAfter < new Date()) { toast('El certificado está vencido.', 'err'); return false; } return true; } }] }).result;
+    el('div', { class: 'cols' }, el('div', { class: 'row' }, el('label', { text: 'Contacto' }), contact), el('div', { class: 'row' }, el('label', { text: 'Marca de tiempo' }), tsaSel)),
+    el('div', { class: 'row' }, el('label', { text: 'Aspecto' }), styleSel), cv,
+    el('div', { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px', marginTop: '8px' } },
+      el('div', { class: 'hint', html: 'Al firmar se aplican primero todos los cambios del documento y luego se le pedirá dónde guardar el PDF firmado.' }), prefsBtn));
+  fillWho();
+  if (NATIVE) natJson('certs').then(cs => { winCerts = cs || []; fillWho(); }).catch(() => { });
+  if (PSN && S.settings.androidCertAlias) PSN.getCertificate({ alias: S.settings.androidCertAlias }).then(c => { if (c && c.alias) { androidCert = c; fillWho(); } }).catch(() => { /* permiso retirado o certificado eliminado: se elige de nuevo */ });
+  const ok = await openModal({ title: 'Firma digital', body, wide: true, buttons: [{ label: 'Cancelar', value: null }, { label: 'Continuar', primary: true, onClick: () => {
+    if (!signer && fileEntry()) { if (!pw.value) { toast('Escriba la contraseña del certificado.', 'err'); pw.focus(); return false; } if (!loadP12()) return false; }
+    if (!signer) { toast('Elija o añada un certificado.', 'err'); return false; }
+    if (signer.info.notAfter && signer.info.notAfter < new Date()) { toast('El certificado está vencido.', 'err'); return false; }
+    return true;
+  } }] }).result;
   if (!ok) return;
-  S.settings.sigLocation = location.value; S.settings.sigContact = contact.value; saveSettings();
-  if (remember.checked && p12) idb.set('p12', { name: p12.name, bytes: p12.bytes }).catch(() => { }); else idb.del('p12').catch(() => { });
-  const opts = { signer, reason: reason.value, location: location.value, contact: contact.value };
-  const sigs = store.get('sigs', []);
-  if (useImg.value !== '') opts.imageDataUrl = sigs[+useImg.value];
-  if (vis.value === 'invisible') return performSign(d, opts, null, null);
+  S.settings.sigLocation = location.value; S.settings.sigContact = contact.value;
+  if (!S.settings.sigIdDefault) S.settings.sigIdDefault = cur();
+  saveSettings();
+  const opts = { signer, reason: reason.value, location: location.value, contact: contact.value, tsa: tsaById(tsaSel.value) };
+  if (styleSel.value === 'invisible') return performSign(d, opts, null, null);
+  opts.style = sigStyleById(styleSel.value);
   S.pendingSign = opts; setTool('sigbox');
   toast('Dibuje en la página el recuadro donde aparecerá la firma.', '', 5000);
 }
@@ -346,21 +388,28 @@ async function performSign(d, opts, p, r) {
     let visible = null;
     if (p) {
       const pi = d.pages.indexOf(p);
-      let image = null;
-      if (opts.imageDataUrl) image = dataUrlToBytes(opts.imageDataUrl);
-      visible = { pageIndex: pi, rect: dispRectToUser(p, r), w: r.w, h: r.h, rot: rotT(p), image };
+      const style = opts.style || sigStyleById(S.settings.sigStyleDefault);
+      const image = opts.imageDataUrl ? dataUrlToBytes(opts.imageDataUrl) : null;
+      visible = { pageIndex: pi, rect: dispRectToUser(p, r), w: r.w, h: r.h, rot: rotT(p), style, image };
     }
-    const bytes = await withBusy('Firmando…', async upd => {
+    const run = o => withBusy('Firmando…', async upd => {
       const base = await buildPdf(d, { progress: upd, noEncrypt: true });
-      upd('Aplicando firma digital…', 95);
-      return signPdfBytes(base, { ...opts, visible });
+      upd(o.tsa ? 'Firmando y solicitando la marca de tiempo a ' + o.tsa.name + '…' : 'Aplicando firma digital…', 95);
+      return signPdfBytes(base, { ...o, visible });
     });
+    let bytes;
+    try { bytes = await run(opts); }
+    catch (e) {
+      if (!e.tsa) throw e;
+      if (!(await confirmDialog('Marca de tiempo', `No se pudo obtener la marca de tiempo de <b>${escapeHtml(opts.tsa.name)}</b>:<br>${escapeHtml(e.message)}<br><br>¿Firmar sin marca de tiempo (con la hora de este equipo)?`, 'Firmar sin marca de tiempo'))) { toast('Firma cancelada.', 'err'); return; }
+      bytes = await run({ ...opts, tsa: null });
+    }
     let n = d.name; if (!/firmado/i.test(n)) n = baseName(n) + '_firmado.pdf';
     const saved = await saveAsDialog(d, bytes, n);
     if (!saved) { toast('Firma cancelada: el documento no se guardó.', 'err'); return; }
     await reloadDocFromBytes(d, bytes);
     S.side = 'signatures'; S.sideOpen = true; renderSide();
-    toast('Documento firmado digitalmente y guardado.', 'ok', 5000);
+    toast('Documento firmado digitalmente' + (opts.tsa ? ' con marca de tiempo' : '') + ' y guardado.', 'ok', 5000);
   } catch (e) { console.error(e); toast('No se pudo firmar: ' + e.message, 'err', 8000); }
 }
 async function reloadDocFromBytes(d, bytes) {
@@ -383,7 +432,7 @@ async function renderSignatures(body) {
         const st = !good ? ['circle-x', 'var(--danger)', 'Firma NO válida: el contenido firmado fue alterado'] : v.coversAll ? ['badge-check', 'var(--ok)', 'Firma íntegra'] : ['badge-check', 'var(--ok)', 'Firma íntegra (con cambios posteriores permitidos)'];
         row.innerHTML = '';
         row.append(el('div', { style: { display: 'flex', gap: '6px', alignItems: 'center', fontWeight: 600, color: st[1] } }, icEl(st[0]), st[2]),
-          el('div', { style: { marginTop: '6px' }, html: `<b>${escapeHtml(v.cert?.cn || v.name || 'Firmante desconocido')}</b>${v.cert?.serialNumber ? ' · ' + escapeHtml(v.cert.serialNumber) : ''}<br>Emisor: ${escapeHtml(v.cert?.issuer || '—')}<br>Fecha: ${v.signingTime ? v.signingTime.toLocaleString('es-HN') : escapeHtml(v.m || '—')}${v.reason ? '<br>Motivo: ' + escapeHtml(v.reason) : ''}${v.location ? '<br>Ubicación: ' + escapeHtml(v.location) : ''}<br>${v.certValidAtTime === false ? '<span style="color:var(--danger)">Certificado fuera de vigencia al firmar</span><br>' : ''}<span class="muted">Firma ${k + 1} de ${s.sigs.length}. La confianza en la autoridad emisora (SAR u otra) debe confirmarse con su certificado raíz.</span>${v.error ? '<br><span class="muted">' + escapeHtml(v.error) + '</span>' : ''}` }));
+          el('div', { style: { marginTop: '6px' }, html: `<b>${escapeHtml(v.cert?.cn || v.name || 'Firmante desconocido')}</b>${v.cert?.serialNumber ? ' · ' + escapeHtml(v.cert.serialNumber) : ''}<br>Emisor: ${escapeHtml(v.cert?.issuer || '—')}<br>Fecha: ${v.signingTime ? v.signingTime.toLocaleString('es-HN') : escapeHtml(v.m || '—')}${v.timestamp ? (v.timestamp.time ? `<br>Marca de tiempo: <b>${v.timestamp.time.toLocaleString('es-HN')}</b>${v.timestamp.tsa ? ' · ' + escapeHtml(v.timestamp.tsa) : ''}${v.timestamp.covers === false ? ' <span style="color:var(--danger)">(no corresponde a esta firma)</span>' : ''}` : '<br><span style="color:var(--danger)">Marca de tiempo ilegible</span>') : ''}${v.reason ? '<br>Motivo: ' + escapeHtml(v.reason) : ''}${v.location ? '<br>Ubicación: ' + escapeHtml(v.location) : ''}<br>${v.certValidAtTime === false ? '<span style="color:var(--danger)">Certificado fuera de vigencia al firmar</span><br>' : ''}<span class="muted">Firma ${k + 1} de ${s.sigs.length}. La confianza en la autoridad emisora (SAR u otra) debe confirmarse con su certificado raíz.</span>${v.error ? '<br><span class="muted">' + escapeHtml(v.error) + '</span>' : ''}` }));
       });
     });
   }
