@@ -1,0 +1,11 @@
+node_modules/
+web/dist/
+web/test-output/
+publish/
+dist-installer/
+bin/
+obj/
+*.user
+.vs/
+__pycache__/
+*.pyc

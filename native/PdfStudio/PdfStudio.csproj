@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>PdfStudio</AssemblyName>
+    <RootNamespace>PdfStudio</RootNamespace>
+    <ApplicationIcon>app.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <Version>1.0.0</Version>
+    <Product>PDF Studio</Product>
+    <Company>ZMA Inversiones</Company>
+    <Copyright>© 2026 Christian Díaz Fajardo — Licencia MIT</Copyright>
+    <Description>Editor PDF libre para Windows</Description>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <SatelliteResourceLanguages>es</SatelliteResourceLanguages>
+    <InvariantGlobalization>false</InvariantGlobalization>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2903.40" />
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="8.0.1" />
+  </ItemGroup>
+
+  <!-- Interfaz web compilada (web/dist). Ejecute "npm ci && npm run build" en /web antes de compilar. -->
+  <ItemGroup>
+    <Content Include="..\..\web\dist\**\*" Exclude="..\..\web\dist\__t\**" LinkBase="web" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="PdfStudio.Tests" />
+  </ItemGroup>
+
+</Project>

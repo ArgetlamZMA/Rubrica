@@ -1,0 +1,78 @@
+name: Compilar, probar y publicar
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ 'v*' ]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Versión
+        id: ver
+        shell: pwsh
+        run: |
+          $pkg = Get-Content web/package.json | ConvertFrom-Json
+          if ($env:GITHUB_REF -like 'refs/tags/v*') { $v = $env:GITHUB_REF_NAME.TrimStart('v') } else { $v = $pkg.version }
+          "version=$v" >> $env:GITHUB_OUTPUT
+          Write-Host "Versión: $v"
+
+      # ---------- Interfaz web ----------
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Compilar interfaz (web/dist)
+        working-directory: web
+        run: |
+          npm ci
+          npm run build
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Pruebas de la interfaz (Playwright)
+        working-directory: web
+        run: |
+          pip install -r tests/requirements.txt
+          python -m playwright install chromium
+          python tests/run_all.py
+
+      # ---------- Aplicación de Windows ----------
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Pruebas C#
+        run: dotnet test native/PdfStudio.Tests/PdfStudio.Tests.csproj -c Release
+      - name: Publicar PdfStudio.exe
+        run: dotnet publish native/PdfStudio/PdfStudio.csproj -c Release -r win-x64 --self-contained true -p:Version=${{ steps.ver.outputs.version }} -o publish
+
+      - name: Instalador (Inno Setup)
+        shell: pwsh
+        run: |
+          if (-not (Get-Command iscc -ErrorAction SilentlyContinue)) { choco install innosetup --no-progress -y | Out-Null }
+          $iscc = (Get-Command iscc -ErrorAction SilentlyContinue).Source
+          if (-not $iscc) { $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" }
+          & $iscc /DMyAppVersion=${{ steps.ver.outputs.version }} /DPublishDir=..\publish installer\PdfStudio.iss
+          Compress-Archive -Path web/dist/* -DestinationPath dist-installer/PDFStudio-Web-${{ steps.ver.outputs.version }}.zip -Force
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PDFStudio-${{ steps.ver.outputs.version }}
+          path: dist-installer/*
+
+      - name: Publicar versión (solo etiquetas v*)
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist-installer/*
+          generate_release_notes: true
