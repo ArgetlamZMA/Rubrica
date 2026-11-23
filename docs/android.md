@@ -14,6 +14,7 @@ Versión para teléfonos y plegables (probada para Galaxy Z Fold 7, Z Fold 8 Ult
 - **Abrir / Guardar**: selector de archivos de Android, que incluye el teléfono, Google Drive y OneDrive (si su app está instalada). «Guardar» escribe sobre el mismo archivo.
 - **«Abrir con» y «Compartir»**: Rúbrica aparece al abrir un PDF o al compartir PDF e imágenes desde otras apps.
 - **Compartir e imprimir** el PDF resultante.
+- **Firma digital con el certificado instalado en Android** (por ejemplo, el del SAR): la clave no sale del almacén del sistema. Ver [firma-digital.md](firma-digital.md).
 - Todo el editor: anotaciones, edición de texto, páginas, formularios, firma digital con `.p12`, contraseñas, conversión.
 - Interfaz táctil: pellizcar para zoom, panel de propiedades como hoja inferior, botón *Atrás* de Android, diseño amplio al desplegar el Fold.
 

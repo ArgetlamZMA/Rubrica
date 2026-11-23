@@ -51,6 +51,67 @@ function nativeStoreSigner(c) {
   return { kind: 'store', info: { cn: c.name, issuer: c.issuer, notAfter: new Date(c.notAfter), notBefore: new Date(c.notBefore), serialNumber: c.serialNumber || '' }, async sign(data) { return natBytes('sign?thumbprint=' + encodeURIComponent(c.thumbprint), { method: 'POST', headers: { 'Content-Type': 'application/octet-stream' }, body: data }); } };
 }
 
+/* ---------- Certificado instalado en Android (KeyChain) ----------
+   La clave privada nunca sale del almacén de Android: la app nativa solo firma
+   los atributos firmados (SHA-256) y aquí se arma el CMS desacoplado. */
+const cat8 = parts => { const n = parts.reduce((a, p) => a + p.length, 0), o = new Uint8Array(n); let k = 0; for (const p of parts) { o.set(p, k); k += p.length; } return o; };
+const derLen = n => { if (n < 128) return [n]; const b = []; while (n) { b.unshift(n & 255); n = Math.floor(n / 256); } return [0x80 | b.length, ...b]; };
+const tlv = (tag, ...parts) => { const body = cat8(parts); return cat8([new Uint8Array([tag, ...derLen(body.length)]), body]); };
+const derOid = oid => tlv(0x06, binToU8(forge.asn1.oidToDer(oid).getBytes()));
+const DER_NULL = new Uint8Array([5, 0]);
+/** Hijos directos de un elemento DER: [{tag, start, end, body}] (start/end incluyen la cabecera) */
+function derChildren(u8, start = 0, end = u8.length) {
+  const out = [];
+  for (let k = start; k < end;) {
+    const tag = u8[k]; let len = u8[k + 1], h = 2;
+    if (len & 0x80) { const nb = len & 0x7f; len = 0; for (let j = 0; j < nb; j++) len = len * 256 + u8[k + 2 + j]; h += nb; }
+    out.push({ tag, start: k, end: k + h + len, body: k + h }); k += h + len;
+  }
+  return out;
+}
+function certIssuerSerial(der) {
+  const [cert] = derChildren(der); const [tbs] = derChildren(der, cert.body, cert.end);
+  const f = derChildren(der, tbs.body, tbs.end); const o = f[0].tag === 0xa0 ? 1 : 0; // versión opcional
+  return { serial: der.slice(f[o].start, f[o].end), issuer: der.slice(f[o + 2].start, f[o + 2].end) };
+}
+const cmpU8 = (a, b) => { for (let i = 0; i < Math.min(a.length, b.length); i++) if (a[i] !== b[i]) return a[i] - b[i]; return a.length - b.length; };
+/**
+ * CMS/PKCS#7 desacoplado con SHA-256 a partir de una firma externa.
+ * chain: certificados DER (el del firmante primero). keyType: 'RSA' | 'EC'.
+ * signRaw(bytes) firma los atributos firmados y devuelve la firma (PKCS#1 v1.5 o ECDSA DER).
+ */
+async function buildDetachedCms(data, chain, keyType, signRaw, when = new Date()) {
+  const O = forge.pki.oids, ec = keyType === 'EC';
+  const sha = tlv(0x30, derOid(O.sha256), DER_NULL);
+  const digest = new Uint8Array(await crypto.subtle.digest('SHA-256', data));
+  const attr = (oid, val) => tlv(0x30, derOid(oid), tlv(0x31, val));
+  const attrs = [attr(O.contentType, derOid(O.data)),
+    attr(O.signingTime, tlv(0x17, binToU8(forge.asn1.dateToUtcTime(when)))),
+    attr(O.messageDigest, tlv(0x04, digest))].sort(cmpU8); // SET OF en DER: ordenado
+  const sig = await signRaw(tlv(0x31, ...attrs));
+  if (!sig || !sig.length) throw new Error('El almacén de Android no devolvió la firma.');
+  const sigAlg = ec ? tlv(0x30, derOid('1.2.840.10045.4.3.2')) : tlv(0x30, derOid(O.rsaEncryption), DER_NULL);
+  const { issuer, serial } = certIssuerSerial(chain[0]);
+  const signerInfo = tlv(0x30, tlv(0x02, new Uint8Array([1])), tlv(0x30, issuer, serial), sha, tlv(0xa0, ...attrs), sigAlg, tlv(0x04, sig));
+  const signedData = tlv(0x30, tlv(0x02, new Uint8Array([1])), tlv(0x31, sha), tlv(0x30, derOid(O.data)), tlv(0xa0, ...chain), tlv(0x31, signerInfo));
+  return tlv(0x30, derOid(O.signedData), tlv(0xa0, signedData));
+}
+function androidCertInfo(c, chain) {
+  try { return certInfo(forge.pki.certificateFromAsn1(forge.asn1.fromDer(u8ToBin(chain[0])))); }
+  catch { // p. ej. claves EC, que node-forge no lee: se usan los datos del sistema
+    const cn = dn => ((dn || '').match(/(?:^|,)\s*CN=((?:\\.|[^,])*)/) || [, dn || ''])[1].replace(/\\(.)/g, '$1');
+    return { cn: cn(c.subject), issuer: cn(c.issuer), serialNumber: '', notBefore: new Date(c.notBefore), notAfter: new Date(c.notAfter) };
+  }
+}
+function androidStoreSigner(c) {
+  const chain = (c.chain || []).map(b64ToU8);
+  if (!chain.length) throw new Error('El certificado elegido no trae su cadena.');
+  return {
+    kind: 'android', alias: c.alias, info: androidCertInfo(c, chain),
+    sign: data => buildDetachedCms(data, chain, c.keyType, async tbs => b64ToU8((await PSN.signWithCertificate({ alias: c.alias, data: u8ToB64(tbs) })).signature || ''))
+  };
+}
+
 /* ---------- Construcción de la firma ---------- */
 function pdfDateStr(d) {
   const p = n => String(n).padStart(2, '0'), off = -d.getTimezoneOffset();
@@ -238,11 +299,26 @@ async function digitalSignDialog() {
       for (const c of cs) list.append(el('div', { class: 'recent-row', onclick: e => { $$('.recent-row', list).forEach(x => x.style.background = ''); e.currentTarget.style.background = 'var(--accent2)'; signer = nativeStoreSigner(c); showInfo(); } }, icEl('badge-check'), el('span', { class: 'nm', text: c.name }), el('span', { class: 'src', text: 'vence ' + new Date(c.notAfter).toLocaleDateString('es-HN') })));
     }).catch(e => list.append(el('div', { class: 'cb-empty', text: e.message })));
   }
+  // certificado instalado en Android (solo app de Android)
+  if (PSN) {
+    const lbl = el('span', { class: 'muted', text: 'Ninguno elegido' });
+    const useCert = c => { signer = androidStoreSigner(c); lbl.textContent = signer.info.cn || c.alias; showInfo(); S.settings.androidCertAlias = c.alias; saveSettings(); };
+    panes.android = el('div', { class: 'fm' },
+      el('div', { class: 'inline', style: { display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '8px' } },
+        el('button', { class: 'btn', html: ic('badge-check') + 'Elegir certificado', onclick: async () => {
+          try { const c = await PSN.chooseCertificate({ alias: S.settings.androidCertAlias || '' }); if (c && c.alias) useCert(c); }
+          catch (e) { toast(e.message || String(e), 'err', 7000); }
+        } }), lbl),
+      el('div', { class: 'hint', html: 'Use el certificado que instaló en el teléfono en <b>Ajustes → Seguridad y privacidad → Más ajustes de seguridad → Instalar desde almacenamiento → Certificado de usuario de VPN y app</b>. La clave privada no sale del almacén de Android y la contraseña no se vuelve a pedir.' }));
+    if (S.settings.androidCertAlias) PSN.getCertificate({ alias: S.settings.androidCertAlias })
+      .then(c => { if (c && c.alias && !signer) useCert(c); }).catch(() => { /* permiso retirado o certificado eliminado: se elige de nuevo */ });
+  }
   const tabs = el('div', { class: 'tabs2' }), paneBox = el('div');
   const setPane = k => { $$('button', tabs).forEach(b => b.classList.toggle('on', b.dataset.k === k)); paneBox.innerHTML = ''; paneBox.append(panes[k]); };
+  if (PSN) tabs.append(el('button', { text: 'Certificado de Android', dataset: { k: 'android' }, onclick: () => setPane('android') }));
   tabs.append(el('button', { text: 'Archivo .p12 / .pfx', dataset: { k: 'p12' }, onclick: () => setPane('p12') }));
   if (NATIVE) tabs.append(el('button', { text: 'Almacén de Windows / token', dataset: { k: 'store' }, onclick: () => setPane('store') }));
-  setPane('p12');
+  setPane(PSN && !savedP12 ? 'android' : 'p12');
   const reason = el('select'); for (const r of ['Soy el autor de este documento', 'Apruebo este documento', 'He revisado este documento', 'Certifico la exactitud e integridad de este documento', 'Acepto los términos definidos']) reason.append(el('option', { value: r, text: r }));
   const location = el('input', { type: 'text', value: S.settings.sigLocation || 'San Pedro Sula, Honduras' });
   const contact = el('input', { type: 'text', value: S.settings.sigContact || '' , placeholder: 'correo o teléfono (opcional)' });

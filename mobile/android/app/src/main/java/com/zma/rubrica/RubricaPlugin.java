@@ -17,6 +17,7 @@ import android.print.PrintDocumentAdapter;
 import android.print.PrintDocumentInfo;
 import android.print.PrintManager;
 import android.provider.OpenableColumns;
+import android.security.KeyChain;
 import android.util.Base64;
 
 import androidx.activity.result.ActivityResult;
@@ -47,13 +48,15 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Funciones nativas de Rúbrica para Android:
  * abrir / guardar con el selector de Android (incluye Drive y OneDrive), compartir, imprimir,
- * archivos recibidos desde otras apps, escáner de documentos y OCR de ML Kit (sin conexión).
+ * archivos recibidos desde otras apps, escáner de documentos y OCR de ML Kit (sin conexión) y
+ * firma con los certificados instalados en Android.
  */
 @CapacitorPlugin(name = "Rubrica")
 public class RubricaPlugin extends Plugin {
@@ -375,6 +378,64 @@ public class RubricaPlugin extends Plugin {
                     .addOnFailureListener(e -> call.reject("OCR falló: " + e.getMessage(), e));
         } catch (Exception e) {
             call.reject("OCR falló: " + e.getMessage(), e);
+        }
+    }
+
+    // ---------- Certificados instalados en Android (firma digital) ----------
+    // El certificado se instala en Ajustes → Seguridad → Instalar desde almacenamiento →
+    // «Certificado de usuario de VPN y app». La clave privada queda en el almacén del sistema:
+    // aquí solo se firma el resumen que envía la interfaz, nunca se exporta la clave.
+
+    @PluginMethod
+    public void chooseCertificate(PluginCall call) {
+        String preset = call.getString("alias", "");
+        getActivity().runOnUiThread(() -> KeyChain.choosePrivateKeyAlias(getActivity(), alias -> {
+            if (alias == null) { call.resolve(new JSObject()); return; } // el usuario canceló
+            new Thread(() -> resolveCertificate(call, alias)).start();
+        }, new String[]{"RSA", "EC"}, null, null, preset == null || preset.isEmpty() ? null : preset));
+    }
+
+    @PluginMethod
+    public void getCertificate(PluginCall call) {
+        String alias = call.getString("alias");
+        if (alias == null || alias.isEmpty()) { call.reject("Falta el certificado"); return; }
+        new Thread(() -> resolveCertificate(call, alias)).start();
+    }
+
+    @PluginMethod
+    public void signWithCertificate(PluginCall call) {
+        String alias = call.getString("alias");
+        String data = call.getString("data");
+        if (alias == null || data == null) { call.reject("Faltan datos"); return; }
+        new Thread(() -> {
+            try {
+                JSObject r = new JSObject();
+                r.put("signature", Base64.encodeToString(
+                        AndroidCertificates.sign(getContext(), alias, Base64.decode(data, Base64.DEFAULT)), Base64.NO_WRAP));
+                call.resolve(r);
+            } catch (Exception e) {
+                call.reject(e.getMessage() == null ? "No se pudo firmar con el certificado" : e.getMessage(), e);
+            }
+        }).start();
+    }
+
+    private void resolveCertificate(PluginCall call, String alias) {
+        try {
+            X509Certificate[] chain = AndroidCertificates.chain(getContext(), alias);
+            JSArray arr = new JSArray();
+            for (X509Certificate c : chain) arr.put(Base64.encodeToString(c.getEncoded(), Base64.NO_WRAP));
+            X509Certificate leaf = chain[0];
+            JSObject r = new JSObject();
+            r.put("alias", alias);
+            r.put("chain", arr);
+            r.put("keyType", leaf.getPublicKey().getAlgorithm());
+            r.put("subject", leaf.getSubjectX500Principal().getName());
+            r.put("issuer", leaf.getIssuerX500Principal().getName());
+            r.put("notBefore", leaf.getNotBefore().getTime());
+            r.put("notAfter", leaf.getNotAfter().getTime());
+            call.resolve(r);
+        } catch (Exception e) {
+            call.reject(e.getMessage() == null ? "No se pudo leer el certificado" : e.getMessage(), e);
         }
     }
 
