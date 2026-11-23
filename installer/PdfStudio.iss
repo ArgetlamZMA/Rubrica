@@ -8,7 +8,7 @@
 #endif
 #define MyAppName "PDF Studio"
 #define MyAppPublisher "ZMA Inversiones"
-#define MyAppURL "https://github.com/ArgetlamZMA/pdf-studio"
+#define MyAppURL "https://github.com/ArgetlamZMA/ZMA-PDF"
 #define MyAppExe "PdfStudio.exe"
 
 [Setup]

@@ -6,7 +6,7 @@ namespace PdfStudio;
 internal static class AppInfo
 {
     /// <summary>Repositorio de GitHub donde se publican las versiones (owner/repo). Cámbielo si publica un fork.</summary>
-    public const string GitHubRepo = "ArgetlamZMA/pdf-studio";
+    public const string GitHubRepo = "ArgetlamZMA/ZMA-PDF";
 
     /// <summary>Puerto local preferido. Debe coincidir con la URI de redirección registrada en Microsoft/Google.</summary>
     public const int PreferredPort = 8765;
