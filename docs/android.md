@@ -28,7 +28,7 @@ GitHub Actions firma el APK con la clave guardada en los secretos del repositori
 | Secreto | Contenido |
 |---|---|
 | `ANDROID_KEYSTORE_B64` | el archivo `.jks` en Base64 |
-| `ANDROID_KEYSTORE_PASSWORD` | su contraseña (alias `rubrica`) |
+| `ANDROID_KEYSTORE_PASSWORD` | su contraseña (alias interno `pdfstudio`) |
 
 Sin esos secretos se genera un APK «-prueba» con una clave temporal (útil para probar, pero cada compilación exige desinstalar la anterior). **Guarde una copia de la clave**: sin ella no se pueden instalar actualizaciones encima de la app existente.
 
