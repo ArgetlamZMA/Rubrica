@@ -8,7 +8,7 @@ Creado por **ZMA Inversiones** (San Pedro Sula, Honduras) como alternativa abier
 
 ## Descargar
 
-Vaya a **[Releases](../../releases)** y descargue `PDFStudio-Setup-x.y.z.exe`. El instalador no requiere permisos de administrador. La aplicación avisa cuando hay una versión nueva y se actualiza sola.
+Vaya a **[Releases](../../releases)** y descargue `PDFStudio-Setup-x.y.z.exe` (Windows) o `PDFStudio-Android-x.y.z.apk` (Android, ver [docs/android.md](docs/android.md)). El instalador no requiere permisos de administrador. La aplicación avisa cuando hay una versión nueva y se actualiza sola.
 
 > Windows puede mostrar «Windows protegió su PC» porque el instalador no está firmado con un certificado de editor. Pulse *Más información → Ejecutar de todas formas*.
 
@@ -23,6 +23,7 @@ Vaya a **[Releases](../../releases)** y descargue `PDFStudio-Setup-x.y.z.exe`. E
 | **Organizar** | Miniaturas con arrastrar para reordenar, girar, insertar, duplicar, eliminar, extraer, dividir, invertir |
 | **Convertir** | A Word, Excel, imágenes y texto; OCR (español/inglés); comprimir |
 | **Formulario** | Rellenar formularios, crear campos (texto, casilla, lista), exportar datos a CSV |
+| **Android** | Escáner de documentos con la cámara (bordes, perspectiva, filtros, OCR sin conexión), abrir/guardar en el teléfono, Drive y OneDrive, «Abrir con», compartir, imprimir, interfaz táctil para teléfono y Fold |
 | **Proteger** | **Firma digital** con certificado `.p12/.pfx` (p. ej. el emitido por el SAR) o del almacén de Windows / token USB; verificación de firmas; firma manuscrita; contraseña AES‑256 y permisos; redacción permanente |
 
 Detalles: [docs/firma-digital.md](docs/firma-digital.md) · [docs/configurar-nube.md](docs/configurar-nube.md) · [docs/arquitectura.md](docs/arquitectura.md)

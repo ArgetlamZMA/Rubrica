@@ -321,10 +321,13 @@ async function settingsDialog(focus) {
   <p>Los archivos viajan directamente entre este equipo y su nube; no hay servidores intermedios ni suscripción.</p>`;
   setTimeout(() => { const b = $('#cp-ru'); if (b) b.onclick = () => { navigator.clipboard.writeText(ru); toast('Copiado.', 'ok'); }; }, 50);
   const v = await formDialog('Configuración', [
-    { type: 'heading', label: 'Nube' },
+    ...(CAP ? [{ type: 'heading', label: 'Escaneo' },
+      { key: 'scanPageSize', label: 'Tamaño de página de los escaneos', type: 'select', value: S.settings.scanPageSize || 'letter', options: [['letter', 'Carta'], ['a4', 'A4'], ['legal', 'Oficio / Legal'], ['fit', 'Tamaño de la imagen']] },
+      { key: 'scanOcr', label: 'Reconocer texto (OCR) al escanear, para poder buscar y copiar', type: 'checkbox', value: S.settings.scanOcr !== false }] : []),
+    ...(CAP ? [] : [{ type: 'heading', label: 'Nube' },
     { key: 'msClientId', label: 'Microsoft · ID de aplicación (cliente)', value: S.settings.msClientId, placeholder: '00000000-0000-0000-0000-000000000000' },
     { key: 'msTenant', label: 'Microsoft · Inquilino', value: S.settings.msTenant || 'common', hint: '<code>common</code> acepta cuentas personales y de empresa. Use su dominio (p. ej. <code>miempresa.com</code>) para limitarlo a su organización.' },
-    { key: 'gClientId', label: 'Google · ID de cliente', value: S.settings.gClientId, placeholder: 'xxxxxxxx.apps.googleusercontent.com' },
+    { key: 'gClientId', label: 'Google · ID de cliente', value: S.settings.gClientId, placeholder: 'xxxxxxxx.apps.googleusercontent.com' }]),
     { type: 'heading', label: 'Fuentes' },
     { key: 'defaultFont', label: 'Fuente predeterminada', type: 'select', value: S.settings.defaultFont || 'Aptos', options: [...new Set([S.settings.defaultFont || 'Aptos', 'Aptos', ...STD_FONTS, ...fontFamilies()])].map(f => [f, (STD_LABEL[f] || f) + (fontAvailable(f) ? '' : ' (no disponible en este equipo)')]) },
     { key: 'detectFonts', label: 'Detectar la fuente original al editar texto (usa la fuente instalada con el mismo nombre)', type: 'checkbox', value: S.settings.detectFonts !== false },
@@ -333,7 +336,7 @@ async function settingsDialog(focus) {
     { key: 'author', label: 'Nombre del autor (notas y firmas)', value: S.settings.author },
     ...(NATIVE ? [{ key: 'autoUpdate', label: 'Buscar actualizaciones al iniciar', type: 'checkbox', value: S.settings.autoUpdate !== false }] : [])
   ], {
-    ok: 'Guardar', wide: true, extra: () => guide, extraButtons: [
+    ok: 'Guardar', wide: true, extra: () => CAP ? el('div', { class: 'hint', html: 'En Android, «Abrir» y «Guardar» usan el selector del sistema, que incluye Google Drive, OneDrive (si su app está instalada) y el almacenamiento del teléfono.<br>Para usar Aptos u otra fuente, copie el archivo .ttf al teléfono y use «Agregar fuente…».' }) : guide, extraButtons: [
       ...(!NATIVE && 'queryLocalFonts' in window ? [{ label: 'Cargar fuentes del equipo', onClick: async () => { await loadLocalFonts(false); return false; } }] : []),
       { label: 'Agregar fuente…', onClick: async () => { await addUserFont(); return false; } },
       ...(NATIVE ? [{ label: 'Buscar actualizaciones', onClick: async () => { await nativeCheckUpdates(true); return false; } }] : [])]
@@ -342,6 +345,8 @@ async function settingsDialog(focus) {
   const fontChanged = (v.defaultFont || 'Aptos') !== (S.settings.defaultFont || 'Aptos');
   S.settings.defaultFont = v.defaultFont; S.settings.detectFonts = v.detectFonts; if ('autoUpdate' in v) S.settings.autoUpdate = v.autoUpdate;
   if (fontChanged) { S.toolOpts.text.font = defaultFont(); S.toolOpts.text._fontSet = false; saveToolOpts(); if (!isStdFont(defaultFont())) ensureFont(defaultFont(), false, false); }
+  if ('scanPageSize' in v) { S.settings.scanPageSize = v.scanPageSize; S.settings.scanOcr = v.scanOcr; }
+  if (!('msClientId' in v)) Object.assign(v, { msClientId: S.settings.msClientId, msTenant: S.settings.msTenant || 'common', gClientId: S.settings.gClientId });
   const changedMs = v.msClientId.trim() !== S.settings.msClientId || v.msTenant.trim() !== S.settings.msTenant;
   const changedG = v.gClientId.trim() !== S.settings.gClientId;
   Object.assign(S.settings, { msClientId: v.msClientId.trim(), msTenant: v.msTenant.trim() || 'common', gClientId: v.gClientId.trim(), author: v.author.trim() });

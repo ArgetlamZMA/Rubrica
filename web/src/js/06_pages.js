@@ -76,10 +76,11 @@ async function insertFromFileDialog() {
   const d = D();
   const v = await formDialog('Insertar desde archivo', [
     { key: 'where', label: 'Posición', type: 'select', value: 'after', options: [['after', 'Después de la página actual'], ['before', 'Antes de la página actual'], ['start', 'Al inicio'], ['end', 'Al final']] },
-    { key: 'from', label: 'Origen', type: 'select', value: 'local', options: [['local', 'Este equipo'], ['onedrive', 'OneDrive'], ['gdrive', 'Google Drive']] },
+    { key: 'from', label: 'Origen', type: 'select', value: 'local', options: PSN ? [['local', 'Archivo (teléfono, Drive, OneDrive…)'], ['scan', 'Escanear con la cámara']] : [['local', 'Este equipo'], ['onedrive', 'OneDrive'], ['gdrive', 'Google Drive']] },
     { key: 'range', label: 'Páginas a insertar (vacío = todas)', placeholder: 'Ej.: 1-3, 5' }
   ], { ok: 'Elegir archivo…' });
   if (!v) return;
+  if (v.from === 'scan') { d.cur = Math.max(0, insertIndex(v.where) - 1); return scanDocument(d); }
   const files = await pickFiles(v.from, true); if (!files.length) return;
   await withBusy('Insertando…', async () => {
     let at = insertIndex(v.where), added = [];

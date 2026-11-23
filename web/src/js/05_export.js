@@ -115,7 +115,8 @@ async function drawOverlays(pdf, pg, p, ctx, doc) {
   const Y = (y, h = 0) => Hc - y - h; // de arriba-izq a eje Y hacia arriba
   pg.pushOperators(PL.pushGraphicsState(), PL.concatTransformationMatrix(...M));
   // 1) capa OCR invisible (debajo de todo)
-  const words = p.ov.filter(o => o.type === 'ocrword');
+  // en orden de lectura (líneas de arriba abajo, palabras de izquierda a derecha) para copiar y buscar bien
+  const words = p.ov.filter(o => o.type === 'ocrword').sort((a, b) => (Math.abs(a.y - b.y) < Math.min(a.h, b.h) * 0.5 ? a.x - b.x : a.y - b.y));
   if (words.length) {
     const font = await getFont(pdf, ctx, 'Helvetica', false, false);
     pg.setFont(font); const key = pg.fontKey;
@@ -123,7 +124,7 @@ async function drawOverlays(pdf, pg, p, ctx, doc) {
       const t = safeText(font, o.t); if (!t.trim()) continue;
       const size = Math.max(1, o.h * 0.85), w1 = font.widthOfTextAtSize(t, size) || 1;
       pg.pushOperators(PL.pushGraphicsState(), PL.beginText(), PL.setFontAndSize(key, size), PL.setTextRenderingMode(PL.TextRenderingMode.Invisible),
-        PL.PDFOperator.of('Tz', [PL.PDFNumber.of(clamp(o.w / w1 * 100, 1, 1000))]), PL.setTextMatrix(1, 0, 0, 1, o.x, Y(o.y) - size * 0.82), PL.showText(font.encodeText(t)), PL.endText(), PL.popGraphicsState());
+        PL.PDFOperator.of('Tz', [PL.PDFNumber.of(clamp(o.w / w1 * 100, 1, 1000))]), PL.setTextMatrix(1, 0, 0, 1, o.x, Y(o.y) - size * 0.82), PL.showText(font.encodeText(t + ' ')), PL.endText(), PL.popGraphicsState());
     }
   }
   for (const o of p.ov) {

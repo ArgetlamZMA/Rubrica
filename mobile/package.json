@@ -1,0 +1,15 @@
+{
+  "name": "pdf-studio-mobile",
+  "version": "1.1.0",
+  "private": true,
+  "description": "PDF Studio para Android (Capacitor). Usa la misma interfaz de /web.",
+  "license": "MIT",
+  "scripts": {
+    "sync": "cap sync android"
+  },
+  "dependencies": {
+    "@capacitor/android": "8.6.2",
+    "@capacitor/cli": "8.6.2",
+    "@capacitor/core": "8.6.2"
+  }
+}

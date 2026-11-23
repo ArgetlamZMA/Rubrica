@@ -12,6 +12,7 @@ function pickLocal(accept = '.pdf,image/*', multiple = true) {
   });
 }
 async function pickFiles(from = 'local', multiple = true, accept) {
+  if (from === 'local' && PSN) return androidOpen(accept === 'image/*');
   if (from === 'local') {
     const fs = await pickLocal(accept || '.pdf,.png,.jpg,.jpeg,.gif,.webp,.bmp', multiple);
     return Promise.all(fs.map(async f => ({ name: f.name, bytes: await readFileBytes(f), mime: f.type })));
@@ -25,6 +26,7 @@ async function pickFiles(from = 'local', multiple = true, accept) {
   });
 }
 async function openLocal() {
+  if (PSN) return androidOpenDocs();
   if (NATIVE) return nativeOpenFiles();
   if (window.showOpenFilePicker) {
     let hs;
@@ -54,7 +56,7 @@ async function openDroppedFiles(list) {
 /* ---------- Recientes ---------- */
 function addRecent(doc) {
   let kind = null, ref = null;
-  if (doc.cloud) { kind = doc.cloud.provider; ref = doc.cloud; } else if (doc.nativePath) { kind = 'native'; ref = { id: doc.nativePath, path: doc.nativePath }; } else if (doc.handleId) { kind = 'local'; ref = { handleId: doc.handleId }; }
+  if (doc.cloud) { kind = doc.cloud.provider; ref = doc.cloud; } else if (doc.androidUri) { kind = 'android'; ref = { id: doc.androidUri, uri: doc.androidUri }; } else if (doc.nativePath) { kind = 'native'; ref = { id: doc.nativePath, path: doc.nativePath }; } else if (doc.handleId) { kind = 'local'; ref = { handleId: doc.handleId }; }
   if (!kind) return;
   const key = kind + ':' + (ref.id || doc.name);
   const list = store.get('recent', []).filter(r => r.key !== key);
@@ -63,7 +65,8 @@ function addRecent(doc) {
 }
 async function openRecent(r) {
   try {
-    if (r.kind === 'native') { if (!NATIVE) throw new Error('Este archivo se abrió desde la app de escritorio.'); await openNativePath(r.ref.path); }
+    if (r.kind === 'android') { if (!PSN) throw new Error('Este archivo se abrió en Android.'); const f = await withBusy('Abriendo…', () => PSN.read({ uri: r.ref.uri })); await openBytes(f.name, b64ToU8(f.data), { androidUri: r.ref.uri }); }
+    else if (r.kind === 'native') { if (!NATIVE) throw new Error('Este archivo se abrió desde la app de escritorio.'); await openNativePath(r.ref.path); }
     else if (r.kind === 'local') {
       const h = await idb.get('h:' + r.ref.handleId);
       if (!h) throw new Error('El archivo ya no está disponible. Ábralo de nuevo con «Abrir».');
@@ -81,6 +84,7 @@ async function openRecent(r) {
 async function saveDoc(doc = D(), as = false) {
   if (!doc) return;
   commitEditing();
+  if (!as && doc.androidUri) return saveToAndroid(doc, doc.androidUri);
   if (!as && doc.cloud) return saveToCloud(doc, doc.cloud.provider, true);
   if (!as && doc.nativePath) return saveToNative(doc, doc.nativePath);
   if (!as && doc.handle) return saveToHandle(doc, doc.handle);
@@ -97,6 +101,7 @@ async function saveToNative(doc, path, preset) {
 }
 /** Guardar como. preset: bytes ya generados (p. ej. PDF firmado). Devuelve true si se guardó. */
 async function saveAsDialog(doc, preset, suggested) {
+  if (PSN) return androidSaveAs(doc, preset, suggested); // el selector de Android incluye Drive, OneDrive y el teléfono
   const name = el('input', { type: 'text', value: suggested || doc.name });
   const choose = where => m.close(where);
   const card = (where, icn, title, sub) => el('button', { class: 'hcard', onclick: () => choose(where) }, el('div', { class: 'hi', html: ic(icn) }), el('div', {}, el('b', { text: title }), el('span', { text: sub })));
@@ -160,13 +165,15 @@ async function combineDialog(imagesMode = false) {
       el('button', { class: 'icon-btn sm', html: ic('x'), title: 'Quitar', onclick: () => { items.splice(i, 1); draw(); } }))));
   };
   const add = async from => { try { items.push(...await pickFiles(from, true, imagesMode ? 'image/*' : undefined)); draw(); } catch (e) { toast(e.message, 'err'); } };
+  const addScan = async () => { try { const r = await PSN.scan({ pageLimit: 60, gallery: true }); (r.pages || []).forEach(pg => items.push({ name: `escaneo${items.length + 1}.jpg`, bytes: b64ToU8(pg.data), mime: 'image/jpeg' })); draw(); } catch (e) { toast(e.message || String(e), 'err'); } };
   const size = el('select'); for (const [v, l] of [['fit', 'Ajustar a cada imagen'], ['a4', 'A4'], ['letter', 'Carta'], ['legal', 'Oficio / Legal']]) size.append(el('option', { value: v, text: l })); size.value = imagesMode ? 'a4' : 'fit';
   const nameI = el('input', { type: 'text', value: imagesMode ? 'Imágenes.pdf' : 'Combinado.pdf' });
   const body = el('div', { class: 'fm' },
     el('div', { class: 'inline', style: { marginBottom: '10px', display: 'flex', gap: '6px', flexWrap: 'wrap' } },
+      ...(PSN ? [el('button', { class: 'btn', html: ic('scan-line') + 'Escanear', onclick: addScan }), el('button', { class: 'btn', html: ic('folder-open') + 'Elegir archivos', onclick: () => add('local') })] : [
       el('button', { class: 'btn', html: ic('hard-drive') + 'Este equipo', onclick: () => add('local') }),
       el('button', { class: 'btn', html: ic('cloud') + 'OneDrive', onclick: () => add('onedrive') }),
-      el('button', { class: 'btn', html: ic('cloud') + 'Google Drive', onclick: () => add('gdrive') })),
+      el('button', { class: 'btn', html: ic('cloud') + 'Google Drive', onclick: () => add('gdrive') })])),
     list, el('div', { class: 'cols', style: { marginTop: '12px' } },
       el('div', { class: 'row' }, el('label', { text: 'Tamaño de página para imágenes' }), size),
       el('div', { class: 'row' }, el('label', { text: 'Nombre del documento' }), nameI)));
@@ -485,7 +492,7 @@ function renderSide() {
   head.innerHTML = ''; head.append(el('span', { text: SIDE.find(x => x[0] === S.side)[2] }), el('button', { class: 'icon-btn sm', html: ic('chevrons-left'), title: 'Ocultar panel', onclick: () => { S.sideOpen = false; renderSide(); } }));
   if (S.side === 'thumbs') {
     const box = el('div', { class: 'thumbs' });
-    d.pages.forEach((p, i) => { const t = el('div', { class: 'thumb' + (i === d.cur ? ' cur' : ''), dataset: { i }, onclick: () => goToPage(i) }); const tc = el('div', { class: 'tc' }); thumbImg(d, p, tc, 130, 165); t.append(tc, el('div', { class: 'tl', text: i + 1 })); box.append(t); });
+    d.pages.forEach((p, i) => { const t = el('div', { class: 'thumb' + (i === d.cur ? ' cur' : ''), dataset: { i }, onclick: () => { goToPage(i); if (isPhone()) { S.sideOpen = false; renderSide(); } } }); const tc = el('div', { class: 'tc' }); thumbImg(d, p, tc, 130, 165); t.append(tc, el('div', { class: 'tl', text: i + 1 })); box.append(t); });
     body.append(box);
   } else if (S.side === 'comments') renderCommentsList(body);
   else if (S.side === 'bookmarks') renderBookmarks(body);
@@ -733,7 +740,8 @@ async function ocrDialog() {
   if (!v) return;
   let idx; try { idx = parseRanges(v.range, d.pages.length); } catch (e) { toast(e.message, 'err'); return; }
   let allText = '';
-  try {
+  if (PSN) { try { allText = await ocrNative(d, idx); } catch (e) { toast('OCR: ' + (e.message || e), 'err'); return; } }
+  else try {
     await withBusy('Cargando motor OCR…', async upd => {
       await loadTesseract();
       const worker = await Tesseract.createWorker(v.lang, 1, { logger: m => { if (m.status && m.progress != null && /recogniz/i.test(m.status)) upd(null, m.progress * 100); else if (m.status) upd(({ 'loading tesseract core': 'Cargando motor…', 'loading language traineddata': 'Descargando idioma…', 'initializing api': 'Inicializando…' })[m.status] || null); } });
@@ -786,6 +794,7 @@ async function compressDialog() {
 /* ---------- Imprimir ---------- */
 async function printDoc() {
   const d = D(); if (!d) return;
+  if (PSN) { try { const bytes = await withBusy('Preparando impresión…', upd => buildPdf(d, { noEncrypt: true, progress: upd })); await PSN.print({ name: d.name, data: u8ToB64(bytes) }); } catch (e) { toast(e.message || String(e), 'err'); } return; }
   try {
     const bytes = await withBusy('Preparando impresión…', upd => buildPdf(d, { noEncrypt: true, progress: upd }));
     const url = URL.createObjectURL(pdfBlob(bytes));

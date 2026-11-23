@@ -224,7 +224,7 @@ async function digitalSignDialog() {
   const loadP12 = () => { try { signer = p12Signer(p12.bytes, pw.value); showInfo(); return true; } catch (e) { signer = null; showInfo(); toast(e.message, 'err', 6000); return false; } };
   const paneP12 = el('div', { class: 'fm' },
     el('div', { class: 'inline', style: { display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '8px' } },
-      el('button', { class: 'btn', html: ic('folder-open') + 'Elegir .p12 / .pfx', onclick: async () => { const f = await pickLocal('.p12,.pfx', false); if (!f.length) return; p12 = { name: f[0].name, bytes: await readFileBytes(f[0]) }; fileLbl.textContent = p12.name; signer = null; showInfo(); } }), fileLbl),
+      el('button', { class: 'btn', html: ic('folder-open') + 'Elegir .p12 / .pfx', onclick: async () => { const f = await pickLocal(CAP ? '' : '.p12,.pfx', false); if (!f.length) return; p12 = { name: f[0].name, bytes: await readFileBytes(f[0]) }; fileLbl.textContent = p12.name; signer = null; showInfo(); } }), fileLbl),
     el('div', { class: 'row' }, pw),
     el('div', { class: 'inline', style: { display: 'flex', gap: '8px' } }, el('button', { class: 'btn sm', text: 'Verificar certificado', onclick: () => p12 ? loadP12() : toast('Elija el archivo del certificado.', 'err') }),
       el('label', { class: 'inline hint' }, remember, 'Recordar el archivo en este equipo (nunca la contraseña)')));

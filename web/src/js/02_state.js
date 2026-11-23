@@ -206,6 +206,7 @@ async function openBytes(name, bytes, extra = {}) {
     if (extra.cloud) doc.cloud = extra.cloud;
     if (extra.handle) { doc.handle = extra.handle; doc.handleId = extra.handleId; }
     if (extra.nativePath) doc.nativePath = extra.nativePath;
+    if (extra.androidUri) doc.androidUri = extra.androidUri;
     if (s0.sigs && s0.sigs.length) setTimeout(() => toast(`Este documento tiene ${s0.sigs.length} firma(s) digital(es). Revíselas en el panel «Firmas».`, '', 6000), 300);
     if (s0.kind === 'image') doc.dirty = true;
     addDoc(doc);

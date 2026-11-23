@@ -10,7 +10,7 @@
     <RootNamespace>PdfStudio</RootNamespace>
     <ApplicationIcon>app.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <Version>1.0.0</Version>
+    <Version>1.1.0</Version>
     <Product>PDF Studio</Product>
     <Company>ZMA Inversiones</Company>
     <Copyright>© 2026 Christian Díaz Fajardo — Licencia MIT</Copyright>

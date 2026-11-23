@@ -76,3 +76,81 @@ jobs:
         with:
           files: dist-installer/*
           generate_release_notes: true
+
+  android:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Versión
+        id: ver
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then V="${GITHUB_REF_NAME#v}"; else V="$(node -p "require('./web/package.json').version")"; fi
+          IFS=. read -r MA MI PA <<< "${V%%-*}"
+          echo "version=$V" >> "$GITHUB_OUTPUT"
+          echo "code=$(( ${MA:-1} * 10000 + ${MI:-0} * 100 + ${PA:-0} ))" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: |
+            web/package-lock.json
+            mobile/package-lock.json
+
+      - name: Compilar interfaz y sincronizar con Android
+        run: |
+          (cd web && npm ci && npm run build)
+          (cd mobile && npm ci && npx cap sync android)
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: gradle
+
+      - name: Almacén de claves (secretos del repositorio)
+        id: ks
+        env:
+          KS_B64: ${{ secrets.ANDROID_KEYSTORE_B64 }}
+        run: |
+          if [ -n "$KS_B64" ]; then
+            echo "$KS_B64" | base64 -d > "$RUNNER_TEMP/release.jks"
+            echo "file=$RUNNER_TEMP/release.jks" >> "$GITHUB_OUTPUT"
+          else
+            echo "::warning::Faltan los secretos ANDROID_KEYSTORE_B64 / ANDROID_KEYSTORE_PASSWORD: se genera un APK de prueba firmado con clave temporal."
+          fi
+
+      - name: Compilar APK
+        working-directory: mobile/android
+        env:
+          VERSION_NAME: ${{ steps.ver.outputs.version }}
+          VERSION_CODE: ${{ github.ref_type == 'tag' && steps.ver.outputs.code || github.run_number }}
+          ANDROID_KEYSTORE_FILE: ${{ steps.ks.outputs.file }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: pdfstudio
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+        run: |
+          chmod +x gradlew
+          TASK=assembleRelease; [ -z "$ANDROID_KEYSTORE_FILE" ] && TASK=assembleDebug
+          set -o pipefail
+          ./gradlew --no-daemon --stacktrace "$TASK" 2>&1 | tee "$RUNNER_TEMP/gradle.log" || {
+            grep -E "error:|ERROR|FAILURE|What went wrong|\.java:[0-9]+|Could not|> " "$RUNNER_TEMP/gradle.log" | head -40 | while IFS= read -r l; do echo "::error::${l//%/%25}"; done
+            exit 1; }
+          mkdir -p ../../dist-android
+          APK=$(ls app/build/outputs/apk/*/*.apk | head -1)
+          SUFFIX=""; [ -z "$ANDROID_KEYSTORE_FILE" ] && SUFFIX="-prueba"
+          cp "$APK" "../../dist-android/PDFStudio-Android-${VERSION_NAME}${SUFFIX}.apk"
+          ls -la ../../dist-android
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PDFStudio-Android-${{ steps.ver.outputs.version }}
+          path: dist-android/*.apk
+
+      - name: Publicar APK en la versión (solo etiquetas v*)
+        if: startsWith(github.ref, 'refs/tags/v') && steps.ks.outputs.file != ''
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist-android/*.apk

@@ -14,7 +14,7 @@ const SWATCHES = ['#111111', '#ffffff', '#d1242f', '#f08c00', '#ffe14d', '#1a7f3
 function setTool(t) {
   commitEditing();
   if (t !== 'image') S.pendingImage = S.pendingImage && t === 'image' ? S.pendingImage : null;
-  S.tool = t;
+  S.tool = t; S.toolSheet = false;
   if (CREATE.has(t) || t === 'eraser') { const old = S.sel; S.sel = null; if (old) { const p = D()?.page(old.pid); p && renderOverlays(p); } }
   document.body.classList.remove('tool-select', 'tool-hand', 'tool-create', 'tool-eraser', 'tool-edittext');
   document.body.classList.add(CREATE.has(t) ? 'tool-create' : 'tool-' + t);
@@ -393,14 +393,17 @@ async function editFieldProps(p, o) {
 /* ---------- Panel de propiedades ---------- */
 function renderProps() {
   const box = $('#props-body'), d = D();
-  $('#props').classList.toggle('hidden', !d || d.view === 'organize');
+  const sheetHidden = isPhone() && !S.sel && !S.toolSheet;
+  const sb = $('#sb-style'); if (sb) sb.style.display = isPhone() && d && !S.sel && S.tool !== 'select' && S.tool !== 'hand' ? '' : 'none';
+  $('#props').classList.toggle('hidden', !d || d.view === 'organize' || sheetHidden);
   box.innerHTML = '';
   if (!d) return;
   const o = selObj();
   const kind = o ? o.type : S.tool;
   const target = o || S.toolOpts[kind];
   const pp = el('div', { class: 'pp' });
-  pp.append(el('h4', { text: o ? (TOOL_NAMES[o.type] || o.type) : TOOL_NAMES[S.tool] || '' }));
+  pp.append(el('h4', { class: 'pp-head' }, el('span', { text: o ? (TOOL_NAMES[o.type] || o.type) : TOOL_NAMES[S.tool] || '' }),
+    isPhone() ? el('button', { class: 'icon-btn sm', html: ic('x'), title: 'Cerrar', onclick: () => { if (S.sel) clearSel(); else { S.toolSheet = false; renderProps(); } } }) : null));
   const set = (k, v) => {
     if (o) {
       if (!S.propCk) { d.checkpoint(); S.propCk = true; }

@@ -4,8 +4,8 @@
 const T = t => ({ tool: t, icon: { select: 'mouse-pointer-2', hand: 'hand', highlight: 'highlighter', underline: 'underline', strike: 'strikethrough', note: 'message-square-plus', text: 'type', ink: 'pencil', rect: 'square', ellipse: 'circle', line: 'minus', arrow: 'move-up-right', stamp: 'stamp', eraser: 'eraser', edittext: 'text-cursor-input', whiteout: 'square-dashed', redact: 'eye-off', 'field-text': 'text-cursor', 'field-check': 'square-check', 'field-drop': 'list' }[t], label: TOOL_NAMES[t] });
 const RIBBON = [
   { id: 'home', label: 'Inicio', groups: [
-    [{ icon: 'folder-open', label: 'Abrir', act: openLocal, nodoc: true }, { icon: 'cloud', label: 'OneDrive', act: () => openFromCloud('onedrive'), nodoc: true }, { icon: 'cloud', label: 'Google Drive', act: () => openFromCloud('gdrive'), nodoc: true }],
-    [{ icon: 'save', label: 'Guardar', act: () => saveDoc() }, { icon: 'save-all', label: 'Guardar como', act: () => saveDoc(D(), true) }, { icon: 'printer', label: 'Imprimir', act: printDoc }],
+    [{ icon: 'scan-line', label: 'Escanear', act: () => scanDocument(), nodoc: true, android: true }, { icon: 'folder-open', label: 'Abrir', act: openLocal, nodoc: true }, { icon: 'cloud', label: 'OneDrive', act: () => openFromCloud('onedrive'), nodoc: true, android: false }, { icon: 'cloud', label: 'Google Drive', act: () => openFromCloud('gdrive'), nodoc: true, android: false }],
+    [{ icon: 'save', label: 'Guardar', act: () => saveDoc() }, { icon: 'save-all', label: 'Guardar como', act: () => saveDoc(D(), true) }, { icon: 'share-2', label: 'Compartir', act: () => shareDoc(), touch: true }, { icon: 'printer', label: 'Imprimir', act: printDoc }],
     [{ icon: 'combine', label: 'Combinar', act: () => combineDialog(false), nodoc: true }, { icon: 'images', label: 'Desde imágenes', act: () => combineDialog(true), nodoc: true }, { icon: 'file-plus', label: 'En blanco', act: newBlankDialog, nodoc: true }],
     [{ icon: 'undo-2', label: 'Deshacer', act: undo }, { icon: 'redo-2', label: 'Rehacer', act: redo }],
     [T('select'), T('hand')],
@@ -20,7 +20,7 @@ const RIBBON = [
     [{ icon: 'crop', label: 'Recortar', act: cropDialog }]] },
   { id: 'pages', label: 'Organizar', groups: [
     [{ icon: 'layout-grid', label: 'Vista de páginas', act: () => setViewMode(D().view === 'organize' ? 'pages' : 'organize'), on: () => D()?.view === 'organize' }],
-    [{ icon: 'file-plus-2', label: 'Insertar en blanco', act: insertBlankDialog }, { icon: 'file-input', label: 'Insertar archivo', act: insertFromFileDialog }],
+    [{ icon: 'file-plus-2', label: 'Insertar en blanco', act: insertBlankDialog }, { icon: 'file-input', label: 'Insertar archivo', act: insertFromFileDialog }, { icon: 'scan-line', label: 'Escanear páginas', act: () => scanDocument(D()), android: true }],
     [{ icon: 'rotate-ccw', label: 'Girar izquierda', act: () => rotatePages(targetPages(), -1) }, { icon: 'rotate-cw', label: 'Girar derecha', act: () => rotatePages(targetPages(), 1) }, { icon: 'copy', label: 'Duplicar', act: () => duplicatePages(targetPages()) }, { icon: 'trash-2', label: 'Eliminar', act: () => deletePages(targetPages()) }],
     [{ icon: 'file-output', label: 'Extraer', act: extractDialog }, { icon: 'scissors', label: 'Dividir', act: splitDialog }, { icon: 'arrow-down-up', label: 'Invertir orden', act: reversePages }],
     [{ icon: 'crop', label: 'Recortar', act: cropDialog }]] },
@@ -44,6 +44,9 @@ function renderRibbon() {
   for (const g of tab.groups) {
     const ge = el('div', { class: 'rgroup' });
     for (const b of g) {
+      if (b.android === true && !CAP) continue;
+      if (b.android === false && CAP) continue;
+      if (b.touch && !CAP && !isTouch()) continue;
       const be = el('button', { class: 'rbtn', html: ic(b.icon) + `<span>${escapeHtml(b.label)}</span>`, title: b.title || b.label, dataset: b.tool ? { tool: b.tool } : {} });
       be._def = b;
       be.onclick = async () => {
@@ -76,13 +79,15 @@ function renderHome() {
     el('h1', { text: 'PDF Studio' }),
     el('p', { class: 'sub', text: 'Editor PDF local: lectura, comentarios, edición, páginas, formularios, firmas, protección, conversión y OCR — con OneDrive y Google Drive.' }),
     el('div', { class: 'home-cards' },
-      card('folder-open', 'Abrir archivo', 'PDF o imagen de este equipo', openLocal),
-      card('cloud', 'Abrir de OneDrive', CLOUD.onedrive.label2(), () => openFromCloud('onedrive')),
-      card('cloud', 'Abrir de Google Drive', CLOUD.gdrive.label2(), () => openFromCloud('gdrive')),
+      CAP ? card('scan-line', 'Escanear documento', 'Cámara con detección de bordes y OCR', () => scanDocument()) : null,
+      CAP ? card('folder-open', 'Abrir PDF', 'Teléfono, Google Drive, OneDrive…', openLocal) : null,
+      CAP ? null : card('folder-open', 'Abrir archivo', 'PDF o imagen de este equipo', openLocal),
+      CAP ? null : card('cloud', 'Abrir de OneDrive', CLOUD.onedrive.label2(), () => openFromCloud('onedrive')),
+      CAP ? null : card('cloud', 'Abrir de Google Drive', CLOUD.gdrive.label2(), () => openFromCloud('gdrive')),
       card('combine', 'Combinar archivos', 'Unir varios PDF e imágenes', () => combineDialog(false)),
       card('images', 'PDF desde imágenes', 'Fotos o escaneos a un PDF', () => combineDialog(true)),
       card('file-plus', 'Documento en blanco', 'Carta, A4, Oficio…', newBlankDialog)),
-    el('div', { class: 'home-drop', html: ic('upload') + '<br>Arrastre aquí archivos PDF o imágenes para abrirlos' }));
+    CAP ? null : el('div', { class: 'home-drop', html: ic('upload') + '<br>Arrastre aquí archivos PDF o imágenes para abrirlos' }));
   const rec = store.get('recent', []).filter(r => NATIVE || r.kind !== 'native');
   if (rec.length) {
     const list = el('div', { class: 'recent-list' });
@@ -91,7 +96,7 @@ function renderHome() {
       el('button', { class: 'icon-btn sm', html: ic('x'), title: 'Quitar de la lista', onclick: e => { e.stopPropagation(); store.set('recent', store.get('recent', []).filter(x => x.key !== r.key)); renderHome(); } })));
     inner.append(el('div', { class: 'recent' }, el('h3', { text: 'Recientes' }), list));
   }
-  if (!CLOUD.onedrive.configured() && !CLOUD.gdrive.configured()) inner.append(el('p', { class: 'hint', style: { marginTop: '22px' }, html: `Para abrir y guardar en la nube, configure OneDrive o Google Drive una sola vez en <a href="#" id="home-cfg">⚙ Configuración</a>.` }));
+  if (!CAP && !CLOUD.onedrive.configured() && !CLOUD.gdrive.configured()) inner.append(el('p', { class: 'hint', style: { marginTop: '22px' }, html: `Para abrir y guardar en la nube, configure OneDrive o Google Drive una sola vez en <a href="#" id="home-cfg">⚙ Configuración</a>.` }));
   box.append(inner);
   const cfg = $('#home-cfg'); if (cfg) cfg.onclick = e => { e.preventDefault(); settingsDialog().then(renderHome); };
 }
@@ -141,6 +146,7 @@ function initChrome() {
   $('#btn-theme').innerHTML = ic(S.settings.dark ? 'sun' : 'moon');
   $('#btn-theme').onclick = () => { S.settings.dark = !S.settings.dark; document.documentElement.classList.toggle('dark', S.settings.dark); saveSettings(); $('#btn-theme').innerHTML = ic(S.settings.dark ? 'sun' : 'moon'); };
   $('#btn-settings').innerHTML = ic('settings'); $('#btn-settings').onclick = () => settingsDialog().then(() => { if (!D()) renderHome(); });
+  $('#sb-style').onclick = () => { S.toolSheet = !S.toolSheet; renderProps(); };
   $('#sb-prev').innerHTML = ic('chevron-up'); $('#sb-next').innerHTML = ic('chevron-down');
   $('#sb-prev').onclick = () => goToPage((D()?.cur || 0) - 1); $('#sb-next').onclick = () => goToPage((D()?.cur || 0) + 1);
   $('#sb-page').onchange = () => goToPage((parseInt($('#sb-page').value) || 1) - 1);
@@ -159,10 +165,12 @@ function initPwa() {
   if (handleAuthCallback()) return;
   if (S.settings.dark) document.documentElement.classList.add('dark');
   initChrome(); initViewerEvents(); initKeys(); initDnD();
+  try { await initMobile(); } catch (e) { console.warn('móvil', e); }
   renderTabs(); renderRibbon(); renderViewer(); renderSide(); renderProps(); updateCloudStatus(); setTool('select');
   try { await initMetricFonts(); } catch (e) { console.warn('fonts', e); }
   try { await initFonts(); } catch (e) { console.warn('system fonts', e); }
   renderProps();
-  if (NATIVE) { document.body.classList.add('native'); if (S.settings.autoUpdate !== false) setTimeout(() => nativeCheckUpdates(false), 6000); }
+  if (CAP) { /* Android: sin service worker ni actualizaciones web */ }
+  else if (NATIVE) { document.body.classList.add('native'); if (S.settings.autoUpdate !== false) setTimeout(() => nativeCheckUpdates(false), 6000); }
   else initPwa();
 })();

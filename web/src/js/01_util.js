@@ -69,6 +69,7 @@ const plRgb = hex => { const c = hexToRgb(hex); return PL.rgb(c.r, c.g, c.b); };
 function rgbToHex(r, g, b) { return '#' + [r, g, b].map(v => clamp(Math.round(v), 0, 255).toString(16).padStart(2, '0')).join(''); }
 
 function download(blob, name) {
+  if (typeof PSN !== 'undefined' && PSN) { androidSaveBlob(blob, name); return; }
   const a = el('a', { href: URL.createObjectURL(blob), download: name });
   document.body.append(a); a.click(); a.remove();
   setTimeout(() => URL.revokeObjectURL(a.href), 30000);
