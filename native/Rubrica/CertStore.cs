@@ -3,7 +3,7 @@ using System.Security.Cryptography.Pkcs;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
 
-namespace PdfStudio;
+namespace Rubrica;
 
 /// <summary>
 /// Certificados del almacén personal de Windows (incluye tokens USB y tarjetas inteligentes con su

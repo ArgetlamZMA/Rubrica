@@ -3,7 +3,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 
-namespace PdfStudio;
+namespace Rubrica;
 
 /// <summary>
 /// Servidor HTTP local (solo localhost). Sirve la interfaz y la API /__native/*.
@@ -225,7 +225,7 @@ internal sealed class LocalServer : IDisposable
                     return;
                 }
                 var bytes = await ReadBodyAsync(req);
-                var tmp = full + ".pdfstudio.tmp";
+                var tmp = full + ".rubrica.tmp";
                 await File.WriteAllBytesAsync(tmp, bytes);
                 File.Move(tmp, full, overwrite: true);
                 await WriteJsonAsync(res, new { ok = true, path = full, size = bytes.Length });

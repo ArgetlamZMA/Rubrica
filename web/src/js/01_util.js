@@ -1,6 +1,6 @@
 'use strict';
 /* ============================================================
-   PDF Studio — editor PDF local con OneDrive / Google Drive
+   Rúbrica — editor PDF local con OneDrive / Google Drive
    01 · Utilidades
    ============================================================ */
 const PL = PDFLib;

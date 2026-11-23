@@ -94,7 +94,7 @@ async function signPdfBytes(bytes, o) {
     Contents: PL.PDFHexString.of('0'.repeat(SIG_HEX)), M: PL.PDFString.fromDate(now),
     Name: PL.PDFHexString.fromText(o.signer.info.cn || ''), Reason: PL.PDFHexString.fromText(o.reason || ''),
     Location: PL.PDFHexString.fromText(o.location || ''), ContactInfo: PL.PDFHexString.fromText(o.contact || ''),
-    Prop_Build: { App: { Name: 'PDFStudio' }, Filter: { Name: 'Adobe.PPKLite' } }
+    Prop_Build: { App: { Name: 'Rubrica' }, Filter: { Name: 'Adobe.PPKLite' } }
   });
   const buf = new Uint8Array(sigDict.sizeInBytes()); sigDict.copyBytesInto(buf, 0);
   const sigRef = ctx.register(PL.PDFInvalidObject.of(buf));

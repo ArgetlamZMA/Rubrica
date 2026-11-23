@@ -6,12 +6,12 @@
     <UseWindowsForms>true</UseWindowsForms>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <AssemblyName>PdfStudio</AssemblyName>
-    <RootNamespace>PdfStudio</RootNamespace>
+    <AssemblyName>Rubrica</AssemblyName>
+    <RootNamespace>Rubrica</RootNamespace>
     <ApplicationIcon>app.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <Version>1.1.0</Version>
-    <Product>PDF Studio</Product>
+    <Product>Rúbrica</Product>
     <Company>ZMA Inversiones</Company>
     <Copyright>© 2026 Christian Díaz Fajardo — Licencia MIT</Copyright>
     <Description>Editor PDF libre para Windows</Description>
@@ -31,7 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <InternalsVisibleTo Include="PdfStudio.Tests" />
+    <InternalsVisibleTo Include="Rubrica.Tests" />
   </ItemGroup>
 
 </Project>

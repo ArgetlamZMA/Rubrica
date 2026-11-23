@@ -3,7 +3,7 @@ using System.Text.Json;
 using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.WinForms;
 
-namespace PdfStudio;
+namespace Rubrica;
 
 /// <summary>
 /// Ventana principal: aloja la interfaz (web/dist) en WebView2 y la conecta con el servidor local.
@@ -19,7 +19,7 @@ internal sealed class MainForm : Form
 
     public MainForm(string[] initialFiles)
     {
-        Text = "PDF Studio";
+        Text = "Rúbrica";
         try { Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath); } catch { /* sin ícono */ }
         MinimumSize = new Size(900, 600);
         WindowBounds.Restore(this);
@@ -53,7 +53,7 @@ internal sealed class MainForm : Form
                 $"if (location.origin === {JsonSerializer.Serialize(_server.Origin)}) {{ window.__PDFS_NATIVE = {info}; }}");
 
             core.NewWindowRequested += OnNewWindowRequested;
-            core.DocumentTitleChanged += (_, _) => Text = string.IsNullOrWhiteSpace(core.DocumentTitle) ? "PDF Studio" : core.DocumentTitle;
+            core.DocumentTitleChanged += (_, _) => Text = string.IsNullOrWhiteSpace(core.DocumentTitle) ? "Rúbrica" : core.DocumentTitle;
             core.NavigationCompleted += (_, e) =>
             {
                 if (!e.IsSuccess || _ready) return;
@@ -65,8 +65,8 @@ internal sealed class MainForm : Form
         catch (WebView2RuntimeNotFoundException)
         {
             var r = MessageBox.Show(this,
-                "PDF Studio necesita «Microsoft Edge WebView2 Runtime», incluido en Windows 10/11.\n\n¿Abrir la página de descarga?",
-                "PDF Studio", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                "Rúbrica necesita «Microsoft Edge WebView2 Runtime», incluido en Windows 10/11.\n\n¿Abrir la página de descarga?",
+                "Rúbrica", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (r == DialogResult.Yes) OpenExternal("https://go.microsoft.com/fwlink/p/?LinkId=2124703");
             _allowClose = true;
             Close();
@@ -74,7 +74,7 @@ internal sealed class MainForm : Form
         catch (Exception ex)
         {
             Log.Error("Inicio", ex);
-            MessageBox.Show(this, "No se pudo iniciar PDF Studio:\n\n" + ex.Message, "PDF Studio", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(this, "No se pudo iniciar Rúbrica:\n\n" + ex.Message, "Rúbrica", MessageBoxButtons.OK, MessageBoxIcon.Error);
             _allowClose = true;
             Close();
         }
@@ -153,7 +153,7 @@ internal sealed class MainForm : Form
         try { dirty = await _web.CoreWebView2.ExecuteScriptAsync("(typeof S !== 'undefined' && S.docs.some(d => d.dirty))"); }
         catch (Exception ex) { Log.Error("Cerrar", ex); }
         if (dirty == "true" && MessageBox.Show(this, "Hay documentos con cambios sin guardar. ¿Salir de todas formas?",
-                "PDF Studio", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes) return;
+                "Rúbrica", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes) return;
         _allowClose = true;
         Close();
     }

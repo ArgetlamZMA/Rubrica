@@ -3,7 +3,7 @@ using System.Security.Cryptography.Pkcs;
 using System.Security.Cryptography.X509Certificates;
 using Xunit;
 
-namespace PdfStudio.Tests;
+namespace Rubrica.Tests;
 
 public class UpdaterTests
 {
@@ -24,7 +24,7 @@ public class CertStoreTests
     public void FirmaCmsDesacopladaVerificable()
     {
         using var rsa = RSA.Create(2048);
-        var req = new CertificateRequest("CN=Prueba PDF Studio, SERIALNUMBER=0501", rsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+        var req = new CertificateRequest("CN=Prueba Rúbrica, SERIALNUMBER=0501", rsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
         using var cert = req.CreateSelfSigned(DateTimeOffset.Now.AddDays(-1), DateTimeOffset.Now.AddDays(30));
         var data = System.Text.Encoding.UTF8.GetBytes("contenido del PDF fuera de /Contents");
 

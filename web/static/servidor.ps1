@@ -1,4 +1,4 @@
-# PDF Studio - servidor local mínimo (solo escucha en este equipo: http://localhost:8765/)
+# Rubrica - servidor local mínimo (solo escucha en este equipo: http://localhost:8765/)
 $ErrorActionPreference = 'Stop'
 $port = 8765
 $root = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -11,7 +11,7 @@ catch {
   Start-Process $url
   exit
 }
-Write-Host "PDF Studio en ejecucion: $url"
+Write-Host "Rubrica en ejecucion: $url"
 Write-Host "Mantenga esta ventana abierta mientras usa la aplicacion (puede minimizarla)."
 Start-Process $url
 $mime = @{ '.html'='text/html; charset=utf-8'; '.js'='text/javascript; charset=utf-8'; '.json'='application/json'; '.png'='image/png'; '.ico'='image/x-icon'; '.svg'='image/svg+xml'; '.css'='text/css' }

@@ -1,4 +1,4 @@
-/* PDF Studio — service worker: la app funciona sin el servidor local una vez instalada,
+/* Rúbrica — service worker: la app funciona sin el servidor local una vez instalada,
    y guarda en caché el motor OCR la primera vez que se descarga. */
 const APP = 'pdfstudio-app-v1', RUNTIME = 'pdfstudio-runtime-v1';
 const CORE = ['/', '/index.html', '/manifest.json', '/icon-192.png', '/icon-512.png'];

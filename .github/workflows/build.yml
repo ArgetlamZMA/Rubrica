@@ -52,9 +52,9 @@ jobs:
         with:
           dotnet-version: 8.0.x
       - name: Pruebas C#
-        run: dotnet test native/PdfStudio.Tests/PdfStudio.Tests.csproj -c Release
-      - name: Publicar PdfStudio.exe
-        run: dotnet publish native/PdfStudio/PdfStudio.csproj -c Release -r win-x64 --self-contained true -p:Version=${{ steps.ver.outputs.version }} -o publish
+        run: dotnet test native/Rubrica.Tests/Rubrica.Tests.csproj -c Release
+      - name: Publicar Rubrica.exe
+        run: dotnet publish native/Rubrica/Rubrica.csproj -c Release -r win-x64 --self-contained true -p:Version=${{ steps.ver.outputs.version }} -o publish
 
       - name: Instalador (Inno Setup)
         shell: pwsh
@@ -62,12 +62,12 @@ jobs:
           if (-not (Get-Command iscc -ErrorAction SilentlyContinue)) { choco install innosetup --no-progress -y | Out-Null }
           $iscc = (Get-Command iscc -ErrorAction SilentlyContinue).Source
           if (-not $iscc) { $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" }
-          & $iscc /DMyAppVersion=${{ steps.ver.outputs.version }} /DPublishDir=..\publish installer\PdfStudio.iss
-          Compress-Archive -Path web/dist/* -DestinationPath dist-installer/PDFStudio-Web-${{ steps.ver.outputs.version }}.zip -Force
+          & $iscc /DMyAppVersion=${{ steps.ver.outputs.version }} /DPublishDir=..\publish installer\Rubrica.iss
+          Compress-Archive -Path web/dist/* -DestinationPath dist-installer/Rubrica-Web-${{ steps.ver.outputs.version }}.zip -Force
 
       - uses: actions/upload-artifact@v5
         with:
-          name: PDFStudio-${{ steps.ver.outputs.version }}
+          name: Rubrica-${{ steps.ver.outputs.version }}
           path: dist-installer/*
 
       - name: Publicar versión (solo etiquetas v*)
@@ -130,7 +130,7 @@ jobs:
           VERSION_CODE: ${{ github.ref_type == 'tag' && steps.ver.outputs.code || github.run_number }}
           ANDROID_KEYSTORE_FILE: ${{ steps.ks.outputs.file }}
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-          ANDROID_KEY_ALIAS: pdfstudio
+          ANDROID_KEY_ALIAS: rubrica
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
         run: |
           chmod +x gradlew
@@ -142,12 +142,12 @@ jobs:
           mkdir -p ../../dist-android
           APK=$(ls app/build/outputs/apk/*/*.apk | head -1)
           SUFFIX=""; [ -z "$ANDROID_KEYSTORE_FILE" ] && SUFFIX="-prueba"
-          cp "$APK" "../../dist-android/PDFStudio-Android-${VERSION_NAME}${SUFFIX}.apk"
+          cp "$APK" "../../dist-android/Rubrica-Android-${VERSION_NAME}${SUFFIX}.apk"
           ls -la ../../dist-android
 
       - uses: actions/upload-artifact@v5
         with:
-          name: PDFStudio-Android-${{ steps.ver.outputs.version }}
+          name: Rubrica-Android-${{ steps.ver.outputs.version }}
           path: dist-android/*.apk
 
       - name: Publicar APK en la versión (solo etiquetas v*)

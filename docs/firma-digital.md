@@ -1,6 +1,6 @@
 # Firma digital
 
-PDF Studio firma documentos con un certificado digital (por ejemplo, el de firma electrónica emitido por el **SAR de Honduras**).
+Rúbrica firma documentos con un certificado digital (por ejemplo, el de firma electrónica emitido por el **SAR de Honduras**).
 
 ## Con archivo `.p12` / `.pfx`
 
@@ -30,7 +30,7 @@ El panel **Firmas** (barra lateral) revisa cada firma del documento:
 - **Firma íntegra (con cambios posteriores permitidos)**: hay revisiones posteriores (otra firma o comentarios).
 - **Firma NO válida**: el contenido firmado fue alterado.
 
-La **confianza** en la autoridad emisora (que el certificado realmente fue emitido por el SAR) se confirma en Adobe Acrobat/Reader agregando el certificado raíz de la autoridad a sus certificados de confianza. PDF Studio no incluye una lista de autoridades raíz.
+La **confianza** en la autoridad emisora (que el certificado realmente fue emitido por el SAR) se confirma en Adobe Acrobat/Reader agregando el certificado raíz de la autoridad a sus certificados de confianza. Rúbrica no incluye una lista de autoridades raíz.
 
 ## Limitaciones actuales
 

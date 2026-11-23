@@ -19,7 +19,7 @@ function handleAuthCallback() {
   return true;
 }
 function ensureServed() {
-  if (location.protocol === 'file:') throw new Error(`La conexión con la nube necesita que la app se abra desde el lanzador (http://localhost:${APP_PORT}/). Ejecute «Iniciar PDF Studio.bat».`);
+  if (location.protocol === 'file:') throw new Error(`La conexión con la nube necesita que la app se abra desde el lanzador (http://localhost:${APP_PORT}/). Ejecute «Iniciar Rúbrica.bat».`);
 }
 function openPopup(url) {
   const w = 520, h = 680, l = screenX + (outerWidth - w) / 2, t = screenY + (outerHeight - h) / 2;
@@ -302,17 +302,17 @@ async function settingsDialog(focus) {
   const ru = location.protocol === 'file:' ? `http://localhost:${APP_PORT}/` : redirectUri();
   const guide = el('div', { class: 'hint', style: { lineHeight: 1.5 } });
   guide.innerHTML = `
-  ${location.protocol === 'file:' ? `<p style="color:var(--danger)"><b>Abierto como archivo local.</b> Para conectar la nube, abra la app con <b>Iniciar PDF Studio.bat</b> (usa ${ru}).</p>` : ''}
+  ${location.protocol === 'file:' ? `<p style="color:var(--danger)"><b>Abierto como archivo local.</b> Para conectar la nube, abra la app con <b>Iniciar Rúbrica.bat</b> (usa ${ru}).</p>` : ''}
   <p>URI de redirección de esta instalación: <code class="kbd">${ru}</code> <button class="btn sm" id="cp-ru">Copiar</button></p>
   <details ${focus === 'onedrive' ? 'open' : ''}><summary><b>Cómo obtener el ID de cliente de Microsoft (OneDrive)</b></summary><ol class="steps">
     <li>Entre a <b>entra.microsoft.com</b> (o portal.azure.com) → <i>Aplicaciones</i> → <i>Registros de aplicaciones</i> → <b>Nuevo registro</b>.</li>
-    <li>Nombre: <code>PDF Studio</code>. Tipo de cuenta: <i>Cuentas en cualquier directorio organizativo y cuentas personales de Microsoft</i>.</li>
+    <li>Nombre: <code>Rúbrica</code>. Tipo de cuenta: <i>Cuentas en cualquier directorio organizativo y cuentas personales de Microsoft</i>.</li>
     <li>URI de redirección: plataforma <b>Aplicación de página única (SPA)</b> → <code>${ru}</code>. Registrar.</li>
     <li>Copie el <b>Id. de aplicación (cliente)</b> y péguelo abajo.</li>
     <li>En <i>Permisos de API</i> agregue de Microsoft Graph (delegados): <code>Files.ReadWrite.All</code>, <code>User.Read</code>, <code>offline_access</code>. Si su organización lo exige, pulse <i>Conceder consentimiento de administrador</i>.</li>
   </ol></details>
   <details ${focus === 'gdrive' ? 'open' : ''}><summary><b>Cómo obtener el ID de cliente de Google (Drive)</b></summary><ol class="steps">
-    <li>Entre a <b>console.cloud.google.com</b> y cree un proyecto (p. ej. <code>PDF Studio</code>).</li>
+    <li>Entre a <b>console.cloud.google.com</b> y cree un proyecto (p. ej. <code>Rúbrica</code>).</li>
     <li><i>APIs y servicios</i> → <i>Biblioteca</i> → habilite <b>Google Drive API</b>.</li>
     <li><i>Pantalla de consentimiento OAuth</i>: tipo <b>Externo</b>, nombre de la app y su correo. En <i>Usuarios de prueba</i> agregue las cuentas que usarán la app.</li>
     <li><i>Credenciales</i> → <b>Crear credenciales</b> → <i>ID de cliente de OAuth</i> → tipo <b>Aplicación web</b>.<br>Orígenes de JavaScript autorizados: <code>${ru.replace(/\/$/, '')}</code><br>URI de redireccionamiento autorizados: <code>${ru}</code></li>

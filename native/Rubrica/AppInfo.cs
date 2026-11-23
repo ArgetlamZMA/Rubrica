@@ -1,12 +1,12 @@
 using System.Reflection;
 
-namespace PdfStudio;
+namespace Rubrica;
 
 /// <summary>Datos generales de la aplicación.</summary>
 internal static class AppInfo
 {
     /// <summary>Repositorio de GitHub donde se publican las versiones (owner/repo). Cámbielo si publica un fork.</summary>
-    public const string GitHubRepo = "ArgetlamZMA/ZMA-PDF";
+    public const string GitHubRepo = "ArgetlamZMA/Rubrica";
 
     /// <summary>Puerto local preferido. Debe coincidir con la URI de redirección registrada en Microsoft/Google.</summary>
     public const int PreferredPort = 8765;
@@ -26,7 +26,14 @@ internal static class AppInfo
     {
         get
         {
-            var d = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "PDFStudio");
+            var local = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            var d = Path.Combine(local, "Rubrica");
+            // La versión 1.0 se llamaba «PDF Studio»: conservar su configuración, firmas y recientes.
+            var old = Path.Combine(local, "PDFStudio");
+            if (!Directory.Exists(d) && Directory.Exists(old))
+            {
+                try { Directory.Move(old, d); } catch { /* si falla, se empieza con datos nuevos */ }
+            }
             Directory.CreateDirectory(d);
             return d;
         }

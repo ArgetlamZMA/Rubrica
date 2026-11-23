@@ -1,11 +1,11 @@
 using System.IO.Pipes;
 using System.Text;
 
-namespace PdfStudio;
+namespace Rubrica;
 
 internal static class Program
 {
-    private static readonly string PipeName = "PdfStudio-" + Environment.UserName;
+    private static readonly string PipeName = "Rubrica-" + Environment.UserName;
 
     [STAThread]
     private static void Main(string[] args)
@@ -69,12 +69,12 @@ internal static class Program
                 }
             }
         })
-        { IsBackground = true, Name = "PdfStudioPipe" };
+        { IsBackground = true, Name = "RubricaPipe" };
         thread.Start();
     }
 }
 
-/// <summary>Registro de errores en %LOCALAPPDATA%\PDFStudio\pdfstudio.log</summary>
+/// <summary>Registro de errores en %LOCALAPPDATA%\Rubrica\rubrica.log</summary>
 internal static class Log
 {
     private static readonly object Gate = new();
@@ -89,7 +89,7 @@ internal static class Log
         {
             lock (Gate)
             {
-                var path = Path.Combine(AppInfo.DataDir, "pdfstudio.log");
+                var path = Path.Combine(AppInfo.DataDir, "rubrica.log");
                 if (File.Exists(path) && new FileInfo(path).Length > 2_000_000) File.Delete(path);
                 File.AppendAllText(path, $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} {line}{Environment.NewLine}");
             }

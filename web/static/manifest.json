@@ -1,6 +1,6 @@
 {
-  "name": "PDF Studio",
-  "short_name": "PDF Studio",
+  "name": "Rúbrica",
+  "short_name": "Rúbrica",
   "description": "Editor PDF local con OneDrive y Google Drive",
   "start_url": "/",
   "scope": "/",

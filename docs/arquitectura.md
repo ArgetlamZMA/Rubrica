@@ -1,7 +1,7 @@
 # Arquitectura
 
 ```
-┌──────────────────────── PdfStudio.exe (C# · .NET 8 · WinForms) ────────────────────────┐
+┌──────────────────────── Rubrica.exe (C# · .NET 8 · WinForms) ────────────────────────┐
 │  WebView2 (motor de Edge)            LocalServer (http://localhost:8765, solo este PC)  │
 │  ┌──────────────────────────┐       ┌──────────────────────────────────────────────┐    │
 │  │ web/dist/index.html      │ HTTP  │ /            → interfaz (archivos estáticos)  │    │
@@ -9,7 +9,7 @@
 │  │ fontkit · forge · JSZip  │ token │               fuentes, certificados, firma,   │    │
 │  └──────────────────────────┘       │               actualizaciones                 │    │
 │                                      └──────────────────────────────────────────────┘    │
-│  Instancia única (named pipe) · «Abrir con» .pdf · registro en %LOCALAPPDATA%\PDFStudio  │
+│  Instancia única (named pipe) · «Abrir con» .pdf · registro en %LOCALAPPDATA%\Rubrica  │
 └─────────────────────────────────────────────────────────────────────────────────────────┘
           │ OAuth 2.0 directo                         │ GitHub Releases (actualizaciones)
           ▼                                           ▼
@@ -17,7 +17,7 @@
 ```
 
 - **web/** — toda la edición ocurre en JavaScript dentro de la ventana: PDF.js dibuja las páginas; pdf-lib construye el PDF final; las anotaciones se guardan como objetos en coordenadas de la página y se aplican al exportar. Se compila en un único `index.html` que también funciona en un navegador (versión web / PWA).
-- **native/PdfStudio** — host de Windows: ventana, servidor local, diálogos nativos de Abrir/Guardar, catálogo de fuentes (incluye las de Microsoft 365 como Aptos), firma con el almacén de certificados (`SignedCms`) y actualizaciones.
+- **native/Rubrica** — host de Windows: ventana, servidor local, diálogos nativos de Abrir/Guardar, catálogo de fuentes (incluye las de Microsoft 365 como Aptos), firma con el almacén de certificados (`SignedCms`) y actualizaciones.
 - **installer/** — Inno Setup: instalación por usuario, accesos directos, «Abrir con».
 - **.github/workflows/build.yml** — compila, ejecuta pruebas (Playwright + xUnit), genera el instalador y publica versiones.
 

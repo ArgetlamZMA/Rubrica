@@ -1,6 +1,6 @@
-<p align="center"><img src="web/static/icon-192.png" width="96" alt="PDF Studio"></p>
+<p align="center"><img src="web/static/icon-192.png" width="96" alt="Rúbrica"></p>
 
-# PDF Studio
+# Rúbrica
 
 Editor PDF **libre y gratuito** para Windows: leer, comentar, editar, organizar, rellenar, **firmar digitalmente**, proteger y convertir documentos PDF, con apertura y guardado en **este equipo, OneDrive o Google Drive**. Sin suscripciones ni nube propia.
 
@@ -8,7 +8,7 @@ Creado por **ZMA Inversiones** (San Pedro Sula, Honduras) como alternativa abier
 
 ## Descargar
 
-Vaya a **[Releases](../../releases)** y descargue `PDFStudio-Setup-x.y.z.exe` (Windows) o `PDFStudio-Android-x.y.z.apk` (Android, ver [docs/android.md](docs/android.md)). El instalador no requiere permisos de administrador. La aplicación avisa cuando hay una versión nueva y se actualiza sola.
+Vaya a **[Releases](../../releases)** y descargue `Rubrica-Setup-x.y.z.exe` (Windows) o `Rubrica-Android-x.y.z.apk` (Android, ver [docs/android.md](docs/android.md)). El instalador no requiere permisos de administrador. La aplicación avisa cuando hay una versión nueva y se actualiza sola.
 
 > Windows puede mostrar «Windows protegió su PC» porque el instalador no está firmado con un certificado de editor. Pulse *Más información → Ejecutar de todas formas*.
 
@@ -47,14 +47,14 @@ pip install -r tests/requirements.txt
 python -m playwright install chromium
 python tests/run_all.py           # 35 comprobaciones automáticas
 cd ..
-dotnet test native/PdfStudio.Tests
-dotnet publish native/PdfStudio -c Release -r win-x64 --self-contained -o publish
-iscc /DMyAppVersion=1.0.0 /DPublishDir=..\publish installer\PdfStudio.iss
+dotnet test native/Rubrica.Tests
+dotnet publish native/Rubrica -c Release -r win-x64 --self-contained -o publish
+iscc /DMyAppVersion=1.0.0 /DPublishDir=..\publish installer\Rubrica.iss
 ```
 
 GitHub Actions hace todo esto en cada cambio ([.github/workflows/build.yml](.github/workflows/build.yml)) y, al crear una etiqueta `vX.Y.Z`, publica el instalador en *Releases*.
 
-La interfaz también funciona sin instalar: abra `web/dist/index.html` o use `Iniciar PDF Studio.bat` (versión web con OneDrive/Google Drive).
+La interfaz también funciona sin instalar: abra `web/dist/index.html` o use `Iniciar Rúbrica.bat` (versión web con OneDrive/Google Drive).
 
 ## Contribuir
 

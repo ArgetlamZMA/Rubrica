@@ -76,7 +76,7 @@ function renderHome() {
   const card = (icn, t, s, fn) => el('button', { class: 'hcard', onclick: () => Promise.resolve(fn()).catch(e => toast(e.message, 'err')) }, el('div', { class: 'hi', html: ic(icn) }), el('div', {}, el('b', { text: t }), el('span', { text: s })));
   const inner = el('div', { class: 'home-inner' },
     el('div', { class: 'home-brand', html: BRAND_ICON }),
-    el('h1', { text: 'PDF Studio' }),
+    el('h1', { text: 'Rúbrica' }),
     el('p', { class: 'sub', text: 'Editor PDF local: lectura, comentarios, edición, páginas, formularios, firmas, protección, conversión y OCR — con OneDrive y Google Drive.' }),
     el('div', { class: 'home-cards' },
       CAP ? card('scan-line', 'Escanear documento', 'Cámara con detección de bordes y OCR', () => scanDocument()) : null,

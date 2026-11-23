@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.Text.Json;
 
-namespace PdfStudio;
+namespace Rubrica;
 
 /// <summary>Actualizaciones desde las versiones publicadas en GitHub (Releases).</summary>
 internal static class Updater
@@ -11,7 +11,7 @@ internal static class Updater
     private static HttpClient CreateClient()
     {
         var h = new HttpClient { Timeout = TimeSpan.FromMinutes(10) };
-        h.DefaultRequestHeaders.UserAgent.ParseAdd("PDFStudio/" + AppInfo.Version);
+        h.DefaultRequestHeaders.UserAgent.ParseAdd("Rubrica/" + AppInfo.Version);
         h.DefaultRequestHeaders.Accept.ParseAdd("application/vnd.github+json");
         return h;
     }
@@ -58,7 +58,7 @@ internal static class Updater
         var allowed = $"https://github.com/{AppInfo.GitHubRepo}/releases/download/";
         if (!url.StartsWith(allowed, StringComparison.OrdinalIgnoreCase))
             throw new InvalidOperationException("Dirección de actualización no permitida.");
-        var file = Path.Combine(Path.GetTempPath(), "PDFStudio-Setup-" + Guid.NewGuid().ToString("N")[..8] + ".exe");
+        var file = Path.Combine(Path.GetTempPath(), "Rubrica-Setup-" + Guid.NewGuid().ToString("N")[..8] + ".exe");
         using (var r = await Http.GetAsync(url, HttpCompletionOption.ResponseHeadersRead))
         {
             r.EnsureSuccessStatusCode();

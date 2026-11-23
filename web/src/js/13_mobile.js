@@ -6,7 +6,7 @@
    - Diseño para teléfono, pellizcar para hacer zoom
    ============================================================ */
 const CAP = (window.Capacitor && typeof window.Capacitor.isNativePlatform === 'function' && window.Capacitor.isNativePlatform()) ? window.Capacitor : null;
-const PSN = CAP ? (typeof CAP.registerPlugin === 'function' ? CAP.registerPlugin('PdfStudio') : CAP.Plugins.PdfStudio) : null;
+const PSN = CAP ? (typeof CAP.registerPlugin === 'function' ? CAP.registerPlugin('Rubrica') : CAP.Plugins.Rubrica) : null;
 const b64ToU8 = s => binToU8(atob(s));
 const u8ToB64 = u8 => btoa(u8ToBin(u8));
 const isPhone = () => window.matchMedia('(max-width: 760px)').matches;

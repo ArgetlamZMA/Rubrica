@@ -1,6 +1,7 @@
 # Cambios
 
 ## 1.1.0 — 2026-11-23
+- **Nuevo nombre: Rúbrica** (antes «PDF Studio»). Al actualizar en Windows se conservan la configuración, las firmas y los recientes, y se retiran los accesos directos y la asociación «Abrir con» del nombre anterior.
 - **Android**: nueva app (Capacitor) con escáner de documentos de Google ML Kit, OCR sin conexión, selector de archivos de Android (teléfono, Drive, OneDrive), «Abrir con», compartir e imprimir.
 - Interfaz táctil: pellizcar para zoom, hoja de propiedades, controles más grandes, diseño para teléfono y plegables.
 - La capa de texto OCR se guarda en orden de lectura (mejor al copiar y buscar).

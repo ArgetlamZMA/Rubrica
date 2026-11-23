@@ -1,4 +1,4 @@
-package com.zma.pdfstudio;
+package com.zma.rubrica;
 
 import android.os.Bundle;
 import android.webkit.WebView;
@@ -11,7 +11,7 @@ public class MainActivity extends BridgeActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        registerPlugin(PdfStudioPlugin.class);
+        registerPlugin(RubricaPlugin.class);
         super.onCreate(savedInstanceState);
 
         // Botón «Atrás»: primero cierra ventanas, herramientas o el documento; si no hay nada, sale.

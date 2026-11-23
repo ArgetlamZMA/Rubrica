@@ -1,6 +1,6 @@
 {
-  "appId": "com.zma.pdfstudio",
-  "appName": "PDF Studio",
+  "appId": "com.zma.rubrica",
+  "appName": "Rúbrica",
   "webDir": "../web/dist",
   "android": {
     "allowMixedContent": false,

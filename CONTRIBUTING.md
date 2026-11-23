@@ -1,13 +1,13 @@
 # Cómo contribuir
 
 1. Cree un *fork* y una rama: `git checkout -b mejora/mi-cambio`.
-2. La interfaz está en `web/src` (HTML, CSS y JavaScript sin *frameworks*, un archivo por módulo en `web/src/js`). La aplicación de Windows está en `native/PdfStudio` (C# / .NET 8 / WebView2).
+2. La interfaz está en `web/src` (HTML, CSS y JavaScript sin *frameworks*, un archivo por módulo en `web/src/js`). La aplicación de Windows está en `native/Rubrica` (C# / .NET 8 / WebView2).
 3. Compile y pruebe:
    ```powershell
    cd web; npm ci; npm run build; python tests/run_all.py
-   dotnet test native/PdfStudio.Tests
+   dotnet test native/Rubrica.Tests
    ```
-4. Agregue una prueba en `web/tests` o `native/PdfStudio.Tests` para cada error corregido o función nueva.
+4. Agregue una prueba en `web/tests` o `native/Rubrica.Tests` para cada error corregido o función nueva.
 5. Abra un *pull request* describiendo el cambio. GitHub Actions compila y ejecuta las pruebas automáticamente.
 
 ## Convenciones

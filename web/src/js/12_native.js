@@ -1,5 +1,5 @@
 /* ============================================================
-   12 · Puente con la aplicación nativa de Windows (PdfStudio.exe)
+   12 · Puente con la aplicación nativa de Windows (Rubrica.exe)
    El host C# sirve la interfaz en http://localhost:<puerto>/ y expone
    /__native/* protegido con un token de sesión que solo esta página
    recibe (inyectado por WebView2). En el navegador NATIVE es null y

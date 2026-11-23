@@ -18,7 +18,7 @@ function renderTabs() {
       el('button', { class: 'x', html: ic('x'), title: 'Cerrar', onclick: e => { e.stopPropagation(); closeDoc(d); } }));
     box.append(t);
   }
-  document.title = (S.active ? (S.active.dirty ? '• ' : '') + S.active.name + ' — ' : '') + 'PDF Studio';
+  document.title = (S.active ? (S.active.dirty ? '• ' : '') + S.active.name + ' — ' : '') + 'Rúbrica';
 }
 function activateDoc(doc) {
   const prev = S.active;

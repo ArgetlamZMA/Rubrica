@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PdfStudio\PdfStudio.csproj" />
+    <ProjectReference Include="..\Rubrica\Rubrica.csproj" />
   </ItemGroup>
 
 </Project>

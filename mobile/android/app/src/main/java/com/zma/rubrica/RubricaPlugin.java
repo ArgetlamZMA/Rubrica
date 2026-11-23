@@ -1,4 +1,4 @@
-package com.zma.pdfstudio;
+package com.zma.rubrica;
 
 import android.app.Activity;
 import android.content.ClipData;
@@ -51,12 +51,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Funciones nativas de PDF Studio para Android:
+ * Funciones nativas de Rúbrica para Android:
  * abrir / guardar con el selector de Android (incluye Drive y OneDrive), compartir, imprimir,
  * archivos recibidos desde otras apps, escáner de documentos y OCR de ML Kit (sin conexión).
  */
-@CapacitorPlugin(name = "PdfStudio")
-public class PdfStudioPlugin extends Plugin {
+@CapacitorPlugin(name = "Rubrica")
+public class RubricaPlugin extends Plugin {
 
     private ActivityResultLauncher<IntentSenderRequest> scanLauncher;
     private PluginCall pendingScan;
@@ -101,7 +101,7 @@ public class PdfStudioPlugin extends Plugin {
                     synchronized (launchFiles) { if (!notify) launchFiles.add(f); }
                     arr.put(f);
                 } catch (Exception e) {
-                    android.util.Log.e("PdfStudio", "No se pudo leer " + u, e);
+                    android.util.Log.e("Rubrica", "No se pudo leer " + u, e);
                 }
             }
             if (notify) {

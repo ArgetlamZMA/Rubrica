@@ -1,10 +1,10 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace = "com.zma.pdfstudio"
+    namespace = "com.zma.rubrica"
     compileSdk = rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "com.zma.pdfstudio"
+        applicationId "com.zma.rubrica"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         // En CI: VERSION_CODE y VERSION_NAME vienen de la etiqueta de la versión

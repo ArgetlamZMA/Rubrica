@@ -1,4 +1,4 @@
-"""Interfaz Android simulada: Capacitor y el complemento nativo PdfStudio se reemplazan por simulaciones."""
+"""Interfaz Android simulada: Capacitor y el complemento nativo Rubrica se reemplazan por simulaciones."""
 import asyncio, os, base64
 from playwright.async_api import async_playwright
 from pypdf import PdfReader
@@ -23,7 +23,7 @@ MOCK = r"""
       return { files: [{ uri: 'content://docs/texto.pdf', name: 'texto.pdf', mime: 'application/pdf', data: btoa(s) }] }; },
     async read(o) { return this.openDocument(); }
   };
-  window.Capacitor = { isNativePlatform: () => true, registerPlugin: () => plugin, Plugins: { PdfStudio: plugin } };
+  window.Capacitor = { isNativePlatform: () => true, registerPlugin: () => plugin, Plugins: { Rubrica: plugin } };
 })();
 """
 

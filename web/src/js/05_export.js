@@ -299,7 +299,7 @@ async function buildPdf(doc, opts = {}) {
   const m = doc.meta || {};
   if (m.title) pdf.setTitle(m.title); if (m.author) pdf.setAuthor(m.author); if (m.subject) pdf.setSubject(m.subject);
   if (m.keywords) pdf.setKeywords(String(m.keywords).split(/[,;]\s*/));
-  pdf.setProducer('PDF Studio'); pdf.setModificationDate(new Date());
+  pdf.setProducer('Rúbrica'); pdf.setModificationDate(new Date());
   const rasterIdx = opts.raster ? pages.map((_, i) => i) : redactIdx;
   if (rasterIdx.length) {
     prog(opts.raster ? 'Comprimiendo páginas…' : 'Aplicando redacción permanente…', 80);

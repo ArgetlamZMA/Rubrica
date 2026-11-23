@@ -1,15 +1,15 @@
 PDF STUDIO — versión web (sin instalar)
 =======================================
 
-Esta carpeta contiene la interfaz de PDF Studio para usar en el navegador.
+Esta carpeta contiene la interfaz de Rúbrica para usar en el navegador.
 Para la aplicación de Windows con instalador, firma con el almacén de
-certificados y actualizaciones automáticas, descargue PDFStudio-Setup-x.y.z.exe
-desde https://github.com/ArgetlamZMA/ZMA-PDF/releases
+certificados y actualizaciones automáticas, descargue Rubrica-Setup-x.y.z.exe
+desde https://github.com/ArgetlamZMA/Rubrica/releases
 
 USO
-1. Doble clic en «Iniciar PDF Studio.bat» (abre http://localhost:8765/).
+1. Doble clic en «Iniciar Rubrica.bat» (abre http://localhost:8765/).
    También puede abrir index.html directamente (sin conexión a la nube).
-2. Opcional: en Edge o Chrome, menú ⋯ > Aplicaciones > «Instalar PDF Studio».
+2. Opcional: en Edge o Chrome, menú ⋯ > Aplicaciones > «Instalar Rúbrica».
 
 Instrucciones para OneDrive/Google Drive: ⚙ Configuración dentro de la app.
-Licencia MIT. Código fuente: https://github.com/ArgetlamZMA/ZMA-PDF
+Licencia MIT. Código fuente: https://github.com/ArgetlamZMA/Rubrica

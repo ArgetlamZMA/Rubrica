@@ -1,15 +1,15 @@
-; Instalador de PDF Studio (Inno Setup 6)
-; Compilar:  iscc /DMyAppVersion=1.0.0 /DPublishDir=..\publish installer\PdfStudio.iss
+﻿; Instalador de Rúbrica (Inno Setup 6)
+; Compilar:  iscc /DMyAppVersion=1.0.0 /DPublishDir=..\publish installer\Rubrica.iss
 #ifndef MyAppVersion
   #define MyAppVersion "1.0.0"
 #endif
 #ifndef PublishDir
   #define PublishDir "..\publish"
 #endif
-#define MyAppName "PDF Studio"
+#define MyAppName "Rúbrica"
 #define MyAppPublisher "ZMA Inversiones"
-#define MyAppURL "https://github.com/ArgetlamZMA/ZMA-PDF"
-#define MyAppExe "PdfStudio.exe"
+#define MyAppURL "https://github.com/ArgetlamZMA/Rubrica"
+#define MyAppExe "Rubrica.exe"
 
 [Setup]
 AppId={{B6E2D9A4-5C71-4F2E-9D3A-7A1C0E4B8F25}
@@ -20,7 +20,7 @@ AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}/issues
 AppUpdatesURL={#MyAppURL}/releases
-DefaultDirName={autopf}\{#MyAppName}
+DefaultDirName={autopf}\Rubrica
 DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
 ; Instalación por usuario (sin permisos de administrador); se puede elegir «para todos».
@@ -29,7 +29,7 @@ PrivilegesRequiredOverridesAllowed=dialog
 ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 OutputDir=..\dist-installer
-OutputBaseFilename=PDFStudio-Setup-{#MyAppVersion}
+OutputBaseFilename=Rubrica-Setup-{#MyAppVersion}
 SetupIconFile=app.ico
 UninstallDisplayIcon={app}\{#MyAppExe}
 WizardStyle=modern
@@ -45,7 +45,14 @@ Name: "spanish"; MessagesFile: "compiler:Languages\Spanish.isl"
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"
-Name: "pdfassoc"; Description: "Agregar PDF Studio a «Abrir con» para archivos PDF"; GroupDescription: "Archivos:"
+Name: "pdfassoc"; Description: "Agregar Rúbrica a «Abrir con» para archivos PDF"; GroupDescription: "Archivos:"
+
+[InstallDelete]
+; Restos de la versión 1.0, que se llamaba «PDF Studio»
+Type: files; Name: "{app}\PdfStudio.exe"
+Type: files; Name: "{app}\PdfStudio.dll"
+Type: files; Name: "{autoprograms}\PDF Studio.lnk"
+Type: files; Name: "{autodesktop}\PDF Studio.lnk"
 
 [Files]
 Source: "{#PublishDir}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
@@ -56,12 +63,16 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExe}"; Tasks: deskto
 
 [Registry]
 ; Se registra como opción de «Abrir con»; no cambia el programa predeterminado del usuario.
-Root: HKA; Subkey: "Software\Classes\PDFStudio.Document"; ValueType: string; ValueData: "Documento PDF"; Flags: uninsdeletekey; Tasks: pdfassoc
-Root: HKA; Subkey: "Software\Classes\PDFStudio.Document\DefaultIcon"; ValueType: string; ValueData: "{app}\{#MyAppExe},0"; Tasks: pdfassoc
-Root: HKA; Subkey: "Software\Classes\PDFStudio.Document\shell\open\command"; ValueType: string; ValueData: """{app}\{#MyAppExe}"" ""%1"""; Tasks: pdfassoc
-Root: HKA; Subkey: "Software\Classes\.pdf\OpenWithProgids"; ValueType: string; ValueName: "PDFStudio.Document"; ValueData: ""; Flags: uninsdeletevalue; Tasks: pdfassoc
+Root: HKA; Subkey: "Software\Classes\Rubrica.Document"; ValueType: string; ValueData: "Documento PDF"; Flags: uninsdeletekey; Tasks: pdfassoc
+Root: HKA; Subkey: "Software\Classes\Rubrica.Document\DefaultIcon"; ValueType: string; ValueData: "{app}\{#MyAppExe},0"; Tasks: pdfassoc
+Root: HKA; Subkey: "Software\Classes\Rubrica.Document\shell\open\command"; ValueType: string; ValueData: """{app}\{#MyAppExe}"" ""%1"""; Tasks: pdfassoc
+Root: HKA; Subkey: "Software\Classes\.pdf\OpenWithProgids"; ValueType: string; ValueName: "Rubrica.Document"; ValueData: ""; Flags: uninsdeletevalue; Tasks: pdfassoc
 Root: HKA; Subkey: "Software\Classes\Applications\{#MyAppExe}\SupportedTypes"; ValueType: string; ValueName: ".pdf"; ValueData: ""; Flags: uninsdeletekey; Tasks: pdfassoc
 Root: HKA; Subkey: "Software\Classes\Applications\{#MyAppExe}"; ValueType: string; ValueName: "FriendlyAppName"; ValueData: "{#MyAppName}"; Tasks: pdfassoc
+
+Root: HKA; Subkey: "Software\Classes\PDFStudio.Document"; ValueType: none; Flags: deletekey dontcreatekey
+Root: HKA; Subkey: "Software\Classes\.pdf\OpenWithProgids"; ValueType: none; ValueName: "PDFStudio.Document"; Flags: deletevalue dontcreatekey
+Root: HKA; Subkey: "Software\Classes\Applications\PdfStudio.exe"; ValueType: none; Flags: deletekey dontcreatekey
 
 [Run]
 Filename: "{app}\{#MyAppExe}"; Description: "{cm:LaunchProgram,{#MyAppName}}"; Flags: nowait postinstall skipifsilent
@@ -82,7 +93,7 @@ procedure CurStepChanged(CurStep: TSetupStep);
 var ErrorCode: Integer;
 begin
   if (CurStep = ssPostInstall) and (not WizardSilent) and (not WebView2Installed()) then
-    if MsgBox('PDF Studio necesita «Microsoft Edge WebView2 Runtime» (incluido normalmente en Windows 10 y 11).' + #13#10#13#10 +
+    if MsgBox('Rúbrica necesita «Microsoft Edge WebView2 Runtime» (incluido normalmente en Windows 10 y 11).' + #13#10#13#10 +
               '¿Abrir la página de descarga de Microsoft?', mbConfirmation, MB_YESNO) = IDYES then
       ShellExec('open', 'https://go.microsoft.com/fwlink/p/?LinkId=2124703', '', '', SW_SHOWNORMAL, ewNoWait, ErrorCode);
 end;

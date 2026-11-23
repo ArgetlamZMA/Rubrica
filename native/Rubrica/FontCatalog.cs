@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace PdfStudio;
+namespace Rubrica;
 
 /// <summary>Una fuente instalada: familia, estilo y archivo.</summary>
 internal sealed record FontEntry(string Family, string Style, string File);

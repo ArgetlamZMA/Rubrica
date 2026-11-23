@@ -1,8 +1,8 @@
 {
-  "name": "pdf-studio-web",
+  "name": "rubrica-web",
   "version": "1.1.0",
   "private": true,
-  "description": "Interfaz del editor PDF Studio (HTML/JS). Se compila en un solo index.html.",
+  "description": "Interfaz del editor Rúbrica (HTML/JS). Se compila en un solo index.html.",
   "license": "MIT",
   "type": "module",
   "scripts": {
