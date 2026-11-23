@@ -130,7 +130,7 @@ jobs:
           VERSION_CODE: ${{ github.ref_type == 'tag' && steps.ver.outputs.code || github.run_number }}
           ANDROID_KEYSTORE_FILE: ${{ steps.ks.outputs.file }}
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-          ANDROID_KEY_ALIAS: pdfstudio  # alias interno de la clave existente; no cambiar
+          ANDROID_KEY_ALIAS: rubrica
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
         run: |
           chmod +x gradlew
