@@ -8,6 +8,17 @@ internal static class AppInfo
     /// <summary>Repositorio de GitHub donde se publican las versiones (owner/repo). Cámbielo si publica un fork.</summary>
     public const string GitHubRepo = "ArgetlamZMA/Rubrica";
 
+    /// <summary>
+    /// Clave pública (ECDSA P-256) que verifica el manifiesto SHA256SUMS.txt de cada versión publicada.
+    /// La clave privada solo existe como secreto de GitHub Actions (UPDATE_SIGNING_KEY).
+    /// </summary>
+    public const string UpdatePublicKey = """
+-----BEGIN PUBLIC KEY-----
+MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEtLEPOziaBNLJJWZ4CzLQSpk/rgGx
+b4oYwqG92QHCqKJzy9GXZCJgFBQ2pFiWbQBZO2mxqijWK8CXrMfvmNyYTw==
+-----END PUBLIC KEY-----
+""";
+
     /// <summary>Puerto local preferido. Debe coincidir con la URI de redirección registrada en Microsoft/Google.</summary>
     public const int PreferredPort = 8765;
 

@@ -10,7 +10,7 @@
     <RootNamespace>Rubrica</RootNamespace>
     <ApplicationIcon>app.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <Version>1.2.0</Version>
+    <Version>1.3.0</Version>
     <Product>Rúbrica</Product>
     <Company>ZMA Inversiones</Company>
     <Copyright>© 2026 Christian Díaz Fajardo — Licencia MIT</Copyright>

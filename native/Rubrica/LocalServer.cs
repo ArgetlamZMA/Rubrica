@@ -248,6 +248,15 @@ internal sealed class LocalServer : IDisposable
                 break;
             }
 
+            case "verify-chain":
+            {
+                var body = await ReadJsonAsync<VerifyChainRequest>(req);
+                if (body?.Certs == null) { res.StatusCode = 400; return; }
+                DateTime? when = DateTime.TryParse(body.Time, null, System.Globalization.DateTimeStyles.RoundtripKind, out var t) ? t : null;
+                await WriteJsonAsync(res, CertStore.VerifyChain(body.Certs, body.LeafSerial, when));
+                break;
+            }
+
             case "tsa":
             {
                 var url = req.Headers["X-Tsa-Url"];
@@ -320,4 +329,5 @@ internal sealed class LocalServer : IDisposable
     private sealed record SaveRequest(string? Name, string? Dir);
 
     private sealed record UpdateRequest(string? Url);
+    private sealed record VerifyChainRequest(string[]? Certs, string? LeafSerial, string? Time);
 }

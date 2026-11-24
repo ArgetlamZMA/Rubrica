@@ -19,6 +19,27 @@ Rúbrica firma documentos con un certificado digital (por ejemplo, el de firma e
 - **Aspecto de la firma**: estilos del recuadro. Cada estilo define el gráfico (*sin gráfico*, *nombre* en letra grande o *gráfico importado*: su logo o su firma manuscrita guardada), los datos que se muestran (nombre, ubicación, nombre distinguido, logo de fondo, fecha, hora, razón y etiquetas) y la dirección del texto. Hay un *Estilo estándar* incluido; puede crear, duplicar, editar y elegir el predeterminado.
 - **Servidores de marca de tiempo**: autoridades de sellado de tiempo (RFC 3161). Viene configurada la del SAR, `TSA_SAR` → `http://tsa.sar.gob.hn/CryptosecOpenKey/tsa_service`, como predeterminada. Puede añadir otras (con usuario y contraseña si el servidor lo pide) y **Probar** la conexión.
 
+## Verificar firmas: íntegra y de confianza
+
+El panel **Firmas** revisa dos cosas por separado:
+
+- **Integridad**: que el documento no haya cambiado desde que se firmó.
+- **Confianza**: que el certificado del firmante encadene hasta una autoridad en la que usted confía (por ejemplo, la raíz del SAR). Se verifica la firma de cada certificado de la cadena y su vigencia en la fecha de la firma (o de la marca de tiempo).
+
+| Estado | Significado |
+| --- | --- |
+| Firma válida · emisor de confianza | Íntegra y emitida por una autoridad de su lista de confianza, del almacén de Windows o de las CA instaladas en Android. |
+| Firma íntegra · emisor no verificado | El documento no cambió, pero no se puede confirmar quién emitió el certificado (raíz desconocida, autofirmado o falta un certificado intermedio). |
+| Firma NO válida | El contenido firmado fue alterado. |
+
+Para que las firmas del SAR aparezcan **de confianza**:
+
+1. Descargue en [sar.gob.hn/firmaelectronica](https://www.sar.gob.hn/firmaelectronica/) la *Autoridad de Certificación Raíz* y la *Subordinada*.
+2. En Rúbrica: **Proteger → Preferencias de firma → Certificados de confianza → Importar certificado** y elija ambos archivos. Compare la huella SHA-256 que muestra Rúbrica con la publicada por el SAR.
+3. En Windows también vale instalarlos en el almacén del sistema (doble clic → Instalar certificado → *Entidades de certificación raíz de confianza*), como indica el SAR; Rúbrica lo consulta.
+
+También puede pulsar **Confiar en este emisor…** en una firma del panel: Rúbrica muestra la huella para que la compare antes de confiar. La revocación (OCSP/CRL) aún no se consulta.
+
 ## Marca de tiempo
 
 Con un servidor de marca de tiempo, la fecha de la firma la certifica esa autoridad (no el reloj del equipo) y la firma sigue siendo verificable después de que el certificado venza. Rúbrica envía a la TSA solo el resumen de la firma, recibe el sello firmado por la TSA y lo incrusta en la firma (atributo `signatureTimeStampToken`), como Adobe y PDFelement. El panel **Firmas** muestra la hora y la autoridad del sello.

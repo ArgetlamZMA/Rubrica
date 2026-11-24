@@ -2,14 +2,14 @@
   /* Paleta ZMA Inversiones: Menta #00CE9D · Azafrán #F3C969 · Noche #0D0D0D · Sal de Mar #F7F7F7 · Gris Taupe #CDCAD3 · Gris Tenue #676A6A */
   --menta:#00ce9d; --azafran:#f3c969; --noche:#0d0d0d; --sal:#f7f7f7; --taupe:#cdcad3; --tenue:#676a6a;
   --bg:#f1f1f3; --panel:#ffffff; --panel2:#f7f7f7; --line:#e2e1e6; --text:#0d0d0d; --muted:#676a6a;
-  --accent:#00866a; --accent2:#e0f7f0; --accent-text:#ffffff; --danger:#c2362b; --ok:#00866a;
+  --accent:#00866a; --accent2:#e0f7f0; --accent-text:#ffffff; --danger:#c2362b; --ok:#00866a; --warn:#a86700;
   --viewer:#dcdbe1; --shadow:0 1px 3px rgba(13,13,13,.12),0 6px 24px rgba(13,13,13,.08);
   --title:#0d0d0d; --title-text:#f7f7f7; --radius:8px;
   font-family:"Aptos","Segoe UI Variable","Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif; font-size:13px; color:var(--text);
 }
 html.dark{
   --bg:#141516; --panel:#1d1f20; --panel2:#25282a; --line:#34383a; --text:#f7f7f7; --muted:#a3a7a7;
-  --accent:#00ce9d; --accent2:#11352c; --viewer:#0d0d0d; --title:#000000; --title-text:#f7f7f7; --ok:#00ce9d;
+  --accent:#00ce9d; --accent2:#11352c; --viewer:#0d0d0d; --title:#000000; --title-text:#f7f7f7; --ok:#00ce9d; --warn:#f3c969;
 }
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;overflow:hidden;background:var(--bg)}

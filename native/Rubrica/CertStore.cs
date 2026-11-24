@@ -70,4 +70,32 @@ internal static class CertStore
         var m = Regex.Match(subject, @"(?:SERIALNUMBER|OID\.2\.5\.4\.5)=([^,]+)", RegexOptions.IgnoreCase);
         return m.Success ? m.Groups[1].Value.Trim() : "";
     }
+
+    /// <summary>
+    /// Valida la cadena del firmante contra el almacén de confianza de Windows (sin consultar revocación).
+    /// certs: certificados en Base64 (DER) incluidos en la firma; leafSerial: número de serie del firmante (hex).
+    /// </summary>
+    internal static object VerifyChain(string[] certs, string? leafSerial, DateTime? when)
+    {
+        var all = certs.Select(b => { try { return new X509Certificate2(Convert.FromBase64String(b)); } catch { return null; } })
+                       .Where(c => c != null).Cast<X509Certificate2>().ToList();
+        if (all.Count == 0) return new { trusted = false, status = new[] { "La firma no incluye certificados." } };
+        static string Norm(string s) => s.TrimStart('0').ToUpperInvariant();
+        var leaf = string.IsNullOrEmpty(leafSerial) ? null : all.FirstOrDefault(c => Norm(c.SerialNumber) == Norm(leafSerial!));
+        leaf ??= all.FirstOrDefault(c => !all.Any(o => o != c && o.Issuer == c.Subject)) ?? all[0];
+        using var chain = new X509Chain();
+        chain.ChainPolicy.RevocationMode = X509RevocationMode.NoCheck;
+        chain.ChainPolicy.VerificationFlags = X509VerificationFlags.IgnoreWrongUsage;
+        if (when.HasValue) chain.ChainPolicy.VerificationTime = when.Value.ToLocalTime();
+        foreach (var c in all) if (c != leaf) chain.ChainPolicy.ExtraStore.Add(c);
+        var ok = chain.Build(leaf);
+        var names = chain.ChainElements.Select(e => e.Certificate.GetNameInfo(X509NameType.SimpleName, false)).ToArray();
+        return new
+        {
+            trusted = ok,
+            root = names.LastOrDefault() ?? "",
+            chain = names,
+            status = chain.ChainStatus.Select(s => s.StatusInformation.Trim()).Where(s => s.Length > 0).Distinct().ToArray(),
+        };
+    }
 }

@@ -264,6 +264,13 @@ async function verifySignature(bytes, sig) {
     const sid = si.value[1];
     if (sid.value && sid.value[1]) { const serial = forge.util.bytesToHex(sid.value[1].value); cert = certs.find(c => c.serialNumber.replace(/^0+/, '') === serial.replace(/^0+/, '')); }
     cert = cert || certs[0];
+    // confianza: cadena hasta una raíz de confianza (en la fecha de la marca de tiempo, si la hay)
+    try {
+      const when = (r.timestamp && r.timestamp.time) || r.signingTime || new Date();
+      const raw = (certsNode ? certsNode.value : []).map(c => A.toDer(c).getBytes());
+      const serial = sid.value && sid.value[1] ? forge.util.bytesToHex(sid.value[1].value) : '';
+      r.trust = await evaluateTrust(cert, certs, raw, serial, when);
+    } catch (e) { r.trust = { status: 'untrusted', path: [], reason: e.message }; }
     if (cert) {
       r.cert = certInfo(cert);
       const t = r.signingTime || new Date(); r.certValidAtTime = t >= cert.validity.notBefore && t <= cert.validity.notAfter;
@@ -419,6 +426,8 @@ async function reloadDocFromBytes(d, bytes) {
   d.undo = []; d.redo = []; d.cur = 0; d.dirty = false; S.sel = null;
   R.thumbCache.clear(); renderTabs(); afterStructureChange(false);
 }
+/** Olvida las verificaciones guardadas (p. ej. tras cambiar los certificados de confianza). */
+function forgetSigChecks() { for (const d of S.docs) for (const s of Object.values(d.sources || {})) for (const g of (s.sigs || [])) delete g._v; }
 async function renderSignatures(body) {
   const d = D(); const srcs = Object.values(d.sources).filter(s => s.kind === 'pdf' && s.sigs && s.sigs.length);
   if (!srcs.length) { body.append(el('div', { class: 'hint', html: 'Este documento no tiene firmas digitales.<br><br>Para firmar: <b>Proteger → Firma digital</b>.' })); return; }
@@ -428,11 +437,21 @@ async function renderSignatures(body) {
       const row = el('div', { style: { padding: '8px', border: '1px solid var(--line)', borderRadius: '8px', marginBottom: '8px', fontSize: '12px' } }, el('div', { class: 'spinner', style: { width: '16px', height: '16px', borderWidth: '2px' } }));
       box.append(row);
       (sig._v ? Promise.resolve(sig._v) : verifySignature(s.bytes, sig).then(v => (sig._v = v))).then(v => {
-        const good = v.integrity && v.sigValid !== false;
-        const st = !good ? ['circle-x', 'var(--danger)', 'Firma NO válida: el contenido firmado fue alterado'] : v.coversAll ? ['badge-check', 'var(--ok)', 'Firma íntegra'] : ['badge-check', 'var(--ok)', 'Firma íntegra (con cambios posteriores permitidos)'];
+        const good = v.integrity && v.sigValid !== false, trusted = good && v.trust && v.trust.status === 'trusted';
+        const later = v.coversAll ? '' : ' (con cambios posteriores permitidos)';
+        const st = !good ? ['circle-x', 'var(--danger)', 'Firma NO válida: el contenido firmado fue alterado']
+          : trusted ? ['badge-check', 'var(--ok)', 'Firma válida · emisor de confianza' + later]
+            : ['shield-alert', 'var(--warn)', 'Firma íntegra · emisor no verificado' + later];
         row.innerHTML = '';
+        const chain = v.trust && (v.trust.chainNames || (v.trust.path || []).map(certCn));
+        const trustLine = !good ? '' : trusted
+          ? `<br><span style="color:var(--ok)">Confianza: ${escapeHtml(v.trust.anchor || '')} (${escapeHtml(v.trust.source || '')})</span>${chain && chain.length > 1 ? '<br><span class="muted">Cadena: ' + chain.map(escapeHtml).join(' → ') + '</span>' : ''}`
+          : `<br><span style="color:var(--warn)">${escapeHtml((v.trust && v.trust.reason) || 'No se pudo comprobar el emisor.')}</span><br><span class="muted">El documento no cambió desde que se firmó, pero Rúbrica no puede confirmar quién emitió el certificado.</span>`;
         row.append(el('div', { style: { display: 'flex', gap: '6px', alignItems: 'center', fontWeight: 600, color: st[1] } }, icEl(st[0]), st[2]),
-          el('div', { style: { marginTop: '6px' }, html: `<b>${escapeHtml(v.cert?.cn || v.name || 'Firmante desconocido')}</b>${v.cert?.serialNumber ? ' · ' + escapeHtml(v.cert.serialNumber) : ''}<br>Emisor: ${escapeHtml(v.cert?.issuer || '—')}<br>Fecha: ${v.signingTime ? v.signingTime.toLocaleString('es-HN') : escapeHtml(v.m || '—')}${v.timestamp ? (v.timestamp.time ? `<br>Marca de tiempo: <b>${v.timestamp.time.toLocaleString('es-HN')}</b>${v.timestamp.tsa ? ' · ' + escapeHtml(v.timestamp.tsa) : ''}${v.timestamp.covers === false ? ' <span style="color:var(--danger)">(no corresponde a esta firma)</span>' : ''}` : '<br><span style="color:var(--danger)">Marca de tiempo ilegible</span>') : ''}${v.reason ? '<br>Motivo: ' + escapeHtml(v.reason) : ''}${v.location ? '<br>Ubicación: ' + escapeHtml(v.location) : ''}<br>${v.certValidAtTime === false ? '<span style="color:var(--danger)">Certificado fuera de vigencia al firmar</span><br>' : ''}<span class="muted">Firma ${k + 1} de ${s.sigs.length}. La confianza en la autoridad emisora (SAR u otra) debe confirmarse con su certificado raíz.</span>${v.error ? '<br><span class="muted">' + escapeHtml(v.error) + '</span>' : ''}` }));
+          el('div', { style: { marginTop: '6px' }, html: `<b>${escapeHtml(v.cert?.cn || v.name || 'Firmante desconocido')}</b>${v.cert?.serialNumber ? ' · ' + escapeHtml(v.cert.serialNumber) : ''}<br>Emisor: ${escapeHtml(v.cert?.issuer || '—')}<br>Fecha: ${v.signingTime ? v.signingTime.toLocaleString('es-HN') : escapeHtml(v.m || '—')}${v.timestamp ? (v.timestamp.time ? `<br>Marca de tiempo: <b>${v.timestamp.time.toLocaleString('es-HN')}</b>${v.timestamp.tsa ? ' · ' + escapeHtml(v.timestamp.tsa) : ''}${v.timestamp.covers === false ? ' <span style="color:var(--danger)">(no corresponde a esta firma)</span>' : ''}` : '<br><span style="color:var(--danger)">Marca de tiempo ilegible</span>') : ''}${v.reason ? '<br>Motivo: ' + escapeHtml(v.reason) : ''}${v.location ? '<br>Ubicación: ' + escapeHtml(v.location) : ''}${v.certValidAtTime === false ? '<br><span style="color:var(--danger)">Certificado fuera de vigencia al firmar</span>' : ''}${trustLine}<br><span class="muted">Firma ${k + 1} de ${s.sigs.length}.</span>${v.error ? '<br><span class="muted">' + escapeHtml(v.error) + '</span>' : ''}` }));
+        if (good && !trusted && v.trust && v.trust.top) row.append(el('div', { style: { display: 'flex', gap: '6px', marginTop: '8px', flexWrap: 'wrap' } },
+          el('button', { class: 'btn sm', html: ic('shield-check') + 'Confiar en este emisor…', onclick: async () => { if (await trustIssuerDialog(v.trust.top)) { forgetSigChecks(); renderSide(); } } }),
+          el('button', { class: 'btn sm', html: ic('sliders-horizontal') + 'Certificados de confianza', onclick: async () => { await signPrefsDialog('trust'); forgetSigChecks(); renderSide(); } })));
       });
     });
   }

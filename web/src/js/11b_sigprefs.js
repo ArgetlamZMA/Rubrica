@@ -297,9 +297,9 @@ function certInfoTable(i) {
 /* ---------- Ventana «Preferencias de firma» ---------- */
 async function signPrefsDialog(tab = 'ids') {
   const tabs = el('div', { class: 'tabs2' }), paneBox = el('div', { style: { minHeight: '360px' } });
-  const panes = { ids: idsPane, style: stylesPane, tsa: tsaPane };
+  const panes = { ids: idsPane, style: stylesPane, tsa: tsaPane, trust: () => trustPane(() => setPane('trust')) };
   const setPane = async k => { tab = k; $$('button', tabs).forEach(b => b.classList.toggle('on', b.dataset.k === k)); paneBox.innerHTML = ''; paneBox.append(await panes[k]()); };
-  for (const [k, l] of [['ids', 'Identificación digital'], ['style', 'Aspecto de la firma'], ['tsa', 'Servidores de marca de tiempo']]) tabs.append(el('button', { text: l, dataset: { k }, onclick: () => setPane(k) }));
+  for (const [k, l] of [['ids', 'Identificación digital'], ['style', 'Aspecto de la firma'], ['tsa', 'Servidores de marca de tiempo'], ['trust', 'Certificados de confianza']]) tabs.append(el('button', { text: l, dataset: { k }, onclick: () => setPane(k) }));
   setPane(tab);
   await openModal({ title: 'Preferencias de firma', body: el('div', { class: 'fm' }, tabs, paneBox), wide: true, buttons: [{ label: 'Cerrar', primary: true, value: true }] }).result;
 

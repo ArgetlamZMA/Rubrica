@@ -50,6 +50,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.KeyStore;
+import java.security.cert.CertPath;
+import java.security.cert.CertPathValidator;
+import java.security.cert.CertificateFactory;
+import java.security.cert.PKIXCertPathValidatorResult;
+import java.security.cert.PKIXParameters;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
@@ -439,6 +445,70 @@ public class RubricaPlugin extends Plugin {
         } catch (Exception e) {
             call.reject(e.getMessage() == null ? "No se pudo leer el certificado" : e.getMessage(), e);
         }
+    }
+
+    // ---------- Confianza de firmas ----------
+    // Valida la cadena del firmante contra los certificados de CA del teléfono (del sistema y los que
+    // instaló el usuario, p. ej. la raíz del SAR). No consulta revocación.
+
+    @PluginMethod
+    public void verifyChain(PluginCall call) {
+        JSArray arr = call.getArray("certs");
+        String leafSerial = call.getString("leafSerial", "");
+        Double time = call.getDouble("time");
+        if (arr == null) { call.reject("Faltan certificados"); return; }
+        new Thread(() -> {
+            JSObject r = new JSObject();
+            try {
+                CertificateFactory cf = CertificateFactory.getInstance("X.509");
+                List<X509Certificate> all = new ArrayList<>();
+                for (int i = 0; i < arr.length(); i++)
+                    all.add((X509Certificate) cf.generateCertificate(new java.io.ByteArrayInputStream(Base64.decode(arr.getString(i), Base64.DEFAULT))));
+                X509Certificate leaf = null;
+                for (X509Certificate c : all) if (stripZeros(c.getSerialNumber().toString(16)).equalsIgnoreCase(stripZeros(leafSerial))) leaf = c;
+                if (leaf == null && !all.isEmpty()) leaf = all.get(0);
+                if (leaf == null) throw new Exception("La firma no incluye certificados.");
+                // cadena ordenada desde el firmante, sin la raíz autofirmada (el ancla la aporta el almacén)
+                List<X509Certificate> path = new ArrayList<>();
+                X509Certificate cur = leaf;
+                while (cur != null && path.size() < 8 && !cur.getSubjectX500Principal().equals(cur.getIssuerX500Principal())) {
+                    path.add(cur);
+                    X509Certificate next = null;
+                    for (X509Certificate c : all) if (c != cur && c.getSubjectX500Principal().equals(cur.getIssuerX500Principal())) next = c;
+                    cur = next;
+                }
+                if (path.isEmpty()) path.add(leaf);
+                KeyStore ks = KeyStore.getInstance("AndroidCAStore");
+                ks.load(null, null);
+                PKIXParameters params = new PKIXParameters(ks);
+                params.setRevocationEnabled(false);
+                if (time != null) params.setDate(new java.util.Date(time.longValue()));
+                CertPath cp = cf.generateCertPath(path);
+                PKIXCertPathValidatorResult res = (PKIXCertPathValidatorResult) CertPathValidator.getInstance("PKIX").validate(cp, params);
+                X509Certificate anchor = res.getTrustAnchor().getTrustedCert();
+                JSArray names = new JSArray();
+                for (X509Certificate c : path) names.put(cn(c));
+                if (anchor != null) names.put(cn(anchor));
+                r.put("trusted", true);
+                r.put("root", anchor != null ? cn(anchor) : "");
+                r.put("chain", names);
+            } catch (Exception e) {
+                r.put("trusted", false);
+                r.put("error", e.getMessage() == null ? e.getClass().getSimpleName() : e.getMessage());
+            }
+            call.resolve(r);
+        }).start();
+    }
+
+    private static String stripZeros(String s) { return s == null ? "" : s.replaceFirst("^0+", ""); }
+
+    private static String cn(X509Certificate c) {
+        String dn = c.getSubjectX500Principal().getName();
+        for (String part : dn.split("(?<!\\\\),")) { // comas no escapadas
+            String p = part.trim();
+            if (p.toUpperCase().startsWith("CN=")) return p.substring(3);
+        }
+        return dn;
     }
 
     // ---------- Servidor de marca de tiempo (RFC 3161) ----------

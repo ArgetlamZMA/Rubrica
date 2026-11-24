@@ -65,6 +65,33 @@ jobs:
           & $iscc /DMyAppVersion=${{ steps.ver.outputs.version }} /DPublishDir=..\publish installer\Rubrica.iss
           Compress-Archive -Path web/dist/* -DestinationPath dist-installer/Rubrica-Web-${{ steps.ver.outputs.version }}.zip -Force
 
+      - name: Manifiesto SHA-256 firmado (actualizaciones verificadas)
+        shell: pwsh
+        env:
+          UPDATE_SIGNING_KEY: ${{ secrets.UPDATE_SIGNING_KEY }}
+        run: |
+          $files = Get-ChildItem dist-installer -File | Where-Object { $_.Name -notlike 'SHA256SUMS*' } | Sort-Object Name
+          $lines = $files | ForEach-Object { "$((Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLower())  $($_.Name)" }
+          $text = ($lines -join "`n") + "`n"
+          [IO.File]::WriteAllText("dist-installer/SHA256SUMS.txt", $text, [Text.UTF8Encoding]::new($false))
+          Get-Content dist-installer/SHA256SUMS.txt
+          if (-not $env:UPDATE_SIGNING_KEY) {
+            Write-Output "::warning::Falta el secreto UPDATE_SIGNING_KEY: el manifiesto no se firma y la app no instalará esta versión automáticamente."
+          } else {
+            $ec = [Security.Cryptography.ECDsa]::Create()
+            $ec.ImportFromPem($env:UPDATE_SIGNING_KEY)
+            $data = [IO.File]::ReadAllBytes("dist-installer/SHA256SUMS.txt")
+            $sig = $ec.SignData($data, [Security.Cryptography.HashAlgorithmName]::SHA256, [Security.Cryptography.DSASignatureFormat]::Rfc3279DerSequence)
+            [IO.File]::WriteAllBytes("dist-installer/SHA256SUMS.txt.sig", $sig)
+            $pub = (Select-String -Path native/Rubrica/AppInfo.cs -Pattern '^[A-Za-z0-9+/=]{20,}$' | ForEach-Object { $_.Line }) -join ''
+            $check = [Security.Cryptography.ECDsa]::Create()
+            $check.ImportSubjectPublicKeyInfo([Convert]::FromBase64String($pub), [ref]0)
+            if (-not $check.VerifyData($data, $sig, [Security.Cryptography.HashAlgorithmName]::SHA256, [Security.Cryptography.DSASignatureFormat]::Rfc3279DerSequence)) {
+              Write-Output "::error::UPDATE_SIGNING_KEY no corresponde a la clave pública de AppInfo.cs"; exit 1
+            }
+            Write-Output "Manifiesto firmado y verificado con la clave pública de la app."
+          }
+
       - uses: actions/upload-artifact@v5
         with:
           name: Rubrica-${{ steps.ver.outputs.version }}

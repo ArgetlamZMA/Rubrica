@@ -1,5 +1,10 @@
 # Cambios
 
+## 1.3.0 — en preparación
+- **Confianza en las firmas**: el panel Firmas distingue *Firma válida · emisor de confianza* (cadena verificada hasta una raíz de confianza), *Firma íntegra · emisor no verificado* (el documento no cambió, pero no se puede confirmar quién emitió el certificado) y *Firma NO válida*. Antes cualquier firma íntegra se mostraba en verde, aunque el certificado fuera autofirmado.
+- Raíces de confianza: certificados importados (`.cer`, `.crt`, `.pem`) en *Preferencias de firma → Certificados de confianza*, «Confiar en este emisor» desde el panel Firmas (con la huella SHA-256 para compararla), el almacén de Windows y los certificados de CA instalados en Android. Se comprueba la firma de cada eslabón y la vigencia de cada certificado en la fecha de la firma (o de la marca de tiempo).
+- **Actualizaciones verificadas** (Windows): cada versión publica `SHA256SUMS.txt` firmado (ECDSA P-256); la app solo ejecuta el instalador si la firma del manifiesto y el SHA-256 del instalador coinciden. Si no, no se ejecuta nada y se ofrece la página de descarga.
+
 ## 1.2.0 — 2026-11-23
 - **Android: firma digital con el certificado instalado en el teléfono** (por ejemplo, la firma electrónica del SAR importada desde su `.pfx` en *Ajustes → Seguridad*). La clave privada no sale del almacén de Android, la contraseña no se vuelve a escribir y Rúbrica recuerda el certificado elegido. Admite claves RSA y EC.
 - La firma generada es la misma que en Windows (CMS desacoplado, SHA-256, `adbe.pkcs7.detached`), validada por Adobe Acrobat/Reader.

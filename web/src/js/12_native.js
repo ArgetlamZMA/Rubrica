@@ -41,9 +41,12 @@ async function nativeCheckUpdates(manual) {
     const u = await natJson('update-check');
     if (!u.available) { if (manual) toast(`Tiene la última versión (${NATIVE.version}).`, 'ok'); return; }
     const notes = escapeHtml(u.notes || '').slice(0, 1500).replace(/\n/g, '<br>');
-    const ok = await confirmDialog('Actualización disponible', `Hay una nueva versión <b>${escapeHtml(u.version)}</b> (tiene ${escapeHtml(NATIVE.version)}).<br><br><div class="hint" style="max-height:200px;overflow:auto">${notes}</div><br>Se descargará el instalador desde GitHub y la aplicación se cerrará para actualizarse.`, 'Actualizar ahora');
+    const ok = await confirmDialog('Actualización disponible', `Hay una nueva versión <b>${escapeHtml(u.version)}</b> (tiene ${escapeHtml(NATIVE.version)}).<br><br><div class="hint" style="max-height:200px;overflow:auto">${notes}</div><br>Se descargará el instalador desde GitHub, se comprobará su firma y la aplicación se cerrará para actualizarse.`, 'Actualizar ahora');
     if (!ok) return;
     if (S.docs.some(d => d.dirty) && !(await confirmDialog('Cambios sin guardar', 'Hay documentos con cambios sin guardar. ¿Actualizar de todas formas?', 'Actualizar', true))) return;
-    await withBusy('Descargando actualización…', () => natPost('update-install', { url: u.url }));
+    const page = `<a href="${escapeHtml(u.page || '')}" target="_blank" rel="noopener">página de la versión</a>`;
+    if (!u.verified) { alertDialog('Actualización sin verificación', `La versión ${escapeHtml(u.version)} no trae el manifiesto firmado, así que Rúbrica no la instalará automáticamente.<br><br>Puede descargarla desde la ${page}.`); return; }
+    try { await withBusy('Descargando y verificando la actualización…', () => natPost('update-install', { url: u.url })); }
+    catch (e) { alertDialog('No se instaló la actualización', `<span style="color:var(--danger)">${escapeHtml(e.message)}</span><br><br>Por seguridad no se ejecutó nada. Puede descargar el instalador desde la ${page}.`); }
   } catch (e) { if (manual) toast('No se pudo comprobar actualizaciones: ' + e.message, 'err'); }
 }
