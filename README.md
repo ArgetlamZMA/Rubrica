@@ -66,6 +66,11 @@ La interfaz también funciona sin instalar: abra `web/dist/index.html` o use `In
 
 Reporte errores en [Issues](../../issues) y proponga cambios con *pull requests*. Vea [CONTRIBUTING.md](CONTRIBUTING.md). Vulnerabilidades: [SECURITY.md](SECURITY.md).
 
+## Firma de código y privacidad
+
+- **Code signing policy:** ver [CODE_SIGNING.md](CODE_SIGNING.md). Solicitud en trámite: *Free code signing provided by [SignPath.io](https://signpath.io), certificate by [SignPath Foundation](https://signpath.org)* (cuando se apruebe).
+- **Privacidad:** Rúbrica no envía sus documentos a ningún servidor propio; ver [PRIVACY.md](PRIVACY.md).
+
 ## Licencia
 
 Código: [MIT](LICENSE). Bibliotecas de terceros: [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).

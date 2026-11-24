@@ -1,0 +1,13 @@
+﻿PRIVACIDAD DE RÚBRICA
+
+Rúbrica trabaja con sus documentos en este equipo. No tiene cuentas, no recopila estadísticas de uso y no envía sus documentos a servidores de Rúbrica ni de ZMA Inversiones.
+
+Conexiones que hace la aplicación:
+
+- GitHub: al iniciar, busca si hay una versión nueva (envía solo la versión de Rúbrica). Se puede desactivar en Configuración > «Buscar actualizaciones al iniciar». Las actualizaciones solo se instalan si su firma es válida.
+- OneDrive y Google Drive: solo si usted conecta su cuenta y abre o guarda allí.
+- Servidor de marca de tiempo (por ejemplo, la TSA del SAR): solo al firmar con marca de tiempo; se envía un resumen criptográfico de la firma, nunca el documento.
+
+El OCR, la conversión, la firma digital y la verificación de firmas se hacen localmente.
+
+Política completa: https://github.com/ArgetlamZMA/Rubrica/blob/main/PRIVACY.md

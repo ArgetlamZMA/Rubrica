@@ -7,3 +7,4 @@
 *.ttf binary
 *.pdf binary
 *.p12 binary
+installer/*.txt text eol=crlf

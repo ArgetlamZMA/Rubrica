@@ -39,6 +39,7 @@ CloseApplications=yes
 RestartApplications=no
 ChangesAssociations=yes
 LicenseFile=..\LICENSE
+InfoBeforeFile=privacidad.txt
 
 [Languages]
 Name: "spanish"; MessagesFile: "compiler:Languages\Spanish.isl"

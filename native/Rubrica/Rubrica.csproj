@@ -11,6 +11,8 @@
     <ApplicationIcon>app.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <Version>1.3.0</Version>
+    <!-- versión de producto idéntica en cada compilación (requisito de SignPath): sin el hash del commit -->
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
     <Product>Rúbrica</Product>
     <Company>ZMA Inversiones</Company>
     <Copyright>© 2026 Christian Díaz Fajardo — Licencia MIT</Copyright>

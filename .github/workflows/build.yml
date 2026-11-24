@@ -13,6 +13,10 @@ permissions:
 jobs:
   build:
     runs-on: windows-latest
+    env:
+      # Firma de código con SignPath Foundation: solo en versiones (etiquetas v*) y cuando el proyecto
+      # ya está aprobado y configurado (secreto SIGNPATH_API_TOKEN y variables SIGNPATH_*). Ver docs/firma-de-codigo.md.
+      SIGNPATH: ${{ startsWith(github.ref, 'refs/tags/v') && secrets.SIGNPATH_API_TOKEN != '' && vars.SIGNPATH_ORGANIZATION_ID != '' }}
     steps:
       - uses: actions/checkout@v5
 
@@ -56,6 +60,37 @@ jobs:
       - name: Publicar Rubrica.exe
         run: dotnet publish native/Rubrica/Rubrica.csproj -c Release -r win-x64 --self-contained true -p:Version=${{ steps.ver.outputs.version }} -o publish
 
+      - name: Subir Rubrica.exe para firmar (SignPath)
+        if: env.SIGNPATH == 'true'
+        id: up-exe
+        uses: actions/upload-artifact@v5
+        with:
+          name: rubrica-exe-sin-firma
+          path: publish/Rubrica.exe
+
+      - name: Firmar Rubrica.exe (SignPath, requiere aprobación manual)
+        if: env.SIGNPATH == 'true'
+        uses: signpath/github-action-submit-signing-request@v3
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
+          project-slug: ${{ vars.SIGNPATH_PROJECT_SLUG }}
+          signing-policy-slug: ${{ vars.SIGNPATH_POLICY_SLUG }}
+          artifact-configuration-slug: rubrica-exe
+          github-artifact-id: ${{ steps.up-exe.outputs.artifact-id }}
+          wait-for-completion: true
+          wait-for-completion-timeout-in-seconds: 3600
+          output-artifact-directory: firmado-exe
+
+      - name: Usar Rubrica.exe firmado
+        if: env.SIGNPATH == 'true'
+        shell: pwsh
+        run: |
+          Copy-Item firmado-exe/Rubrica.exe publish/Rubrica.exe -Force
+          $s = Get-AuthenticodeSignature publish/Rubrica.exe
+          Write-Output "Rubrica.exe: $($s.Status) · $($s.SignerCertificate.Subject)"
+          if ($s.Status -ne 'Valid') { Write-Output "::error::Rubrica.exe no quedó firmado"; exit 1 }
+
       - name: Instalador (Inno Setup)
         shell: pwsh
         run: |
@@ -64,6 +99,38 @@ jobs:
           if (-not $iscc) { $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" }
           & $iscc /DMyAppVersion=${{ steps.ver.outputs.version }} /DPublishDir=..\publish installer\Rubrica.iss
           Compress-Archive -Path web/dist/* -DestinationPath dist-installer/Rubrica-Web-${{ steps.ver.outputs.version }}.zip -Force
+
+      - name: Subir instalador para firmar (SignPath)
+        if: env.SIGNPATH == 'true'
+        id: up-setup
+        uses: actions/upload-artifact@v5
+        with:
+          name: rubrica-setup-sin-firma
+          path: dist-installer/Rubrica-Setup-${{ steps.ver.outputs.version }}.exe
+
+      - name: Firmar instalador (SignPath, requiere aprobación manual)
+        if: env.SIGNPATH == 'true'
+        uses: signpath/github-action-submit-signing-request@v3
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
+          project-slug: ${{ vars.SIGNPATH_PROJECT_SLUG }}
+          signing-policy-slug: ${{ vars.SIGNPATH_POLICY_SLUG }}
+          artifact-configuration-slug: rubrica-setup
+          github-artifact-id: ${{ steps.up-setup.outputs.artifact-id }}
+          wait-for-completion: true
+          wait-for-completion-timeout-in-seconds: 3600
+          output-artifact-directory: firmado-setup
+
+      - name: Usar instalador firmado
+        if: env.SIGNPATH == 'true'
+        shell: pwsh
+        run: |
+          $n = "Rubrica-Setup-${{ steps.ver.outputs.version }}.exe"
+          Copy-Item "firmado-setup/$n" "dist-installer/$n" -Force
+          $s = Get-AuthenticodeSignature "dist-installer/$n"
+          Write-Output "$n`: $($s.Status) · $($s.SignerCertificate.Subject)"
+          if ($s.Status -ne 'Valid') { Write-Output "::error::El instalador no quedó firmado"; exit 1 }
 
       - name: Manifiesto SHA-256 firmado (actualizaciones verificadas)
         shell: pwsh

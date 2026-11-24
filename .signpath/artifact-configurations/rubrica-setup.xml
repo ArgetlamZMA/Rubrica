@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Configuración de artefacto de SignPath: ZIP de upload-artifact con el instalador → firmarlo -->
+<artifact-configuration xmlns="http://signpath.io/artifact-configuration/v1">
+  <zip-file>
+    <pe-file path="Rubrica-Setup-*.exe" product-name="Rúbrica">
+      <authenticode-sign/>
+    </pe-file>
+  </zip-file>
+</artifact-configuration>
