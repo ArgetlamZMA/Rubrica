@@ -1,0 +1,13 @@
+﻿RÚBRICA PRIVACY
+
+Rúbrica works with your documents on this computer. It has no accounts, collects no usage statistics and does not send your documents to servers of Rúbrica or ZMA Inversiones.
+
+Connections the application makes:
+
+- GitHub: at startup it checks whether a new version exists (it sends only the Rúbrica version). You can turn this off in Settings > "Check for updates at startup". Updates are only installed if their signature is valid.
+- OneDrive and Google Drive: only if you connect your account and open or save there.
+- Timestamp server (for example, the Honduran SAR's TSA): only when signing with a timestamp; a cryptographic digest of the signature is sent, never the document.
+
+OCR, conversion, digital signing and signature verification run locally.
+
+Full policy: https://github.com/ArgetlamZMA/Rubrica/blob/main/PRIVACY.md

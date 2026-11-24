@@ -31,4 +31,11 @@ let html = rd(path.join(SRC, 'template.html'));
 for (const [k, v] of Object.entries(parts)) { if (!html.includes(k)) throw new Error('Falta marcador ' + k); html = html.split(k).join(v); }
 fs.writeFileSync(path.join(OUT, 'index.html'), html);
 for (const f of fs.readdirSync(path.join(ROOT, 'static'))) fs.copyFileSync(path.join(ROOT, 'static', f), path.join(OUT, f));
+// OCR sin internet: motor Tesseract (WebAssembly, solo LSTM) y modelos compactos de español e inglés
+const OCR = path.join(OUT, 'ocr'), ocrFiles = [
+  ['tesseract.js/dist/tesseract.min.js', 'tesseract.min.js'], ['tesseract.js/dist/worker.min.js', 'worker.min.js'],
+  ['tesseract.js-core/tesseract-core-lstm.wasm.js', 'core/tesseract-core-lstm.wasm.js'], ['tesseract.js-core/tesseract-core-simd-lstm.wasm.js', 'core/tesseract-core-simd-lstm.wasm.js'],
+  ['@tesseract.js-data/spa/4.0.0_best_int/spa.traineddata.gz', 'lang/spa.traineddata.gz'], ['@tesseract.js-data/eng/4.0.0_best_int/eng.traineddata.gz', 'lang/eng.traineddata.gz'],
+  ['@tesseract.js-data/por/4.0.0_best_int/por.traineddata.gz', 'lang/por.traineddata.gz'], ['@tesseract.js-data/fra/4.0.0_best_int/fra.traineddata.gz', 'lang/fra.traineddata.gz']];
+for (const [src, dst] of ocrFiles) { fs.mkdirSync(path.dirname(path.join(OCR, dst)), { recursive: true }); fs.copyFileSync(path.join(NM, src), path.join(OCR, dst)); }
 console.log(`dist/index.html ${(Buffer.byteLength(html) / 1024).toFixed(0)} KB · ${Object.keys(icons).length} íconos · v${pkg.version}`);

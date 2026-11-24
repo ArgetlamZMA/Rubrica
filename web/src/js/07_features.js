@@ -724,15 +724,17 @@ async function buildXlsx(pj, idx, upd) {
   return z.generateAsync({ type: 'blob', mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
 }
 
-/* ---------- OCR (Tesseract, se descarga la primera vez) ---------- */
+/* ---------- OCR (Tesseract incluido en la app: funciona sin internet) ---------- */
+const OCR_BASE = new URL('ocr/', location.href).href;
+const OCR_OPTS = { workerPath: OCR_BASE + 'worker.min.js', corePath: OCR_BASE + 'core', langPath: OCR_BASE + 'lang', gzip: true, cacheMethod: 'none' };
 async function loadTesseract() {
   if (window.Tesseract) return;
-  await new Promise((res, rej) => { const s = el('script', { src: 'https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js' }); s.onload = res; s.onerror = () => rej(new Error('No se pudo descargar el motor OCR. Se necesita internet la primera vez que se usa.')); document.head.append(s); });
+  await new Promise((res, rej) => { const s = el('script', { src: OCR_BASE + 'tesseract.min.js' }); s.onload = res; s.onerror = () => rej(new Error('No se encontró el motor OCR (carpeta «ocr» de la aplicación).')); document.head.append(s); });
 }
 async function ocrDialog() {
   const d = D();
   const v = await formDialog('Reconocimiento de texto (OCR)', [
-    { type: 'hint', label: 'Convierte páginas escaneadas en texto buscable y seleccionable (se agrega una capa de texto invisible sobre la imagen). La primera vez descarga el motor de reconocimiento (~15 MB); después queda en caché.' },
+    { type: 'hint', label: 'Convierte páginas escaneadas en texto buscable y seleccionable (se agrega una capa de texto invisible sobre la imagen). Funciona sin internet: el motor y los idiomas vienen incluidos en Rúbrica.' },
     { key: 'lang', label: 'Idioma del documento', type: 'select', value: 'spa+eng', options: [['spa', 'Español'], ['eng', 'Inglés'], ['spa+eng', 'Español + Inglés'], ['por', 'Portugués'], ['fra', 'Francés']] },
     { key: 'range', label: 'Páginas', value: String(d.cur + 1), hint: 'Vacío = todas' },
     { key: 'quality', label: 'Calidad', type: 'select', value: '2.8', options: [['2', 'Rápida (144 ppp)'], ['2.8', 'Normal (200 ppp)'], ['4.2', 'Alta (300 ppp)']] }
@@ -744,7 +746,7 @@ async function ocrDialog() {
   else try {
     await withBusy('Cargando motor OCR…', async upd => {
       await loadTesseract();
-      const worker = await Tesseract.createWorker(v.lang, 1, { logger: m => { if (m.status && m.progress != null && /recogniz/i.test(m.status)) upd(null, m.progress * 100); else if (m.status) upd(({ 'loading tesseract core': 'Cargando motor…', 'loading language traineddata': 'Descargando idioma…', 'initializing api': 'Inicializando…' })[m.status] || null); } });
+      const worker = await Tesseract.createWorker(v.lang, 1, { ...OCR_OPTS, logger: m => { if (m.status && m.progress != null && /recogniz/i.test(m.status)) upd(null, m.progress * 100); else if (m.status) upd(({ 'loading tesseract core': 'Cargando motor…', 'loading language traineddata': 'Cargando idioma…', 'initializing api': 'Inicializando…' })[m.status] || null); } });
       const snap = d.snap(); let words = 0;
       for (let k = 0; k < idx.length; k++) {
         const p = d.pages[idx[k]];

@@ -8,7 +8,13 @@ Creado por **ZMA Inversiones** (San Pedro Sula, Honduras) como alternativa abier
 
 ## Descargar
 
-Vaya a **[Releases](../../releases)** y descargue `Rubrica-Setup-x.y.z.exe` (Windows) o `Rubrica-Android-x.y.z.apk` (Android, ver [docs/android.md](docs/android.md)). El instalador no requiere permisos de administrador. La aplicación avisa cuando hay una versión nueva y se actualiza sola.
+Vaya a **[Releases](../../releases)** y descargue:
+
+- Windows (Intel/AMD): `Rubrica-Setup-x.y.z.exe`
+- Windows en ARM (por ejemplo, portátiles con Snapdragon): `Rubrica-Setup-x.y.z-arm64.exe`
+- Android: `Rubrica-Android-x.y.z.apk` (ver [docs/android.md](docs/android.md))
+
+El instalador no requiere permisos de administrador, instala WebView2 si falta y está en español, inglés y portugués. La aplicación avisa cuando hay una versión nueva y se actualiza sola, solo si la firma de la actualización es válida. El OCR funciona sin internet.
 
 > Windows puede mostrar «Windows protegió su PC» porque el instalador no está firmado con un certificado de editor. Pulse *Más información → Ejecutar de todas formas*.
 

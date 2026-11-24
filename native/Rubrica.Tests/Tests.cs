@@ -179,3 +179,14 @@ public class VerifyChainTests
         Assert.Contains("\"trusted\":false", json);
     }
 }
+
+public class UpdaterArchTests
+{
+    [Theory]
+    [InlineData("Rubrica-Setup-1.3.0-arm64.exe", "Rubrica-Setup-1.3.0.exe", true, true)]
+    [InlineData("Rubrica-Setup-1.3.0-arm64.exe", "Rubrica-Setup-1.3.0.exe", false, false)]
+    [InlineData("Rubrica-Setup-1.3.0.exe", "Rubrica-Setup-1.3.0-arm64.exe", false, true)]
+    [InlineData("Rubrica-Setup-1.3.0.exe", "Rubrica-Setup-1.3.0-arm64.exe", true, false)]
+    public void EligeElInstaladorDeLaArquitectura(string candidate, string current, bool arm64, bool better) =>
+        Assert.Equal(better, Updater.IsBetterSetup(candidate, current, arm64));
+}

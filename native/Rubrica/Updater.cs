@@ -45,13 +45,25 @@ internal static class Updater
             {
                 var n = a.GetProperty("name").GetString() ?? "";
                 var u = a.GetProperty("browser_download_url").GetString();
-                if (setupUrl == null && n.EndsWith(".exe", StringComparison.OrdinalIgnoreCase) && n.Contains("Setup", StringComparison.OrdinalIgnoreCase)) { setupName = n; setupUrl = u; }
+                if (n.EndsWith(".exe", StringComparison.OrdinalIgnoreCase) && n.Contains("Setup", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (setupUrl == null || IsBetterSetup(n, setupName!, IsArm64)) { setupName = n; setupUrl = u; }
+                }
                 else if (n.Equals(SumsName, StringComparison.OrdinalIgnoreCase)) sums = u;
                 else if (n.Equals(SigName, StringComparison.OrdinalIgnoreCase)) sig = u;
             }
         }
         _last = new Release(tag, page, setupName, setupUrl, sums, sig);
         return new { available = setupUrl != null && IsNewer(tag, AppInfo.Version), version = tag.TrimStart('v', 'V'), notes, url = setupUrl, page, verified = sums != null && sig != null };
+    }
+
+    private static bool IsArm64 => System.Runtime.InteropServices.RuntimeInformation.OSArchitecture == System.Runtime.InteropServices.Architecture.Arm64;
+
+    /// <summary>Entre dos instaladores, prefiere el de la arquitectura del equipo (…-arm64.exe en Windows ARM).</summary>
+    internal static bool IsBetterSetup(string candidate, string current, bool arm64)
+    {
+        bool c = candidate.Contains("arm64", StringComparison.OrdinalIgnoreCase), k = current.Contains("arm64", StringComparison.OrdinalIgnoreCase);
+        return c != k && c == arm64;
     }
 
     internal static bool IsNewer(string candidate, string current)

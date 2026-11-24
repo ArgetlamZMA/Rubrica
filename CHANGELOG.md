@@ -3,6 +3,10 @@
 ## 1.3.0 — en preparación
 - **Confianza en las firmas**: el panel Firmas distingue *Firma válida · emisor de confianza* (cadena verificada hasta una raíz de confianza), *Firma íntegra · emisor no verificado* (el documento no cambió, pero no se puede confirmar quién emitió el certificado) y *Firma NO válida*. Antes cualquier firma íntegra se mostraba en verde, aunque el certificado fuera autofirmado.
 - Raíces de confianza: certificados importados (`.cer`, `.crt`, `.pem`) en *Preferencias de firma → Certificados de confianza*, «Confiar en este emisor» desde el panel Firmas (con la huella SHA-256 para compararla), el almacén de Windows y los certificados de CA instalados en Android. Se comprueba la firma de cada eslabón y la vigencia de cada certificado en la fecha de la firma (o de la marca de tiempo).
+- **OCR sin internet** en Windows y en la versión web: el motor Tesseract y los idiomas español, inglés, portugués y francés vienen incluidos (antes se descargaban de un CDN la primera vez).
+- **Windows en ARM** (ARM64): instalador nativo `Rubrica-Setup-x.y.z-arm64.exe`; el actualizador elige el instalador de la arquitectura del equipo.
+- Instalador en español, inglés y portugués, con página de privacidad, e instalación automática de WebView2 si falta.
+- Preparación para la firma de código con SignPath Foundation ([CODE_SIGNING.md](CODE_SIGNING.md), [PRIVACY.md](PRIVACY.md), [docs/firma-de-codigo.md](docs/firma-de-codigo.md)).
 - **Actualizaciones verificadas** (Windows): cada versión publica `SHA256SUMS.txt` firmado (ECDSA P-256); la app solo ejecuta el instalador si la firma del manifiesto y el SHA-256 del instalador coinciden. Si no, no se ejecuta nada y se ofrece la página de descarga.
 
 ## 1.2.0 — 2026-11-23

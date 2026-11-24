@@ -1,0 +1,13 @@
+﻿PRIVACIDADE DO RÚBRICA
+
+O Rúbrica trabalha com seus documentos neste computador. Não tem contas, não coleta estatísticas de uso e não envia seus documentos a servidores do Rúbrica ou da ZMA Inversiones.
+
+Conexões que o aplicativo faz:
+
+- GitHub: ao iniciar, verifica se há uma versão nova (envia apenas a versão do Rúbrica). Pode ser desativado em Configurações > "Procurar atualizações ao iniciar". As atualizações só são instaladas se a assinatura for válida.
+- OneDrive e Google Drive: somente se você conectar sua conta e abrir ou salvar lá.
+- Servidor de carimbo do tempo (por exemplo, a TSA do SAR de Honduras): somente ao assinar com carimbo do tempo; é enviado um resumo criptográfico da assinatura, nunca o documento.
+
+O OCR, a conversão, a assinatura digital e a verificação de assinaturas são feitos localmente.
+
+Política completa: https://github.com/ArgetlamZMA/Rubrica/blob/main/PRIVACY.md

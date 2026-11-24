@@ -18,6 +18,7 @@ internal sealed class LocalServer : IDisposable
     {
         [".html"] = "text/html; charset=utf-8", [".js"] = "text/javascript; charset=utf-8", [".json"] = "application/json",
         [".css"] = "text/css", [".png"] = "image/png", [".ico"] = "image/x-icon", [".svg"] = "image/svg+xml", [".txt"] = "text/plain; charset=utf-8",
+        [".wasm"] = "application/wasm", [".gz"] = "application/gzip", [".webmanifest"] = "application/manifest+json",
     };
 
     private readonly MainForm _form;

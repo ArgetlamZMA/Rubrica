@@ -1,5 +1,5 @@
-/* Rúbrica — service worker: la app funciona sin el servidor local una vez instalada,
-   y guarda en caché el motor OCR la primera vez que se descarga. */
+/* Rúbrica — service worker: la app funciona sin el servidor local una vez instalada.
+   El motor OCR viene incluido (carpeta /ocr) y se guarda en caché la primera vez que se usa. */
 const APP = 'pdfstudio-app-v1', RUNTIME = 'pdfstudio-runtime-v1';
 const CORE = ['/', '/index.html', '/manifest.json', '/icon-192.png', '/icon-512.png'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(APP).then(c => c.addAll(CORE)).then(() => self.skipWaiting())); });
