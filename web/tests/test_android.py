@@ -71,7 +71,7 @@ async def sign_ec(pg):
 async def main():
     async with async_playwright() as p:
         b = await p.chromium.launch(executable_path=os.environ.get('CHROME') or None, args=['--no-sandbox'])
-        ctx = await b.new_context(viewport={'width': 384, 'height': 824}, device_scale_factor=3, is_mobile=True, has_touch=True)
+        ctx = await b.new_context(viewport={'width': 384, 'height': 824}, device_scale_factor=3, is_mobile=True, has_touch=True, locale='es-HN')
         await ctx.add_init_script(MOCK)
         pg = await ctx.new_page(); errs = []
         pg.on('pageerror', lambda e: errs.append('PAGEERROR ' + str(e)))

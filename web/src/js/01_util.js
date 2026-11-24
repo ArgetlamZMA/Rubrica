@@ -82,8 +82,8 @@ function fmtSize(n) {
   if (n < 1048576) return (n / 1024).toFixed(0) + ' KB';
   return (n / 1048576).toFixed(1) + ' MB';
 }
-function fmtDate(d) { if (!d) return ''; const x = new Date(d); return isNaN(x) ? '' : x.toLocaleDateString('es-HN', { day: '2-digit', month: 'short', year: 'numeric' }); }
-function todayStr() { return new Date().toLocaleDateString('es-HN', { day: '2-digit', month: '2-digit', year: 'numeric' }); }
+function fmtDate(d) { if (!d) return ''; const x = new Date(d); return isNaN(x) ? '' : x.toLocaleDateString(LOC(), { day: '2-digit', month: 'short', year: 'numeric' }); }
+function todayStr() { return new Date().toLocaleDateString(LOC(), { day: '2-digit', month: '2-digit', year: 'numeric' }); }
 function baseName(n) { return String(n || 'documento').replace(/\.[a-z0-9]{2,5}$/i, ''); }
 function isPdfName(n) { return /\.pdf$/i.test(n || ''); }
 function isImageName(n) { return /\.(png|jpe?g|gif|bmp|webp|tiff?)$/i.test(n || ''); }

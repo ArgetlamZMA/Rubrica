@@ -232,6 +232,7 @@ function initPwa() {
 (async function boot() {
   if (handleAuthCallback()) return;
   if (S.settings.dark) document.documentElement.classList.add('dark');
+  applyLang(S.settings.lang || 'auto');
   initChrome(); initViewerEvents(); initKeys(); initDnD();
   try { await initMobile(); } catch (e) { console.warn('móvil', e); }
   renderTabs(); renderRibbon(); renderViewer(); renderSide(); renderProps(); updateCloudStatus(); setTool('select');

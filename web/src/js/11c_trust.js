@@ -106,7 +106,7 @@ async function trustIssuerDialog(top) {
      <table class="kv"><tr><th>Certificado</th><td>${escapeHtml(certCn(top))}</td></tr>
      <tr><th>Tipo</th><td>${self ? 'Raíz (autofirmado)' : 'Autoridad intermedia'}</td></tr>
      <tr><th>Emisor</th><td>${escapeHtml(dnGet(top.issuer.attributes, 'CN') || '—')}</td></tr>
-     <tr><th>Vigencia</th><td>${top.validity.notBefore.toLocaleDateString('es-HN')} – ${top.validity.notAfter.toLocaleDateString('es-HN')}</td></tr>
+     <tr><th>Vigencia</th><td>${top.validity.notBefore.toLocaleDateString(LOC())} – ${top.validity.notAfter.toLocaleDateString(LOC())}</td></tr>
      <tr><th>Huella SHA-256</th><td style="font-family:monospace;font-size:11.5px">${fp}</td></tr></table>
      <p class="hint" style="margin-top:10px"><b>Compare la huella</b> con la que publica la autoridad (por ejemplo, el SAR en sar.gob.hn/firmaelectronica). Cualquiera puede crear un certificado con el nombre de una institución: confíe solo en raíces de autoridades reconocidas.</p>`, 'Confiar');
   if (!ok) return false;
@@ -121,7 +121,7 @@ async function trustPane(refresh) {
     const cur = list.find(x => x.fp === sel);
     wrap.innerHTML = '';
     const box = el('div', { class: 'recent-list sp-list' });
-    for (const t of list) box.append(el('div', { class: 'recent-row' + (t.fp === sel ? ' on' : ''), onclick: () => { sel = t.fp; render(); } }, icEl('shield-check'), el('span', { class: 'nm', text: t.cn }), el('span', { class: 'src', text: 'vence ' + new Date(t.notAfter).toLocaleDateString('es-HN') })));
+    for (const t of list) box.append(el('div', { class: 'recent-row' + (t.fp === sel ? ' on' : ''), onclick: () => { sel = t.fp; render(); } }, icEl('shield-check'), el('span', { class: 'nm', text: t.cn }), el('span', { class: 'src', text: 'vence ' + new Date(t.notAfter).toLocaleDateString(LOC()) })));
     if (!list.length) box.append(el('div', { class: 'cb-empty', text: 'Aún no hay certificados. Importe la raíz y la subordinada del SAR, o use «Confiar en este emisor» en el panel Firmas.' }));
     wrap.append(el('div', { class: 'sp-bar' },
       el('button', { class: 'btn sm', html: ic('plus') + 'Importar certificado (.cer / .crt / .pem)', onclick: async () => {
@@ -138,7 +138,7 @@ async function trustPane(refresh) {
         await idb.set('trust', list.filter(x => x.fp !== sel)); refresh();
       } })), box);
     if (cur) wrap.append(el('div', { class: 'sp-info' }, el('h5', { text: 'Información sobre el certificado' }), el('table', { class: 'kv' },
-      ...[['Nombre', cur.cn], ['Emisor', cur.issuer || '—'], ['Válido desde', new Date(cur.notBefore).toLocaleString('es-HN')], ['Válido hasta', new Date(cur.notAfter).toLocaleString('es-HN')], ['Huella SHA-256', fpPretty(cur.fp)]].map(([k, v]) => el('tr', {}, el('th', { text: k }), el('td', { text: v, style: k.startsWith('Huella') ? { fontFamily: 'monospace', fontSize: '11.5px' } : {} }))))));
+      ...[['Nombre', cur.cn], ['Emisor', cur.issuer || '—'], ['Válido desde', new Date(cur.notBefore).toLocaleString(LOC())], ['Válido hasta', new Date(cur.notAfter).toLocaleString(LOC())], ['Huella SHA-256', fpPretty(cur.fp)]].map(([k, v]) => el('tr', {}, el('th', { text: k }), el('td', { text: v, style: k.startsWith('Huella') ? { fontFamily: 'monospace', fontSize: '11.5px' } : {} }))))));
     wrap.append(el('div', { class: 'hint', html: `Una firma es <b>de confianza</b> cuando el certificado del firmante encadena hasta uno de estos certificados${NATIVE ? ' o hasta una raíz del almacén de Windows' : PSN ? ' o hasta un certificado de CA instalado en Android' : ''}. Descargue los del SAR en <b>sar.gob.hn/firmaelectronica</b> (Autoridad de Certificación Raíz y Subordinada).` }));
   };
   render(); return wrap;

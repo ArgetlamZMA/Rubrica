@@ -9,7 +9,11 @@ const pkg = JSON.parse(rd(path.join(ROOT, 'package.json')));
 fs.rmSync(OUT, { recursive: true, force: true }); fs.mkdirSync(OUT, { recursive: true });
 const jsDir = path.join(SRC, 'js');
 let js = fs.readdirSync(jsDir).filter(f => f.endsWith('.js')).sort().map(f => `/* ---- ${f} ---- */\n` + rd(path.join(jsDir, f))).join('\n');
-js = `const APP_VERSION = ${JSON.stringify(pkg.version)};\n` + js;
+// Traducciones de la interfaz (src/i18n/ui.tsv: es → en, pt), clave = texto en español
+const tsv = fs.readFileSync(path.join(ROOT, 'src', 'i18n', 'ui.tsv'), 'utf8').split(/\r?\n/).filter(Boolean).map(l => l.split('\t'));
+const [head, ...rows] = tsv, dict = {};
+head.slice(1).forEach((lang, i) => { dict[lang] = {}; for (const r of rows) if (r[i + 1] && r[i + 1] !== r[0]) dict[lang][r[0]] = r[i + 1]; });
+js = `const APP_VERSION = ${JSON.stringify(pkg.version)};\nconst I18N_DICT = ${JSON.stringify(dict)};\n` + js;
 // íconos Lucide referenciados en el código
 const iconDir = path.join(NM, 'lucide-static', 'icons');
 const names = new Set(['square']);

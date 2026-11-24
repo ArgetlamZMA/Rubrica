@@ -13,7 +13,7 @@ srv = http.server.ThreadingHTTPServer(('127.0.0.1', 8765), Handler)
 threading.Thread(target=srv.serve_forever, daemon=True).start()
 code = 0
 try:
-    for t in (sys.argv[1:] or ['test_core.py', 'test_cloud.py', 'test_fonts_sign.py', 'test_sign_ui.py', 'test_sign_prefs.py', 'test_trust.py', 'test_ocr.py', 'test_android.py']):
+    for t in (sys.argv[1:] or ['test_core.py', 'test_cloud.py', 'test_fonts_sign.py', 'test_sign_ui.py', 'test_sign_prefs.py', 'test_trust.py', 'test_ocr.py', 'test_i18n.py', 'test_android.py']):
         print(f'\n===== {t} =====', flush=True)
         r = subprocess.run([sys.executable, os.path.join(HERE, t)], cwd=HERE)
         code = code or r.returncode

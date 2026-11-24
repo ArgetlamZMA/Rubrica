@@ -1,0 +1,851 @@
+es	en	pt
+(Autoridad de Certificación Raíz y Subordinada).	(Root and Subordinate Certification Authority).	(Autoridade Certificadora Raiz e Subordinada).
+(con cambios posteriores permitidos)	(with later changes allowed)	(com alterações posteriores permitidas)
+(de la 5 al final)	(from 5 to the end)	(da 5 até o fim)
+(es su propia app).	(it is your own app).	(é o seu próprio aplicativo).
+(estado {0}).	(status {0}).	(status {0}).
+(incluye fuentes de Microsoft 365)	(includes Microsoft 365 fonts)	(inclui fontes do Microsoft 365)
+(no corresponde a esta firma)	(does not match this signature)	(não corresponde a esta assinatura)
+(no disponible en este equipo)	(not available on this computer)	(não disponível neste computador)
+(o portal.azure.com) →	(or portal.azure.com) →	(ou portal.azure.com) →
+(tiene {1}).	(you have {1}).	(você tem {1}).
+(usa {0}).	(uses {0}).	(usa {0}).
+) para limitarlo a su organización.	) to limit it to your organization.	) para limitá-lo à sua organização.
+) y péguelo abajo. Al iniciar sesión Google mostrará «app no verificada»: elija	) and paste it below. When signing in, Google will show "unverified app": choose	) e cole abaixo. Ao entrar, o Google mostrará "app não verificado": escolha
+, cada firma lleva una marca de tiempo confiable emitida por esa autoridad (p. ej. la TSA del SAR): la fecha de la firma ya no depende del reloj de este equipo y la firma sigue siendo verificable después de que el certificado venza.{0}	, every signature carries a trusted timestamp issued by that authority (e.g. the SAR TSA): the signing date no longer depends on this computer's clock and the signature remains verifiable after the certificate expires.{0}	, cada assinatura leva um carimbo do tempo confiável emitido por essa autoridade (ex.: a TSA do SAR): a data da assinatura não depende mais do relógio deste computador e a assinatura continua verificável depois que o certificado vence.{0}
+, el PDF quedará buscable y seleccionable.	, the PDF will be searchable and selectable.	, o PDF ficará pesquisável e selecionável.
+, las páginas afectadas se convierten en imagen para eliminar de forma permanente el texto e imágenes que quedan debajo.	, the affected pages are converted to images to permanently remove the text and images underneath.	, as páginas afetadas são convertidas em imagem para remover permanentemente o texto e as imagens que ficam por baixo.
+, nombre de la app y su correo. En	, app name and your email. In	, nome do app e seu e-mail. Em
+: sin sesión	: not signed in	: sem sessão
+A Excel	To Excel	Para Excel
+A Word	To Word	Para Word
+A imágenes	To images	Para imagens
+A texto	To text	Para texto
+A4 (210 × 297 mm)	A4 (210 × 297 mm)	A4 (210 × 297 mm)
+APIs y servicios	APIs & Services	APIs e serviços
+Abajo	Bottom	Abaixo
+Abierto como archivo local.	Opened as a local file.	Aberto como arquivo local.
+Abriendo	Opening	Abrindo
+Abriendo…	Opening…	Abrindo…
+Abrir	Open	Abrir
+Abrir PDF	Open PDF	Abrir PDF
+Abrir archivo	Open file	Abrir arquivo
+Abrir configuración	Open settings	Abrir configurações
+Abrir de Google Drive	Open from Google Drive	Abrir do Google Drive
+Abrir de OneDrive	Open from OneDrive	Abrir do OneDrive
+Abrir desde la nube	Open from the cloud	Abrir da nuvem
+Aceptar	OK	OK
+Acepto los términos definidos	I accept the defined terms	Aceito os termos definidos
+Acercar / alejar	Zoom in / out	Aumentar / diminuir zoom
+Actualización disponible	Update available	Atualização disponível
+Actualización sin verificación	Unverified update	Atualização sem verificação
+Actualizar	Update	Atualizar
+Actualizar ahora	Update now	Atualizar agora
+Acuerdo de claves	Key agreement	Acordo de chaves
+Agregar comentarios	Add comments	Adicionar comentários
+Agregar fuente desde archivo…	Add font from file…	Adicionar fonte de arquivo…
+Agregar fuente…	Add font…	Adicionar fonte…
+Agregar texto	Add text	Adicionar texto
+Agregue archivos.	Add files.	Adicione arquivos.
+Agregue dos o más archivos PDF o imágenes	Add two or more PDF files or images	Adicione dois ou mais arquivos PDF ou imagens
+Agregue imágenes (JPG, PNG…)	Add images (JPG, PNG…)	Adicione imagens (JPG, PNG…)
+Ajustar a cada imagen	Fit each image	Ajustar a cada imagem
+Ajustar a la página	Fit page	Ajustar à página
+Ajustar al ancho	Fit width	Ajustar à largura
+Ajustar ancho	Fit width	Ajustar largura
+Al final	At the end	No final
+Al firmar se aplican primero todos los cambios del documento y luego se le pedirá dónde guardar el PDF firmado.	When signing, all document changes are applied first and then you will be asked where to save the signed PDF.	Ao assinar, todas as alterações do documento são aplicadas primeiro e depois será perguntado onde salvar o PDF assinado.
+Al guardar	When saving	Ao salvar
+Al guardar, el documento quedará sin contraseña ni restricciones.	When saved, the document will have no password or restrictions.	Ao salvar, o documento ficará sem senha nem restrições.
+Al inicio	At the beginning	No início
+Algoritmo de resumen no soportado	Unsupported digest algorithm	Algoritmo de resumo não suportado
+Alineación	Alignment	Alinhamento
+Almacén de Windows / token	Windows store / token	Repositório do Windows / token
+Almacén de certificados de Windows	Windows certificate store	Repositório de certificados do Windows
+Alta (300 ppp)	High (300 dpi)	Alta (300 ppp)
+Antes de la página actual	Before the current page	Antes da página atual
+Apertura cancelada	Opening canceled	Abertura cancelada
+Aplica un tono de fondo mediante fusión «multiplicar»: el texto y los gráficos siguen visibles.	Applies a background tint using "multiply" blending: text and graphics remain visible.	Aplica um tom de fundo com mesclagem "multiplicar": o texto e os gráficos continuam visíveis.
+Aplicaciones	Applications	Aplicativos
+Aplicación de página única (SPA)	Single-page application (SPA)	Aplicativo de página única (SPA)
+Aplicación web	Web application	Aplicativo web
+Aplicando cambios…	Applying changes…	Aplicando alterações…
+Aplicando firma digital…	Applying digital signature…	Aplicando assinatura digital…
+Aplicando redacción permanente…	Applying permanent redaction…	Aplicando tarja permanente…
+Aplicar	Apply	Aplicar
+Aplicar a	Apply to	Aplicar a
+Aplicar protección	Apply protection	Aplicar proteção
+Apruebo este documento	I approve this document	Aprovo este documento
+Archivo	File	Arquivo
+Archivo (teléfono, Drive, OneDrive…)	File (phone, Drive, OneDrive…)	Arquivo (telefone, Drive, OneDrive…)
+Archivo de identificación digital	Digital ID file	Arquivo de identidade digital
+Archivo:	File:	Arquivo:
+Archivos .p12 / .pfx	.p12 / .pfx files	Arquivos .p12 / .pfx
+Arrastre aquí archivos PDF o imágenes para abrirlos	Drag PDF files or images here to open them	Arraste arquivos PDF ou imagens aqui para abri-los
+Arrastre en la página para definir dónde se verá la firma digital. Esc para cancelar.	Drag on the page to set where the digital signature will appear. Esc to cancel.	Arraste na página para definir onde a assinatura digital aparecerá. Esc para cancelar.
+Arrastre para dibujar un recuadro (mínimo 40 × 18 pt).	Drag to draw a box (minimum 40 × 18 pt).	Arraste para desenhar uma caixa (mínimo 40 × 18 pt).
+Arriba	Top	Acima
+Aspecto	Appearance	Aparência
+Aspecto de la firma	Signature appearance	Aparência da assinatura
+Asunto	Subject	Assunto
+Atajos de teclado	Keyboard shortcuts	Atalhos de teclado
+Autor	Author	Autor
+Autoridad intermedia	Intermediate authority	Autoridade intermediária
+Autoridad:	Authority:	Autoridade:
+Ayuda	Help	Ajuda
+Añada su certificado .p12/.pfx (por ejemplo, la firma electrónica del SAR).	Add your .p12/.pfx certificate (for example, your SAR electronic signature).	Adicione seu certificado .p12/.pfx (por exemplo, a assinatura eletrônica do SAR).
+Añada su certificado .p12/.pfx o elija uno de la lista.	Add your .p12/.pfx certificate or choose one from the list.	Adicione seu certificado .p12/.pfx ou escolha um da lista.
+Añadir	Add	Adicionar
+Añadir archivo .p12 / .pfx	Add .p12 / .pfx file	Adicionar arquivo .p12 / .pfx
+Añadir archivo .p12 / .pfx…	Add .p12 / .pfx file…	Adicionar arquivo .p12 / .pfx…
+Añadir servidor de marca de tiempo	Add timestamp server	Adicionar servidor de carimbo do tempo
+Aún no hay certificados. Importe la raíz y la subordinada del SAR, o use «Confiar en este emisor» en el panel Firmas.	No certificates yet. Import the SAR root and subordinate, or use "Trust this issuer" in the Signatures panel.	Ainda não há certificados. Importe a raiz e a subordinada do SAR, ou use "Confiar neste emissor" no painel Assinaturas.
+Bajar	Move down	Descer
+Biblioteca	Library	Biblioteca
+Borde	Border	Borda
+Borrador	Eraser	Borracha
+Borrar	Clear	Apagar
+Buscando…	Searching…	Pesquisando…
+Buscar	Search	Pesquisar
+Buscar actualizaciones	Check for updates	Procurar atualizações
+Buscar actualizaciones al iniciar	Check for updates at startup	Procurar atualizações ao iniciar
+Buscar en	Search in	Pesquisar em
+Buscar en el documento…	Search in the document…	Pesquisar no documento…
+Buscar y redactar	Search and redact	Pesquisar e tarjar
+CN=Nombre del firmante, O=Organización, C=HN	CN=Signer name, O=Organization, C=HN	CN=Nome do signatário, O=Organização, C=HN
+Cada N páginas	Every N pages	A cada N páginas
+Cadena de certificados demasiado larga.	Certificate chain too long.	Cadeia de certificados longa demais.
+Cadena:	Chain:	Cadeia:
+Calidad	Quality	Qualidade
+Cambios sin guardar	Unsaved changes	Alterações não salvas
+Campo	Field	Campo
+Campo de formulario	Form field	Campo de formulário
+Campo de texto	Text field	Campo de texto
+Cancelar	Cancel	Cancelar
+Cantidad	Quantity	Quantidade
+Cargando idioma…	Loading language…	Carregando idioma…
+Cargando motor OCR…	Loading OCR engine…	Carregando mecanismo de OCR…
+Cargando motor…	Loading engine…	Carregando mecanismo…
+Cargar fuentes del equipo	Load system fonts	Carregar fontes do computador
+Cargar fuentes del equipo…	Load system fonts…	Carregar fontes do computador…
+Carpeta vacía — puede guardar aquí.	Empty folder — you can save here.	Pasta vazia — você pode salvar aqui.
+Carta	Letter	Carta
+Carta (216 × 279 mm)	Letter (216 × 279 mm)	Carta (216 × 279 mm)
+Carta, A4, Oficio…	Letter, A4, Legal…	Carta, A4, Ofício…
+Casilla	Checkbox	Caixa de seleção
+Centrada	Centered	Centralizada
+Centro	Center	Centro
+Cerrar	Close	Fechar
+Cerrar documento	Close document	Fechar documento
+Cerrar el documento	Close the document	Fechar o documento
+Cerrar sesión	Sign out	Sair
+Cerrar sin guardar	Close without saving	Fechar sem salvar
+Certificado	Certificate	Certificado
+Certificado agregado a sus certificados de confianza.	Certificate added to your trusted certificates.	Certificado adicionado aos seus certificados confiáveis.
+Certificado de Android	Android certificate	Certificado do Android
+Certificado fuera de vigencia al firmar	Certificate not valid at signing time	Certificado fora da validade ao assinar
+Certificado instalado en Android	Certificate installed on Android	Certificado instalado no Android
+Certificado no incluido o no compatible para verificación (p. ej. ECDSA).	Certificate not included or not supported for verification (e.g. ECDSA).	Certificado não incluído ou não compatível para verificação (ex.: ECDSA).
+Certificados de confianza	Trusted certificates	Certificados confiáveis
+Certifico la exactitud e integridad de este documento	I certify the accuracy and integrity of this document	Certifico a exatidão e integridade deste documento
+Cifrado AES-256. La protección se aplica al guardar el documento.	AES-256 encryption. Protection is applied when the document is saved.	Criptografia AES-256. A proteção é aplicada ao salvar o documento.
+Cifrado de clave	Key encipherment	Cifragem de chave
+Cifrado de datos	Data encipherment	Cifragem de dados
+Clic para editar este texto	Click to edit this text	Clique para editar este texto
+Colocar firma	Place signature	Colocar assinatura
+Color	Color	Cor
+Color de fondo	Background color	Cor de fundo
+Color de relleno	Fill color	Cor de preenchimento
+Color del borde	Border color	Cor da borda
+Combinando…	Combining…	Combinando…
+Combinar	Combine	Combinar
+Combinar archivos	Combine files	Combinar arquivos
+Comentar	Comment	Comentar
+Comentario	Comment	Comentário
+Comentarios	Comments	Comentários
+Compare la huella	Compare the fingerprint	Compare a impressão digital
+Compare las huellas SHA-256 con las publicadas por la autoridad antes de confiar.	Compare the SHA-256 fingerprints with those published by the authority before trusting.	Compare as impressões digitais SHA-256 com as publicadas pela autoridade antes de confiar.
+Compartidos conmigo	Shared with me	Compartilhados comigo
+Compartir	Share	Compartilhar
+Complete el inicio de sesión en la ventana emergente.	Complete the sign-in in the pop-up window.	Conclua o login na janela pop-up.
+Comprimiendo páginas…	Compressing pages…	Comprimindo páginas…
+Comprimiendo…	Compressing…	Comprimindo…
+Comprimir	Compress	Comprimir
+Comprimir PDF	Compress PDF	Comprimir PDF
+Con un servidor	With a server	Com um servidor
+Conceder consentimiento de administrador	Grant admin consent	Conceder consentimento do administrador
+Conectado:	Connected:	Conectado:
+Confiar	Trust	Confiar
+Confiar en este emisor	Trust this issuer	Confiar neste emissor
+Confiar en este emisor…	Trust this issuer…	Confiar neste emissor…
+Configuración	Settings	Configurações
+Configuración guardada.	Settings saved.	Configurações salvas.
+Configurar el estilo de la firma	Configure signature style	Configurar o estilo da assinatura
+Configurar gráfico	Configure graphic	Configurar gráfico
+Configurar servidores de marca de hora	Configure timestamp servers	Configurar servidores de carimbo do tempo
+Configurar texto	Configure text	Configurar texto
+Configure primero el ID de cliente de Google (⚙ Configuración).	First set up the Google client ID (⚙ Settings).	Primeiro configure o ID do cliente do Google (⚙ Configurações).
+Configure primero el ID de cliente de Microsoft (⚙ Configuración).	First set up the Microsoft client ID (⚙ Settings).	Primeiro configure o ID do cliente da Microsoft (⚙ Configurações).
+Confirmar contraseña	Confirm password	Confirmar senha
+Consultando	Querying	Consultando
+Consultar…	Browse…	Procurar…
+Contacto	Contact	Contato
+Continuar	Continue	Continuar
+Contraseña	Password	Senha
+Contraseña de permisos (restringe impresión, copia y edición)	Permissions password (restricts printing, copying and editing)	Senha de permissões (restringe impressão, cópia e edição)
+Contraseña del certificado	Certificate password	Senha do certificado
+Contraseña incorrecta o archivo no válido.	Wrong password or invalid file.	Senha incorreta ou arquivo inválido.
+Contraseña incorrecta.	Wrong password.	Senha incorreta.
+Contraseña para abrir (opcional)	Password to open (optional)	Senha para abrir (opcional)
+Conversión completada.	Conversion complete.	Conversão concluída.
+Convertir	Convert	Converter
+Convertir a Excel (.xlsx)	Convert to Excel (.xlsx)	Converter para Excel (.xlsx)
+Convertir a Word (.docx)	Convert to Word (.docx)	Converter para Word (.docx)
+Convertir a imágenes	Convert to images	Converter para imagens
+Convertir a texto (.txt)	Convert to text (.txt)	Converter para texto (.txt)
+Convierte páginas escaneadas en texto buscable y seleccionable (se agrega una capa de texto invisible sobre la imagen). Funciona sin internet: el motor y los idiomas vienen incluidos en Rúbrica.	Turns scanned pages into searchable, selectable text (an invisible text layer is added over the image). Works offline: the engine and languages are included in Rúbrica.	Converte páginas digitalizadas em texto pesquisável e selecionável (uma camada de texto invisível é adicionada sobre a imagem). Funciona sem internet: o mecanismo e os idiomas vêm incluídos no Rúbrica.
+Convirtiendo…	Converting…	Convertendo…
+Copiado.	Copied.	Copiado.
+Copiar	Copy	Copiar
+Copiar texto	Copy text	Copiar texto
+Copiar texto e imágenes	Copy text and images	Copiar texto e imagens
+Copiar, cortar y pegar el objeto seleccionado	Copy, cut and paste the selected object	Copiar, recortar e colar o objeto selecionado
+Copie el	Copy the	Copie o
+Corrector (tapar)	Correction (cover)	Corretivo (cobrir)
+Creando PDF…	Creating PDF…	Criando PDF…
+Crear	Create	Criar
+Crear PDF	Create PDF	Criar PDF
+Crear PDF desde imágenes	Create PDF from images	Criar PDF a partir de imagens
+Crear credenciales	Create credentials	Criar credenciais
+Credenciales	Credentials	Credenciais
+Ctrl+Mayús+S	Ctrl+Shift+S	Ctrl+Shift+S
+Ctrl+Mayús+Tab	Ctrl+Shift+Tab	Ctrl+Shift+Tab
+Ctrl+Mayús+Z	Ctrl+Shift+Z	Ctrl+Shift+Z
+Ctrl+Mayús+R	Ctrl+Shift+R	Ctrl+Shift+R
+Mayús+F3	Shift+F3	Shift+F3
+Mayús+Flechas	Shift+Arrows	Shift+Setas
+Flechas	Arrows	Setas
+Supr	Del	Del
+RePág	PgUp	PgUp
+AvPág	PgDn	PgDn
+Fin	End	End
+Cuadro de texto	Text box	Caixa de texto
+Cuentas en cualquier directorio organizativo y cuentas personales de Microsoft	Accounts in any organizational directory and personal Microsoft accounts	Contas em qualquer diretório organizacional e contas pessoais da Microsoft
+Cursiva	Italic	Itálico
+Cámara con detección de bordes y OCR	Camera with edge detection and OCR	Câmera com detecção de bordas e OCR
+Cómo obtener el ID de cliente de Google (Drive)	How to get the Google client ID (Drive)	Como obter o ID do cliente do Google (Drive)
+Cómo obtener el ID de cliente de Microsoft (OneDrive)	How to get the Microsoft client ID (OneDrive)	Como obter o ID do cliente da Microsoft (OneDrive)
+Datos del certificado disponibles después de usarlo por primera vez (escriba la contraseña y pulse «Verificar»).	Certificate details are available after first use (enter the password and press "Verify").	Os dados do certificado ficam disponíveis após o primeiro uso (digite a senha e clique em "Verificar").
+De derecha a izquierda	Right to left	Da direita para a esquerda
+De izquierda a derecha	Left to right	Da esquerda para a direita
+Der.	Right	Dir.
+Derecha	Right	Direita
+Derecho	Right	Direito
+Descarga fallida (	Download failed (	Falha no download (
+Descargando	Downloading	Baixando
+Descargando y verificando la actualización…	Downloading and verifying the update…	Baixando e verificando a atualização…
+Descargando…	Downloading…	Baixando…
+Descargar .txt	Download .txt	Baixar .txt
+Descargar a la carpeta de descargas	Download to the Downloads folder	Baixar para a pasta Downloads
+Desde archivo	From file	De arquivo
+Desde imágenes	From images	De imagens
+Deshacer	Undo	Desfazer
+Después de la página actual	After the current page	Depois da página atual
+Detecta columnas por la posición del texto. Funciona mejor con tablas de PDFs digitales (no escaneados).	Detects columns by text position. Works best with tables in digital (not scanned) PDFs.	Detecta colunas pela posição do texto. Funciona melhor com tabelas de PDFs digitais (não digitalizados).
+Detectar la fuente original al editar texto (usa la fuente instalada con el mismo nombre)	Detect the original font when editing text (uses the installed font with the same name)	Detectar a fonte original ao editar texto (usa a fonte instalada com o mesmo nome)
+Dibujar	Draw	Desenhar
+Dibuje en la página el recuadro donde aparecerá la firma.	Draw on the page the box where the signature will appear.	Desenhe na página a caixa onde a assinatura aparecerá.
+Dibuje la firma primero.	Draw the signature first.	Desenhe a assinatura primeiro.
+Dirección del texto	Text direction	Direção do texto
+Diseño exacto (cada página como imagen)	Exact layout (each page as an image)	Layout exato (cada página como imagem)
+Distinguir mayúsculas	Match case	Diferenciar maiúsculas
+Distribución	Layout	Layout
+Dividiendo…	Splitting…	Dividindo…
+Dividir	Split	Dividir
+Dividir documento	Split document	Dividir documento
+Documento PDF	PDF document	Documento PDF
+Documento en blanco	Blank document	Documento em branco
+Documento firmado digitalmente	Digitally signed document	Documento assinado digitalmente
+Documento protegido	Protected document	Documento protegido
+Documento siguiente / anterior	Next / previous document	Documento seguinte / anterior
+Duplicar	Duplicate	Duplicar
+Dígitos	Digits	Dígitos
+Edición	Editing	Edição
+Editar	Edit	Editar
+Editar texto	Edit text	Editar texto
+Editar texto e imágenes	Edit text and images	Editar texto e imagens
+Editor PDF local: lectura, comentarios, edición, páginas, formularios, firmas, protección, conversión y OCR — con OneDrive y Google Drive.	Local PDF editor: reading, comments, editing, pages, forms, signatures, protection, conversion and OCR — with OneDrive and Google Drive.	Editor de PDF local: leitura, comentários, edição, páginas, formulários, assinaturas, proteção, conversão e OCR — com OneDrive e Google Drive.
+Ej.: 1-3, 5	E.g.: 1-3, 5	Ex.: 1-3, 5
+Ej.: 2- para omitir la portada	E.g.: 2- to skip the cover	Ex.: 2- para pular a capa
+Ejemplos:	Examples:	Exemplos:
+El almacén de Android no devolvió la firma.	The Android store did not return the signature.	O repositório do Android não retornou a assinatura.
+El archivo no contiene certificados.	The file contains no certificates.	O arquivo não contém certificados.
+El archivo no contiene una clave privada compatible (se requiere RSA). Si su certificado es de otro tipo, use el almacén de Windows en la app de escritorio.	The file does not contain a compatible private key (RSA required). If your certificate is of another type, use the Windows store in the desktop app.	O arquivo não contém uma chave privada compatível (requer RSA). Se seu certificado for de outro tipo, use o repositório do Windows no aplicativo de desktop.
+El archivo ya no está disponible. Ábralo de nuevo con «Abrir».	The file is no longer available. Open it again with "Open".	O arquivo não está mais disponível. Abra-o novamente com "Abrir".
+El certificado del firmante no se pudo leer aquí (p. ej. clave EC).	The signer's certificate could not be read here (e.g. EC key).	O certificado do signatário não pôde ser lido aqui (ex.: chave EC).
+El certificado elegido no trae su cadena.	The chosen certificate does not include its chain.	O certificado escolhido não traz sua cadeia.
+El certificado está vencido.	The certificate has expired.	O certificado está vencido.
+El certificado «{0}» no estaba vigente en la fecha de la firma.	The certificate "{0}" was not valid on the signing date.	O certificado "{0}" não estava válido na data da assinatura.
+El documento no cambió desde que se firmó, pero Rúbrica no puede confirmar quién emitió el certificado.	The document has not changed since it was signed, but Rúbrica cannot confirm who issued the certificate.	O documento não mudou desde que foi assinado, mas o Rúbrica não pode confirmar quem emitiu o certificado.
+El documento no tiene campos de formulario.	The document has no form fields.	O documento não tem campos de formulário.
+El documento no tiene contraseña.	The document has no password.	O documento não tem senha.
+El documento no tiene páginas.	The document has no pages.	O documento não tem páginas.
+El documento no tiene un formulario existente.	The document has no existing form.	O documento não tem um formulário existente.
+El escáner está disponible en la app de Android. Aquí puede usar «PDF desde imágenes».	The scanner is available in the Android app. Here you can use "PDF from images".	O scanner está disponível no aplicativo Android. Aqui você pode usar "PDF de imagens".
+El modo texto recupera el contenido para editarlo; el modo diseño conserva la apariencia exacta pero no es editable.	Text mode recovers the content for editing; layout mode keeps the exact appearance but is not editable.	O modo texto recupera o conteúdo para edição; o modo layout mantém a aparência exata, mas não é editável.
+El navegador bloqueó la ventana emergente. Permita ventanas emergentes para esta página.	The browser blocked the pop-up window. Allow pop-ups for this page.	O navegador bloqueou a janela pop-up. Permita pop-ups para esta página.
+El navegador no puede contactar el servidor de marca de tiempo. Use la app de Windows o de Android.	The browser cannot reach the timestamp server. Use the Windows or Android app.	O navegador não consegue contatar o servidor de carimbo do tempo. Use o aplicativo de Windows ou Android.
+El nombre es obligatorio	The name is required	O nome é obrigatório
+El servidor de marca de tiempo rechazó la solicitud	The timestamp server rejected the request	O servidor de carimbo do tempo rejeitou a solicitação
+El servidor de marca de tiempo respondió	The timestamp server responded	O servidor de carimbo do tempo respondeu
+El servidor rechazó la solicitud de prueba.	The server rejected the test request.	O servidor rejeitou a solicitação de teste.
+El texto original queda tapado con el color de fondo detectado y se escribe el texto nuevo encima. Doble clic para seguir editando.	The original text is covered with the detected background color and the new text is written on top. Double-click to keep editing.	O texto original é coberto com a cor de fundo detectada e o novo texto é escrito por cima. Clique duas vezes para continuar editando.
+Elegir archivos	Choose files	Escolher arquivos
+Elegir archivo…	Choose file…	Escolher arquivo…
+Elegir carpeta y guardar	Choose folder and save	Escolher pasta e salvar
+Elegir certificado de Android…	Choose Android certificate…	Escolher certificado do Android…
+Elegir imagen de firma (PNG con fondo transparente recomendado)	Choose signature image (PNG with transparent background recommended)	Escolher imagem da assinatura (PNG com fundo transparente recomendado)
+Elija la imagen del gráfico.	Choose the graphic image.	Escolha a imagem do gráfico.
+Elija o añada un certificado.	Choose or add a certificate.	Escolha ou adicione um certificado.
+Elija una carpeta.	Choose a folder.	Escolha uma pasta.
+Eliminar	Delete	Excluir
+Eliminar estilo	Delete style	Excluir estilo
+Eliminar la selección (o las páginas en Organizar)	Delete the selection (or pages in Organize)	Excluir a seleção (ou as páginas em Organizar)
+Eliminar las páginas extraídas del documento original	Delete the extracted pages from the original document	Excluir as páginas extraídas do documento original
+Eliminar páginas	Delete pages	Excluir páginas
+Eliminar servidor	Delete server	Excluir servidor
+Elipse	Ellipse	Elipse
+Emisor	Issuer	Emissor
+Empezar en	Start at	Começar em
+En	In	Em
+En Android, «Abrir» y «Guardar» usan el selector del sistema, que incluye Google Drive, OneDrive (si su app está instalada) y el almacenamiento del teléfono.	On Android, "Open" and "Save" use the system picker, which includes Google Drive, OneDrive (if its app is installed) and phone storage.	No Android, "Abrir" e "Salvar" usam o seletor do sistema, que inclui Google Drive, OneDrive (se o app estiver instalado) e o armazenamento do telefone.
+En blanco	Blank	Em branco
+En el navegador	In the browser	No navegador
+Encabezado	Header	Cabeçalho
+Encabezado y pie	Header & footer	Cabeçalho e rodapé
+Encabezado y pie de página	Header and footer	Cabeçalho e rodapé
+Entendido	Got it	Entendi
+Entre a	Go to	Acesse
+Enviar atrás	Send to back	Enviar para trás
+Error al convertir:	Conversion error:	Erro ao converter:
+Error al subir (	Upload error (	Erro ao enviar (
+Error:	Error:	Erro:
+Escanear	Scan	Digitalizar
+Escanear con la cámara	Scan with the camera	Digitalizar com a câmera
+Escanear documento	Scan document	Digitalizar documento
+Escanear páginas	Scan pages	Digitalizar páginas
+Escaneo	Scan	Digitalização
+Escriba la contraseña de «{0}» para comprobarlo. No se guarda: se pedirá al firmar.	Enter the password for "{0}" to check it. It is not saved: it will be asked when signing.	Digite a senha de "{0}" para verificá-lo. Ela não é salva: será pedida ao assinar.
+Escriba la contraseña del certificado.	Enter the certificate password.	Digite a senha do certificado.
+Escriba la contraseña y pulse «Verificar certificado» para ver los datos.	Enter the password and press "Verify certificate" to see the details.	Digite a senha e clique em "Verificar certificado" para ver os dados.
+Escriba su nombre	Type your name	Digite seu nome
+Escriba un nombre de archivo.	Enter a file name.	Digite um nome de arquivo.
+Escriba un nombre.	Enter a name.	Digite um nome.
+Escriba un título.	Enter a title.	Digite um título.
+Escribiendo archivo…	Writing file…	Gravando arquivo…
+Escribir	Type	Digitar
+Español	Spanish	Espanhol
+Español + Inglés	Spanish + English	Espanhol + Inglês
+Esta lista de atajos	This list of shortcuts	Esta lista de atalhos
+Esta página no tiene texto seleccionable (use OCR si es escaneada).	This page has no selectable text (use OCR if it is scanned).	Esta página não tem texto selecionável (use OCR se for digitalizada).
+Establecer por defecto	Set as default	Definir como padrão
+Este archivo se abrió desde la app de escritorio.	This file was opened from the desktop app.	Este arquivo foi aberto pelo aplicativo de desktop.
+Este archivo se abrió en Android.	This file was opened on Android.	Este arquivo foi aberto no Android.
+Este documento no tiene firmas digitales.	This document has no digital signatures.	Este documento não tem assinaturas digitais.
+Este documento no tiene marcadores.	This document has no bookmarks.	Este documento não tem marcadores.
+Este documento tiene {0} firma(s) digital(es). Revíselas en el panel «Firmas».	This document has {0} digital signature(s). Review them in the "Signatures" panel.	Este documento tem {0} assinatura(s) digital(is). Revise-as no painel "Assinaturas".
+Este elemento pertenece a un grupo aplicado a varias páginas (marca de agua, encabezado, numeración…). Para quitarlo en todas, use el mismo comando del menú.	This element belongs to a group applied to several pages (watermark, header, numbering…). To remove it from all of them, use the same menu command.	Este elemento pertence a um grupo aplicado a várias páginas (marca-d'água, cabeçalho, numeração…). Para removê-lo de todas, use o mesmo comando do menu.
+Este equipo	This computer	Este computador
+Este navegador no permite leer las fuentes del equipo. Use «Agregar fuente…».	This browser cannot read system fonts. Use "Add font…".	Este navegador não permite ler as fontes do computador. Use "Adicionar fonte…".
+Este servidor requiere que me conecte	This server requires me to sign in	Este servidor exige que eu me conecte
+Estilo	Style	Estilo
+Estilo de apariencia	Appearance style	Estilo de aparência
+Estilo estándar	Standard style	Estilo padrão
+Estándar PDF	PDF standard	Padrão PDF
+Etiquetas	Labels	Rótulos
+Exportar datos (CSV)	Export data (CSV)	Exportar dados (CSV)
+Externo	External	Externo
+Extraer	Extract	Extrair
+Extraer páginas	Extract pages	Extrair páginas
+Fecha	Date	Data
+Fecha:	Date:	Data:
+Firma	Signature	Assinatura
+Firma NO válida: el contenido firmado fue alterado	Signature NOT valid: the signed content was altered	Assinatura NÃO válida: o conteúdo assinado foi alterado
+Firma cancelada.	Signing canceled.	Assinatura cancelada.
+Firma cancelada: el documento no se guardó.	Signing canceled: the document was not saved.	Assinatura cancelada: o documento não foi salvo.
+Firma de CRL	CRL signing	Assinatura de CRL
+Firma de certificados	Certificate signing	Assinatura de certificados
+Firma digital	Digital signature	Assinatura digital
+Firma manuscrita	Handwritten signature	Assinatura manuscrita
+Firma manuscrita #	Handwritten signature #	Assinatura manuscrita #
+Firma válida · emisor de confianza	Valid signature · trusted issuer	Assinatura válida · emissor confiável
+Firma {9} de {10}.	Signature {9} of {10}.	Assinatura {9} de {10}.
+Firma íntegra · emisor no verificado	Intact signature · issuer not verified	Assinatura íntegra · emissor não verificado
+Firmado digitalmente por:	Digitally signed by:	Assinado digitalmente por:
+Firmando y solicitando la marca de tiempo a	Signing and requesting the timestamp from	Assinando e solicitando o carimbo do tempo a
+Firmando…	Signing…	Assinando…
+Firmante desconocido	Unknown signer	Signatário desconhecido
+Firmar como	Sign as	Assinar como
+Firmar sin marca de tiempo	Sign without timestamp	Assinar sem carimbo do tempo
+Firmas	Signatures	Assinaturas
+Firmas guardadas (clic para usar):	Saved signatures (click to use):	Assinaturas salvas (clique para usar):
+Flecha	Arrow	Seta
+Fondo	Background	Fundo
+Formato	Format	Formato
+Formato no soportado:	Unsupported format:	Formato não suportado:
+Formulario	Form	Formulário
+Formulario:	Form:	Formulário:
+Fotos o escaneos a un PDF	Photos or scans to a PDF	Fotos ou digitalizações em um PDF
+Francés	French	Francês
+Fuente	Font	Fonte
+Fuente no disponible	Font not available	Fonte não disponível
+Fuente predeterminada	Default font	Fonte padrão
+Fuente sin origen	Font without source	Fonte sem origem
+Fuentes	Fonts	Fontes
+Fuentes del equipo	System fonts	Fontes do computador
+Fuerte — páginas como imagen 110 ppp	Strong — pages as 110 dpi images	Forte — páginas como imagem 110 ppp
+Funciona mejor con PDFs generados digitalmente. Para documentos escaneados use primero	Works best with digitally generated PDFs. For scanned documents, first use	Funciona melhor com PDFs gerados digitalmente. Para documentos digitalizados, use primeiro
+General	General	Geral
+Generando PDF…	Generating PDF…	Gerando PDF…
+Generando archivo {0} de {1}…	Generating file {0} of {1}…	Gerando arquivo {0} de {1}…
+Girar a la derecha	Rotate right	Girar para a direita
+Girar a la izquierda	Rotate left	Girar para a esquerda
+Girar derecha	Rotate right	Girar à direita
+Girar izquierda	Rotate left	Girar à esquerda
+Girar la página a la derecha / izquierda	Rotate the page right / left	Girar a página para a direita / esquerda
+Google · ID de cliente	Google · Client ID	Google · ID do cliente
+Grosor	Thickness	Espessura
+Gráfico importado	Imported graphic	Gráfico importado
+Guardado en	Saved to	Salvo em
+Guardado en este equipo:	Saved on this computer:	Salvo neste computador:
+Guardado:	Saved:	Salvo:
+Guardando…	Saving…	Salvando…
+Guardar	Save	Salvar
+Guardar aquí	Save here	Salvar aqui
+Guardar como	Save as	Salvar como
+Guardar en la nube	Save to the cloud	Salvar na nuvem
+Guardar esta firma para usarla después	Save this signature to use later	Salvar esta assinatura para usar depois
+Haga clic en la página donde va la firma.	Click on the page where the signature goes.	Clique na página onde vai a assinatura.
+Haga clic en la página para colocar la imagen, o arrastre para definir su tamaño.	Click on the page to place the image, or drag to set its size.	Clique na página para colocar a imagem, ou arraste para definir o tamanho.
+Haga clic para seleccionar · Ctrl/Mayús para varias · arrastre para reordenar	Click to select · Ctrl/Shift for several · drag to reorder	Clique para selecionar · Ctrl/Shift para várias · arraste para reordenar
+Haga clic sobre cualquier anotación para eliminarla.	Click any annotation to delete it.	Clique em qualquer anotação para excluí-la.
+Haga clic sobre un texto del PDF para editarlo.	Click a text in the PDF to edit it.	Clique em um texto do PDF para editá-lo.
+Hay documentos con cambios sin guardar. ¿Actualizar de todas formas?	Some documents have unsaved changes. Update anyway?	Há documentos com alterações não salvas. Atualizar mesmo assim?
+Hay una nueva versión	A new version is available	Há uma nova versão
+He revisado este documento	I have reviewed this document	Revisei este documento
+Herramientas	Tools	Ferramentas
+Hora	Time	Hora
+Hora del servidor:	Server time:	Hora do servidor:
+Horizontal	Horizontal	Horizontal
+Huella	Fingerprint	Impressão digital
+Huella SHA-256	SHA-256 fingerprint	Impressão digital SHA-256
+ID de cliente	Client ID	ID do cliente
+ID de cliente de OAuth	OAuth client ID	ID do cliente OAuth
+Id. de aplicación (cliente)	Application (client) ID	ID do aplicativo (cliente)
+Identificación digital	Digital ID	Identidade digital
+Identificación digital añadida.	Digital ID added.	Identidade digital adicionada.
+Idioma del documento	Document language	Idioma do documento
+Igual a la página actual	Same as the current page	Igual à página atual
+Imagen	Image	Imagem
+Importar certificado (.cer / .crt / .pem)	Import certificate (.cer / .crt / .pem)	Importar certificado (.cer / .crt / .pem)
+Importar certificados de confianza	Import trusted certificates	Importar certificados confiáveis
+Imprimir	Print	Imprimir
+Incluido	Included	Incluído
+Incluir fecha	Include date	Incluir data
+Indique al menos una contraseña.	Enter at least one password.	Informe pelo menos uma senha.
+Inferior	Bottom	Inferior
+Información sobre el certificado	Certificate information	Informações do certificado
+Inglés	English	Inglês
+Inicializando…	Initializing…	Inicializando…
+Iniciando sesión…	Signing in…	Entrando…
+Iniciar sesión con Google	Sign in with Google	Entrar com o Google
+Iniciar sesión con Microsoft	Sign in with Microsoft	Entrar com a Microsoft
+Iniciar sesión y elegir carpeta	Sign in and choose folder	Entrar e escolher pasta
+Inicio	Home	Início
+Inicio de sesión cancelado.	Sign-in canceled.	Login cancelado.
+Inicio · Fin	Home · End	Home · End
+Insertando…	Inserting…	Inserindo…
+Insertar	Insert	Inserir
+Insertar archivo	Insert file	Inserir arquivo
+Insertar desde archivo	Insert from file	Inserir de arquivo
+Insertar en blanco	Insert blank	Inserir em branco
+Insertar página en blanco	Insert blank page	Inserir página em branco
+Insertar, girar o eliminar páginas	Insert, rotate or delete pages	Inserir, girar ou excluir páginas
+Invertir	Reverse	Inverter
+Invertir orden	Reverse order	Inverter ordem
+Invisible (solo en el panel de firmas)	Invisible (only in the signatures panel)	Invisível (só no painel de assinaturas)
+Ir a la página…	Go to page…	Ir para a página…
+Izq.	Left	Esq.
+Izquierda	Left	Esquerda
+Izquierdo	Left	Esquerdo
+La TSA del SAR no requiere usuario. Si su servidor lo pide, la contraseña se guarda en este equipo.	The SAR TSA does not require a user. If your server asks for one, the password is saved on this computer.	A TSA do SAR não exige usuário. Se o seu servidor pedir, a senha é salva neste computador.
+La capa de texto se agregó al documento: ya puede buscar y, al	The text layer was added to the document: you can now search and, on	A camada de texto foi adicionada ao documento: já pode pesquisar e, ao
+La contraseña de los archivos	The password of the files	A senha dos arquivos
+La contraseña no se guarda: se pide en cada firma.	The password is not saved: it is asked for each signature.	A senha não é salva: é pedida em cada assinatura.
+La firma no cabe en el espacio reservado.	The signature does not fit in the reserved space.	A assinatura não cabe no espaço reservado.
+La firma no incluye el certificado del emisor «{0}» y no está en sus certificados de confianza.	The signature does not include the issuer certificate "{0}" and it is not among your trusted certificates.	A assinatura não inclui o certificado do emissor "{0}" e ele não está entre seus certificados confiáveis.
+La lista está vacía.	The list is empty.	A lista está vazia.
+La marca de tiempo recibida no corresponde a esta firma.	The received timestamp does not match this signature.	O carimbo do tempo recebido não corresponde a esta assinatura.
+La marca de tiempo recibida no corresponde a esta solicitud.	The received timestamp does not match this request.	O carimbo do tempo recebido não corresponde a esta solicitação.
+La página de este marcador ya no está en el documento.	This bookmark's page is no longer in the document.	A página deste marcador não está mais no documento.
+La raíz «{0}» no está en sus certificados de confianza.	The root "{0}" is not among your trusted certificates.	A raiz "{0}" não está entre seus certificados confiáveis.
+La versión {0} no trae el manifiesto firmado, así que Rúbrica no la instalará automáticamente.	Version {0} has no signed manifest, so Rúbrica will not install it automatically.	A versão {0} não traz o manifesto assinado, então o Rúbrica não a instalará automaticamente.
+Las contraseñas no coinciden.	The passwords do not match.	As senhas não coincidem.
+Las firmas emitidas por «{0}» dejarán de mostrarse como de confianza.	Signatures issued by "{0}" will no longer be shown as trusted.	As assinaturas emitidas por "{0}" deixarão de ser mostradas como confiáveis.
+Lista	List	Lista
+Lista desplegable	Dropdown list	Lista suspensa
+Logo	Logo	Logotipo
+Los archivos viajan directamente entre este equipo y su nube; no hay servidores intermedios ni suscripción.	Files travel directly between this computer and your cloud; there are no intermediate servers or subscription.	Os arquivos trafegam diretamente entre este computador e sua nuvem; não há servidores intermediários nem assinatura.
+Los márgenes son demasiado grandes.	The margins are too large.	As margens são grandes demais.
+Los niveles con pérdida convierten cada página en imagen: el tamaño baja mucho en documentos escaneados, pero el texto deja de ser seleccionable (puede aplicar OCR después). El resultado se abre en una pestaña nueva para que lo revise antes de guardar.	Lossy levels turn each page into an image: the size drops a lot for scanned documents, but the text is no longer selectable (you can apply OCR afterwards). The result opens in a new tab so you can review it before saving.	Os níveis com perda convertem cada página em imagem: o tamanho cai muito em documentos digitalizados, mas o texto deixa de ser selecionável (pode aplicar OCR depois). O resultado abre em uma nova aba para revisar antes de salvar.
+Lápiz	Pen	Lápis
+Línea	Line	Linha
+Mano	Hand	Mão
+Marca de agua	Watermark	Marca-d'água
+Marca de agua aplicada a	Watermark applied to	Marca-d'água aplicada a
+Marca de agua eliminada.	Watermark removed.	Marca-d'água removida.
+Marca de tiempo	Timestamp	Carimbo do tempo
+Marca de tiempo ilegible	Unreadable timestamp	Carimbo do tempo ilegível
+Marca de tiempo:	Timestamp:	Carimbo do tempo:
+Marcada por defecto	Checked by default	Marcada por padrão
+Marcadores	Bookmarks	Marcadores
+Margen (mm)	Margin (mm)	Margem (mm)
+Marque las zonas a ocultar.	Mark the areas to hide.	Marque as áreas a ocultar.
+Media — páginas como imagen 150 ppp	Medium — pages as 150 dpi images	Média — páginas como imagem 150 ppp
+Mi unidad	My Drive	Meu Drive
+Microsoft · ID de aplicación (cliente)	Microsoft · Application (client) ID	Microsoft · ID do aplicativo (cliente)
+Microsoft · Inquilino	Microsoft · Tenant	Microsoft · Locatário
+Miniaturas	Thumbnails	Miniaturas
+Mis archivos	My files	Meus arquivos
+Modificar el documento	Modify the document	Modificar o documento
+Modo	Mode	Modo
+Mosaico	Tile	Mosaico
+Mostrar / ocultar	Show / hide	Mostrar / ocultar
+Mostrar u ocultar el panel lateral	Show or hide the side panel	Mostrar ou ocultar o painel lateral
+Motivo	Reason	Motivo
+Motivo:	Reason:	Motivo:
+Mover el objeto 1 / 10 puntos	Move the object 1 / 10 points	Mover o objeto 1 / 10 pontos
+Márgenes a recortar, en milímetros, medidos sobre la página tal como se ve en pantalla.	Margins to crop, in millimeters, measured on the page as shown on screen.	Margens a recortar, em milímetros, medidas na página como é exibida na tela.
+Máxima — páginas como imagen 72 ppp	Maximum — pages as 72 dpi images	Máxima — páginas como imagem 72 ppp
+N (para «Cada N páginas»)	N (for "Every N pages")	N (para "A cada N páginas")
+Negrita	Bold	Negrito
+Ninguna	None	Nenhuma
+Ninguno	None	Nenhum
+Nivel	Level	Nível
+No	No	Não
+No especificado	Not specified	Não especificado
+No hay PDFs ni imágenes en esta carpeta.	There are no PDFs or images in this folder.	Não há PDFs nem imagens nesta pasta.
+No hay anotaciones todavía.	No annotations yet.	Ainda não há anotações.
+No hay marca de agua.	There is no watermark.	Não há marca-d'água.
+No hay una sesión iniciada en	You are not signed in to	Não há uma sessão iniciada em
+No repudio	Non-repudiation	Não repúdio
+No se concedió acceso a las fuentes del equipo.	Access to system fonts was not granted.	O acesso às fontes do computador não foi concedido.
+No se encontró el espacio de la firma.	The signature space was not found.	O espaço da assinatura não foi encontrado.
+No se encontró el motor OCR (carpeta «ocr» de la aplicación).	The OCR engine was not found (the app's "ocr" folder).	O mecanismo de OCR não foi encontrado (pasta "ocr" do aplicativo).
+No se encontró el valor de la firma.	The signature value was not found.	O valor da assinatura não foi encontrado.
+No se instaló la actualización	The update was not installed	A atualização não foi instalada
+No se pudo compartir:	Could not share:	Não foi possível compartilhar:
+No se pudo comprobar actualizaciones:	Could not check for updates:	Não foi possível verificar atualizações:
+No se pudo comprobar el emisor.	Could not check the issuer.	Não foi possível verificar o emissor.
+No se pudo firmar:	Could not sign:	Não foi possível assinar:
+No se pudo guardar en	Could not save to	Não foi possível salvar em
+No se pudo guardar la lista:	Could not save the list:	Não foi possível salvar a lista:
+No se pudo guardar:	Could not save:	Não foi possível salvar:
+No se pudo incrustar	Could not embed	Não foi possível incorporar
+No se pudo leer	Could not read	Não foi possível ler
+No se pudo leer el PDF:	Could not read the PDF:	Não foi possível ler o PDF:
+No se pudo leer el certificado:	Could not read the certificate:	Não foi possível ler o certificado:
+No se pudo leer la imagen	Could not read the image	Não foi possível ler a imagem
+No se pudo obtener la marca de tiempo de	Could not get the timestamp from	Não foi possível obter o carimbo do tempo de
+No se pueden eliminar todas las páginas.	You cannot delete all pages.	Não é possível excluir todas as páginas.
+No se reconoció texto en las páginas indicadas.	No text was recognized on the given pages.	Nenhum texto foi reconhecido nas páginas indicadas.
+Nombre	Name	Nome
+Nombre de usuario	User name	Nome de usuário
+Nombre del archivo	File name	Nome do arquivo
+Nombre del autor (notas y firmas)	Author name (notes and signatures)	Nome do autor (notas e assinaturas)
+Nombre del campo	Field name	Nome do campo
+Nombre del certificado	Certificate name	Nome do certificado
+Nombre del documento	Document name	Nome do documento
+Nombre del firmante	Signer name	Nome do signatário
+Nombre distinguido	Distinguished name	Nome distinto
+Nombre:	Name:	Nome:
+Normal (200 ppp)	Normal (200 dpi)	Normal (200 ppp)
+Nota	Note	Nota
+Nota / comentario	Note / comment	Nota / comentário
+Nube	Cloud	Nuvem
+Nueva carpeta	New folder	Nova pasta
+Nuevo documento en blanco	New blank document	Novo documento em branco
+Nuevo estilo	New style	Novo estilo
+Nuevo registro	New registration	Novo registro
+Numeración Bates	Bates numbering	Numeração Bates
+Número de identidad / RTN	ID number / Tax ID	Nº de identidade / identificação fiscal
+Número inicial	Start number	Número inicial
+Números de página	Page numbers	Números de página
+OCR:	OCR:	OCR:
+Objeto copiado.	Object copied.	Objeto copiado.
+Objeto cortado.	Object cut.	Objeto recortado.
+Ocultar panel	Hide panel	Ocultar painel
+Oficio / Legal	Legal	Ofício / Legal
+Opacidad	Opacity	Opacidade
+Opacidad (%)	Opacity (%)	Opacidade (%)
+Opciones (una por línea)	Options (one per line)	Opções (uma por linha)
+Organizar	Organize	Organizar
+Orientación	Orientation	Orientação
+Origen	Source	Origem
+Orígenes de JavaScript autorizados:	Authorized JavaScript origins:	Origens JavaScript autorizadas:
+Otro	Other	Outro
+Otro color	Other color	Outra cor
+PDF descargado.	PDF downloaded.	PDF baixado.
+PDF desde imágenes	PDF from images	PDF de imagens
+PDF e imágenes	PDFs and images	PDFs e imagens
+PDF o imagen de este equipo	PDF or image from this computer	PDF ou imagem deste computador
+Palabras clave	Keywords	Palavras-chave
+Pantalla completa	Full screen	Tela cheia
+Pantalla completa no disponible.	Full screen not available.	Tela cheia não disponível.
+Pantalla de consentimiento OAuth	OAuth consent screen	Tela de consentimento OAuth
+Para abrir y guardar en la nube, configure OneDrive o Google Drive una sola vez en	To open and save in the cloud, set up OneDrive or Google Drive once in	Para abrir e salvar na nuvem, configure o OneDrive ou o Google Drive uma única vez em
+Para conectar la nube, abra la app con	To connect the cloud, open the app with	Para conectar a nuvem, abra o aplicativo com
+Para firmar:	To sign:	Para assinar:
+Para usar	To use	Para usar
+Para usar Aptos u otra fuente, copie el archivo .ttf al teléfono y use «Agregar fuente…».	To use Aptos or another font, copy the .ttf file to the phone and use "Add font…".	Para usar Aptos ou outra fonte, copie o arquivo .ttf para o telefone e use "Adicionar fonte…".
+Pase el ratón sobre el texto del documento: los bloques editables se marcan en azul. Haga clic para modificarlos.	Hover over the document text: editable blocks are highlighted in blue. Click to modify them.	Passe o mouse sobre o texto do documento: os blocos editáveis ficam marcados em azul. Clique para modificá-los.
+Permiso de escritura denegado.	Write permission denied.	Permissão de gravação negada.
+Permisos de API	API permissions	Permissões de API
+Permitir a quien abra el documento	Allow whoever opens the document to	Permitir a quem abrir o documento
+Personalizado…	Custom…	Personalizado…
+Pie de página	Footer	Rodapé
+Por rangos personalizados	By custom ranges	Por intervalos personalizados
+Por seguridad no se ejecutó nada. Puede descargar el instalador desde la {1}.	For security nothing was run. You can download the installer from the {1}.	Por segurança nada foi executado. Você pode baixar o instalador na {1}.
+Portugués	Portuguese	Português
+Posición	Position	Posição
+Predeterminada	Default	Padrão
+Predeterminado	Default	Padrão
+Preferencias de firma	Signature preferences	Preferências de assinatura
+Preferencias de firma…	Signature preferences…	Preferências de assinatura…
+Prefijo	Prefix	Prefixo
+Preparando impresión…	Preparing to print…	Preparando impressão…
+Preparando páginas…	Preparing pages…	Preparando páginas…
+Preparando…	Preparing…	Preparando…
+Primer número	First number	Primeiro número
+Primera / última página	First / last page	Primeira / última página
+Primero elija una imagen o firma.	First choose an image or signature.	Primeiro escolha uma imagem ou assinatura.
+Probar	Test	Testar
+Procesando {0}…	Processing {0}…	Processando {0}…
+Propiedades	Properties	Propriedades
+Propiedades del campo	Field properties	Propriedades do campo
+Propiedades del documento	Document properties	Propriedades do documento
+Propiedades del documento (o duplicar el objeto seleccionado)	Document properties (or duplicate the selected object)	Propriedades do documento (ou duplicar o objeto selecionado)
+Propiedades…	Properties…	Propriedades…
+Protección configurada. Guarde el documento para aplicarla.	Protection configured. Save the document to apply it.	Proteção configurada. Salve o documento para aplicá-la.
+Proteger	Protect	Proteger
+Proteger con contraseña	Protect with password	Proteger com senha
+Proteger → Firma digital	Protect → Digital signature	Proteger → Assinatura digital
+Protegido con contraseña	Password protected	Protegido por senha
+Puede descargarla desde la {1}.	You can download it from the {1}.	Você pode baixá-la na {1}.
+Pág. 1	P. 1	Pág. 1
+Página	Page	Página
+Página 1	Page 1	Página 1
+Página 1 de 10	Page 1 of 10	Página 1 de 10
+Página actual	Current page	Página atual
+Página actual:	Current page:	Página atual:
+Página anterior / siguiente	Previous / next page	Página anterior / seguinte
+Página completa	Full page	Página inteira
+Página {0} ({1} de {2})…	Page {0} ({1} of {2})…	Página {0} ({1} de {2})…
+Página {0} de {1}…	Page {0} of {1}…	Página {0} de {1}…
+Página {0}…	Page {0}…	Página {0}…
+Páginas	Pages	Páginas
+Páginas (vacío = todas)	Pages (empty = all)	Páginas (vazio = todas)
+Páginas a insertar (vacío = todas)	Pages to insert (empty = all)	Páginas a inserir (vazio = todas)
+Páginas:	Pages:	Páginas:
+Quitar	Remove	Remover
+Quitar Bates	Remove Bates	Remover Bates
+Quitar certificado de confianza	Remove trusted certificate	Remover certificado confiável
+Quitar de la lista	Remove from the list	Remover da lista
+Quitar fondo	Remove background	Remover fundo
+Quitar identificación	Remove ID	Remover identidade
+Quitar la selección / volver a Seleccionar	Clear the selection / back to Select	Limpar a seleção / voltar a Selecionar
+Quitar marca de agua	Remove watermark	Remover marca-d'água
+Quitar numeración	Remove numbering	Remover numeração
+Quitar recorte (restaurar página completa)	Remove crop (restore full page)	Remover recorte (restaurar página inteira)
+Quitar seguridad	Remove security	Remover segurança
+Quite la contraseña antes de firmar (un PDF cifrado no se puede firmar aquí).	Remove the password before signing (an encrypted PDF cannot be signed here).	Remova a senha antes de assinar (um PDF criptografado não pode ser assinado aqui).
+Rango	Range	Intervalo
+Rango no válido:	Invalid range:	Intervalo inválido:
+Rangos (separe archivos con ;)	Ranges (separate files with ;)	Intervalos (separe arquivos com ;)
+Rango…	Range…	Intervalo…
+Razón	Reason	Razão
+Raíz (autofirmado)	Root (self-signed)	Raiz (autoassinado)
+RePág · AvPág	PgUp · PgDn	PgUp · PgDn
+Recientes	Recent	Recentes
+Reconocer texto	Recognize text	Reconhecer texto
+Reconocer texto (OCR) al escanear, para poder buscar y copiar	Recognize text (OCR) when scanning, to be able to search and copy	Reconhecer texto (OCR) ao digitalizar, para poder pesquisar e copiar
+Reconociendo página {0} ({1} de {2})…	Recognizing page {0} ({1} of {2})…	Reconhecendo página {0} ({1} de {2})…
+Reconociendo texto, página {0}…	Recognizing text, page {0}…	Reconhecendo texto, página {0}…
+Reconociendo texto…	Recognizing text…	Reconhecendo texto…
+Reconocimiento de texto (OCR)	Text recognition (OCR)	Reconhecimento de texto (OCR)
+Recortar	Crop	Recortar
+Recortar páginas	Crop pages	Recortar páginas
+Rectángulo	Rectangle	Retângulo
+Recuadro de firma digital	Digital signature box	Caixa de assinatura digital
+Redactar	Redact	Tarjar
+Redactar todas	Redact all	Tarjar todas
+Reemplazar	Replace	Substituir
+Reemplazar archivo	Replace file	Substituir arquivo
+Registros de aplicaciones	App registrations	Registros de aplicativo
+Regular	Regular	Regular
+Rehacer	Redo	Refazer
+Rellenar formularios	Fill in forms	Preencher formulários
+Relleno	Fill	Preenchimento
+Requiere configuración (una sola vez)	Requires setup (once)	Requer configuração (uma única vez)
+Resaltar	Highlight	Realçar
+Resaltar campos	Highlight fields	Realçar campos
+Resolución	Resolution	Resolução
+Respuesta no válida del servidor de marca de tiempo.	Invalid response from the timestamp server.	Resposta inválida do servidor de carimbo do tempo.
+Restablecer	Reset	Redefinir
+Restablecer formulario	Reset form	Redefinir formulário
+Resultado siguiente / anterior	Next / previous result	Resultado seguinte / anterior
+Resultados de «{0}»	Results for "{0}"	Resultados de "{0}"
+Rotación (°)	Rotation (°)	Rotação (°)
+Rápida (144 ppp)	Fast (144 dpi)	Rápida (144 ppp)
+Rúbrica tratará como	Rúbrica will treat as	O Rúbrica tratará como
+San Pedro Sula, Honduras	San Pedro Sula, Honduras	San Pedro Sula, Honduras
+Se agotó el tiempo de espera del inicio de sesión.	The sign-in timed out.	O tempo de login esgotou.
+Se descargará el instalador desde GitHub, se comprobará su firma y la aplicación se cerrará para actualizarse.	The installer will be downloaded from GitHub, its signature will be checked and the app will close to update.	O instalador será baixado do GitHub, sua assinatura será verificada e o aplicativo será fechado para atualizar.
+Se devolverán todos los campos a sus valores originales.	All fields will be returned to their original values.	Todos os campos voltarão aos valores originais.
+Se extrajeron {0} página(s) a un documento nuevo.	{0} page(s) were extracted to a new document.	{0} página(s) foram extraídas para um novo documento.
+Se generaron {0} archivos (ZIP).	{0} files were generated (ZIP).	Foram gerados {0} arquivos (ZIP).
+Se quitará de la lista de Rúbrica. El archivo original y el certificado no se borran.	It will be removed from Rúbrica's list. The original file and the certificate are not deleted.	Será removido da lista do Rúbrica. O arquivo original e o certificado não são apagados.
+Seguridad eliminada. Guarde para aplicar.	Security removed. Save to apply.	Segurança removida. Salve para aplicar.
+Seguridad:	Security:	Segurança:
+Seleccionar	Select	Selecionar
+Seleccionar todo el texto de la página (o todas las páginas en Organizar)	Select all text on the page (or all pages in Organize)	Selecionar todo o texto da página (ou todas as páginas em Organizar)
+Seleccione un objeto para editar sus propiedades.	Select an object to edit its properties.	Selecione um objeto para editar suas propriedades.
+Seleccione una o más páginas.	Select one or more pages.	Selecione uma ou mais páginas.
+Sello	Stamp	Carimbo
+Servidor de marca de tiempo	Timestamp server	Servidor de carimbo do tempo
+Servidores de marca de tiempo	Timestamp servers	Servidores de carimbo do tempo
+Si no aparece, revise que el navegador permita ventanas emergentes.	If it does not appear, check that the browser allows pop-ups.	Se não aparecer, verifique se o navegador permite pop-ups.
+Sin gráfico	No graphic	Sem gráfico
+Sin guardar	Unsaved	Não salvo
+Sin marca de tiempo (hora de este equipo)	No timestamp (this computer's time)	Sem carimbo do tempo (hora deste computador)
+Sin marcadores.	No bookmarks.	Sem marcadores.
+Sin pérdida — optimiza la estructura interna	Lossless — optimizes the internal structure	Sem perda — otimiza a estrutura interna
+Sin resultados	No results	Sem resultados
+Sin título.pdf	Untitled.pdf	Sem título.pdf
+Solo cifrado	Encipher only	Somente cifragem
+Solo descifrado	Decipher only	Somente decifragem
+Soy el autor de este documento	I am the author of this document	Sou o autor deste documento
+Subiendo a	Uploading to	Enviando para
+Subir	Move up	Subir
+Subrayar	Underline	Sublinhar
+Sufijo	Suffix	Sufixo
+Superior	Top	Superior
+Sí	Yes	Sim
+Tachar	Strikethrough	Tachar
+Tamaño	Size	Tamanho
+Tamaño (pt)	Size (pt)	Tamanho (pt)
+Tamaño de la imagen	Image size	Tamanho da imagem
+Tamaño de página de los escaneos	Page size for scans	Tamanho de página das digitalizações
+Tamaño de página para imágenes	Page size for images	Tamanho de página para imagens
+Tamaño original:	Original size:	Tamanho original:
+Tamaño real (100 %)	Actual size (100 %)	Tamanho real (100 %)
+Tamaño y estilo	Size and style	Tamanho e estilo
+Tamaño: {0} → {1} ({2} % menos)	Size: {0} → {1} ({2} % smaller)	Tamanho: {0} → {1} ({2} % menor)
+Teléfono, Google Drive, OneDrive…	Phone, Google Drive, OneDrive…	Telefone, Google Drive, OneDrive…
+Texto	Text	Texto
+Texto del sello	Stamp text	Texto do carimbo
+Texto editable (párrafos)	Editable text (paragraphs)	Texto editável (parágrafos)
+Texto editado	Edited text	Texto editado
+Texto reconocido	Recognized text	Texto reconhecido
+Tiene la última versión ({0}).	You have the latest version ({0}).	Você tem a versão mais recente ({0}).
+Tipo	Type	Tipo
+Todas	All	Todas
+Todas las páginas	All pages	Todas as páginas
+Traer al frente	Bring to front	Trazer para a frente
+Título	Title	Título
+URI de redireccionamiento autorizados:	Authorized redirect URIs:	URIs de redirecionamento autorizados:
+URI de redirección de esta instalación:	Redirect URI for this installation:	URI de redirecionamento desta instalação:
+URI de redirección: plataforma	Redirect URI: platform	URI de redirecionamento: plataforma
+Ubicación	Location	Local
+Ubicación:	Location:	Local:
+Una firma es	A signature is	Uma assinatura é
+Una página por archivo	One page per file	Uma página por arquivo
+Unir varios PDF e imágenes	Merge several PDFs and images	Unir vários PDFs e imagens
+Usar esta firma	Use this signature	Usar esta assinatura
+Uso previsto	Intended use	Uso previsto
+Usuarios de prueba	Test users	Usuários de teste
+Vacío = todas	Empty = all	Vazio = todas
+Valor inicial	Initial value	Valor inicial
+Variables:	Variables:	Variáveis:
+Varias líneas	Multiple lines	Várias linhas
+Ver firmas	View signatures	Ver assinaturas
+Verificar certificado	Verify certificate	Verificar certificado
+Vertical	Vertical	Vertical
+Vigencia	Validity	Validade
+Vista	View	Exibir
+Vista de páginas	Page view	Exibição de páginas
+Vista previa	Preview	Visualização
+Volver al visor	Back to viewer	Voltar ao visualizador
+Válido desde	Valid from	Válido desde
+Válido hasta	Valid until	Válido até
+Ya estaban en la lista.	They were already in the list.	Já estavam na lista.
+Ya existe «{0}» en esta carpeta. ¿Reemplazarlo?	"{0}" already exists in this folder. Replace it?	"{0}" já existe nesta pasta. Substituí-lo?
+Ya puede cerrar esta ventana.	You can close this window now.	Já pode fechar esta janela.
+acepta cuentas personales y de empresa. Use su dominio (p. ej.	accepts personal and work accounts. Use your domain (e.g.	aceita contas pessoais e corporativas. Use seu domínio (ex.:
+agregue de Microsoft Graph (delegados):	add from Microsoft Graph (delegated):	adicione do Microsoft Graph (delegadas):
+agregue las cuentas que usarán la app.	add the accounts that will use the app.	adicione as contas que usarão o aplicativo.
+con la que publica la autoridad (por ejemplo, el SAR en sar.gob.hn/firmaelectronica). Cualquiera puede crear un certificado con el nombre de una institución: confíe solo en raíces de autoridades reconocidas.	with the one published by the authority (for example, the SAR at sar.gob.hn/firmaelectronica). Anyone can create a certificate with an institution's name: only trust roots from recognized authorities.	com a publicada pela autoridade (por exemplo, o SAR em sar.gob.hn/firmaelectronica). Qualquer pessoa pode criar um certificado com o nome de uma instituição: confie apenas em raízes de autoridades reconhecidas.
+con marca de tiempo	with timestamp	com carimbo do tempo
+con texto reconocido	with recognized text	com texto reconhecido
+correo o teléfono (opcional)	email or phone (optional)	e-mail ou telefone (opcional)
+cuando el certificado del firmante encadena hasta uno de estos certificados{0}. Descargue los del SAR en	when the signer's certificate chains up to one of these certificates{0}. Download the SAR ones at	quando o certificado do signatário encadeia até um destes certificados{0}. Baixe os do SAR em
+deshacer ·	undo ·	desfazer ·
+detección de fuente	font detection	detecção de fonte
+duplicar · flechas para mover ·	duplicate · arrows to move ·	duplicar · setas para mover ·
+el almacén de certificados de Windows	the Windows certificate store	o repositório de certificados do Windows
+eliminar ·	delete ·	excluir ·
+fuentes del sistema	system fonts	fontes do sistema
+guardar ·	save ·	salvar ·
+hay que registrar esta aplicación una sola vez (gratis) y pegar el	you need to register this app once (free) and paste the	é preciso registrar este aplicativo uma única vez (grátis) e colar o
+incluida en Rúbrica	included in Rúbrica	incluída no Rúbrica
+las firmas cuyos certificados emita:	signatures whose certificates it issues:	as assinaturas cujos certificados emitir:
+los certificados instalados en Android	the certificates installed on Android	os certificados instalados no Android
+los servidores de marca de tiempo no suelen aceptar conexiones: use la app de Windows o de Android.	timestamp servers usually do not accept connections: use the Windows or Android app.	os servidores de carimbo do tempo geralmente não aceitam conexões: use o aplicativo de Windows ou Android.
+móvil	mobile	celular
+nº de página ·	page no. ·	nº da página ·
+o hasta un certificado de CA instalado en Android	or up to a CA certificate installed on Android	ou até um certificado de AC instalado no Android
+o hasta una raíz del almacén de Windows	or up to a root in the Windows store	ou até uma raiz do repositório do Windows
+o use una firma manuscrita guardada…	or use a saved handwritten signature…	ou use uma assinatura manuscrita salva…
+página de la versión	release page	página da versão
+página(s).	page(s).	página(s).
+raíces incluidas en Rúbrica	roots included in Rúbrica	raízes incluídas no Rúbrica
+respondió correctamente.	responded correctly.	respondeu corretamente.
+se guarda. Los certificados del almacén de Windows (incluidos tokens USB) se usan con el PIN de Windows; la clave privada no sale del sistema.	saved. Certificates in the Windows store (including USB tokens) are used with the Windows PIN; the private key never leaves the system.	salva. Os certificados do repositório do Windows (incluindo tokens USB) são usados com o PIN do Windows; a chave privada não sai do sistema.
+sus certificados de confianza	your trusted certificates	seus certificados confiáveis
+total ·	total ·	total ·
+y cree un proyecto (p. ej.	and create a project (e.g.	e crie um projeto (ex.:
+y péguelo abajo.	and paste it below.	e cole abaixo.
+{0} certificado(s) de confianza agregado(s).	{0} trusted certificate(s) added.	{0} certificado(s) confiável(is) adicionado(s).
+{0} coincidencias marcadas para redacción. Se aplicará al guardar.	{0} matches marked for redaction. It will be applied when saving.	{0} ocorrências marcadas para tarja. Será aplicada ao salvar.
+{0} familias de fuentes disponibles.	{0} font families available.	{0} famílias de fontes disponíveis.
+{0} familias de fuentes disponibles{1}. Si una fuente no existe, se usa Helvetica.	{0} font families available{1}. If a font does not exist, Helvetica is used.	{0} famílias de fontes disponíveis{1}. Se uma fonte não existir, é usada a Helvetica.
+{0} pág.	{0} p.	{0} pág.
+{0} página(s) escaneada(s){1}. Guarde o comparta el PDF.	{0} page(s) scanned{1}. Save or share the PDF.	{0} página(s) digitalizada(s){1}. Salve ou compartilhe o PDF.
+{0} resultado(s)	{0} result(s)	{0} resultado(s)
+{0} seleccionada(s)	{0} selected	{0} selecionada(s)
+«Logo» dibuja la marca de Rúbrica atenuada al fondo del recuadro. El texto se ajusta solo al tamaño del recuadro que dibuje en la página.	"Logo" draws the Rúbrica mark faded in the background of the box. The text fits automatically to the size of the box you draw on the page.	"Logotipo" desenha a marca do Rúbrica esmaecida ao fundo da caixa. O texto se ajusta sozinho ao tamanho da caixa que você desenhar na página.
+«{0}» no es un certificado válido.	"{0}" is not a valid certificate.	"{0}" não é um certificado válido.
+«{0}» no es una autoridad de certificación.	"{0}" is not a certification authority.	"{0}" não é uma autoridade certificadora.
+«{0}» requiere contraseña para abrirse.	"{0}" requires a password to open.	"{0}" exige senha para ser aberto.
+«{0}» tiene cambios sin guardar. ¿Cerrar de todas formas?	"{0}" has unsaved changes. Close anyway?	"{0}" tem alterações não salvas. Fechar mesmo assim?
+· Este equipo	· This computer	· Este computador
+¿Eliminar {0} páginas?	Delete {0} pages?	Excluir {0} páginas?
+¿Eliminar «{0}»?	Delete "{0}"?	Excluir "{0}"?
+¿Firmar sin marca de tiempo (con la hora de este equipo)?	Sign without a timestamp (with this computer's time)?	Assinar sem carimbo do tempo (com a hora deste computador)?
+→ habilite	→ enable	→ habilite
+→ tipo	→ type	→ tipo
+⚙ Configuración	⚙ Settings	⚙ Configurações
+✔ Inicio de sesión completado.	✔ Sign-in complete.	✔ Login concluído.
+Idioma de la interfaz	Interface language	Idioma da interface
+Automático (idioma del sistema)	Automatic (system language)	Automático (idioma do sistema)
+buscar	search	pesquisar

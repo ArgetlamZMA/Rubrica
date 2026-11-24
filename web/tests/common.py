@@ -28,7 +28,7 @@ def save_b64(name, b64):
 async def launch(p):
     exe = os.environ.get('CHROME') or None
     b = await p.chromium.launch(executable_path=exe, args=['--no-sandbox'])
-    ctx = await b.new_context(viewport={'width': 1440, 'height': 900}, accept_downloads=True)
+    ctx = await b.new_context(viewport={'width': 1440, 'height': 900}, accept_downloads=True, locale='es-HN')
     pg = await ctx.new_page()
     errs = []
     pg.on('pageerror', lambda e: errs.append('PAGEERROR ' + str(e)))

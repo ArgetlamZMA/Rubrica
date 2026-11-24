@@ -125,8 +125,8 @@ function sigDateText(d, st) {
   return out.join(' ');
 }
 function sigTextLines(st, data) {
-  const L = [], lab = st.show.labels, add = (k, v, bold) => { if (v) L.push({ t: (lab && SIG_LBL[k] ? SIG_LBL[k] : '') + v, bold: !!bold }); };
-  if (st.show.name && data.cn) { if (lab) L.push({ t: 'Firmado digitalmente por:', bold: false }); add('name', data.cn, true); }
+  const L = [], lab = st.show.labels, add = (k, v, bold) => { if (v) L.push({ t: (lab && SIG_LBL[k] ? tr(SIG_LBL[k].trim()) + ' ' : '') + v, bold: !!bold }); };
+  if (st.show.name && data.cn) { if (lab) L.push({ t: tr('Firmado digitalmente por:'), bold: false }); add('name', data.cn, true); }
   if (st.show.dn) add('dn', data.dn);
   if (st.show.reason) add('reason', data.reason);
   if (st.show.location) add('location', data.location);
@@ -199,7 +199,7 @@ async function brandPng() {
   const c = el('canvas', { width: W, height: H }); c.getContext('2d').drawImage(img, 0, 0, W, H);
   return (_brandPng = await canvasToBytes(c, 'image/png'));
 }
-const sigSample = signer => ({ cn: signer?.info?.cn || S.settings.author || 'Nombre del firmante', dn: signer?.info?.dn || 'CN=Nombre del firmante, O=Organización, C=HN', reason: 'Soy el autor de este documento', location: S.settings.sigLocation || 'San Pedro Sula, Honduras', date: new Date() });
+const sigSample = signer => ({ cn: signer?.info?.cn || S.settings.author || tr('Nombre del firmante'), dn: signer?.info?.dn || tr('CN=Nombre del firmante, O=Organización, C=HN'), reason: tr('Soy el autor de este documento'), location: S.settings.sigLocation || 'San Pedro Sula, Honduras', date: new Date() });
 /** Vista previa del recuadro en un canvas (misma distribución que el PDF). */
 async function drawSigPreview(canvas, st, data, w = 240, h = 80) {
   const scale = canvas.width / w, g = canvas.getContext('2d');
@@ -289,7 +289,7 @@ async function addIdFile(file, password) {
 }
 function certInfoTable(i) {
   if (!i) return el('div', { class: 'hint', text: 'Datos del certificado disponibles después de usarlo por primera vez (escriba la contraseña y pulse «Verificar»).' });
-  const exp = i.notAfter && i.notAfter < new Date(), f = d => d ? d.toLocaleString('es-HN') : '—';
+  const exp = i.notAfter && i.notAfter < new Date(), f = d => d ? d.toLocaleString(LOC()) : '—';
   const rows = [['Nombre del certificado', i.cn], ['Número de identidad / RTN', i.serialNumber || '—'], ['Emisor', i.issuer || '—'], ['Válido desde', f(i.notBefore)], ['Válido hasta', f(i.notAfter) + (exp ? ' (VENCIDO)' : '')], ['Uso previsto', usageText(i.usage)], ['Nombre distinguido', i.dn || '—']];
   return el('table', { class: 'kv' }, ...rows.map(([k, v]) => el('tr', {}, el('th', { text: k }), el('td', { text: v, style: k === 'Válido hasta' && exp ? { color: 'var(--danger)' } : {} }))));
 }
@@ -384,7 +384,7 @@ async function signPrefsDialog(tab = 'ids') {
         el('button', { class: 'btn sm', html: ic('pencil') + 'Editar', disabled: !cur, onclick: async () => { const t = await edit(cur); if (t) { save(tsaServers().map(x => x.id === t.id ? t : x)); render(); } } }),
         el('button', { class: 'btn sm', html: ic('star') + 'Establecer por defecto', disabled: !cur, onclick: () => { S.settings.tsaDefault = S.settings.tsaDefault === sel ? '' : sel; saveSettings(); render(); } }),
         el('button', { class: 'btn sm', html: ic('plug') + 'Probar', disabled: !cur, onclick: async () => {
-          try { const r = await withBusy('Consultando ' + cur.name + '…', () => testTsa(cur)); alertDialog('Servidor de marca de tiempo', `<b>${escapeHtml(cur.name)}</b> respondió correctamente.<br>Hora del servidor: <b>${r.time ? r.time.toLocaleString('es-HN') : '—'}</b>${r.tsa ? '<br>Autoridad: ' + escapeHtml(r.tsa) : ''}`); }
+          try { const r = await withBusy('Consultando ' + cur.name + '…', () => testTsa(cur)); alertDialog('Servidor de marca de tiempo', `<b>${escapeHtml(cur.name)}</b> respondió correctamente.<br>Hora del servidor: <b>${r.time ? r.time.toLocaleString(LOC()) : '—'}</b>${r.tsa ? '<br>Autoridad: ' + escapeHtml(r.tsa) : ''}`); }
           catch (e) { alertDialog('Servidor de marca de tiempo', `<span style="color:var(--danger)">${escapeHtml(e.message || String(e))}</span>`); }
         } }),
         el('button', { class: 'btn sm', html: ic('trash-2') + 'Eliminar', disabled: !cur, onclick: async () => { if (!(await confirmDialog('Eliminar servidor', `¿Eliminar «${escapeHtml(cur.name)}»?`, 'Eliminar', true))) return; save(tsaServers().filter(x => x.id !== sel)); if (S.settings.tsaDefault === sel) { S.settings.tsaDefault = ''; saveSettings(); } sel = (tsaServers()[0] || {}).id; render(); } })]),

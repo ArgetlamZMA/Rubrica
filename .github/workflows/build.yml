@@ -155,8 +155,12 @@ jobs:
           if (-not $env:UPDATE_SIGNING_KEY) {
             Write-Output "::warning::Falta el secreto UPDATE_SIGNING_KEY: el manifiesto no se firma y la app no instalará esta versión automáticamente."
           } else {
+            # Se toma solo el bloque PRIVATE KEY (tolera texto alrededor, la clave pública incluida o saltos de línea perdidos)
+            $m = [regex]::Match($env:UPDATE_SIGNING_KEY, '-----BEGIN PRIVATE KEY-----(?<k>[\s\S]+?)-----END PRIVATE KEY-----')
+            if (-not $m.Success) { Write-Output "::error::UPDATE_SIGNING_KEY no contiene un bloque '-----BEGIN PRIVATE KEY----- ... -----END PRIVATE KEY-----'"; exit 1 }
             $ec = [Security.Cryptography.ECDsa]::Create()
-            $ec.ImportFromPem($env:UPDATE_SIGNING_KEY)
+            $read = 0
+            $ec.ImportPkcs8PrivateKey([Convert]::FromBase64String(($m.Groups['k'].Value -replace '\s', '')), [ref]$read)
             $data = [IO.File]::ReadAllBytes("dist-installer/SHA256SUMS.txt")
             $sig = $ec.SignData($data, [Security.Cryptography.HashAlgorithmName]::SHA256, [Security.Cryptography.DSASignatureFormat]::Rfc3279DerSequence)
             [IO.File]::WriteAllBytes("dist-installer/SHA256SUMS.txt.sig", $sig)
