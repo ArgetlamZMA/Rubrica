@@ -6,7 +6,7 @@ const RIBBON = [
   { id: 'home', label: 'Inicio', groups: [
     [{ icon: 'scan-line', label: 'Escanear', act: () => scanDocument(), nodoc: true, android: true }, { icon: 'folder-open', label: 'Abrir', act: openLocal, nodoc: true }, { icon: 'cloud', label: 'OneDrive', act: () => openFromCloud('onedrive'), nodoc: true, android: false }, { icon: 'cloud', label: 'Google Drive', act: () => openFromCloud('gdrive'), nodoc: true, android: false }],
     [{ icon: 'save', label: 'Guardar', act: () => saveDoc() }, { icon: 'save-all', label: 'Guardar como', act: () => saveDoc(D(), true) }, { icon: 'share-2', label: 'Compartir', act: () => shareDoc(), touch: true }, { icon: 'printer', label: 'Imprimir', act: printDoc }],
-    [{ icon: 'combine', label: 'Combinar', act: () => combineDialog(false), nodoc: true }, { icon: 'images', label: 'Desde imágenes', act: () => combineDialog(true), nodoc: true }, { icon: 'file-plus', label: 'En blanco', act: newBlankDialog, nodoc: true }],
+    [{ icon: 'combine', label: 'Combinar', act: () => combineDialog(false), nodoc: true }, { icon: 'folder-archive', label: 'Expediente', act: dossierDialog, nodoc: true }, { icon: 'images', label: 'Desde imágenes', act: () => combineDialog(true), nodoc: true }, { icon: 'file-plus', label: 'En blanco', act: newBlankDialog, nodoc: true }],
     [{ icon: 'undo-2', label: 'Deshacer', act: undo }, { icon: 'redo-2', label: 'Rehacer', act: redo }],
     [T('select'), T('hand')],
     [{ icon: 'info', label: 'Propiedades', act: propertiesDialog }]] },
@@ -23,6 +23,7 @@ const RIBBON = [
     [{ icon: 'file-plus-2', label: 'Insertar en blanco', act: insertBlankDialog }, { icon: 'file-input', label: 'Insertar archivo', act: insertFromFileDialog }, { icon: 'scan-line', label: 'Escanear páginas', act: () => scanDocument(D()), android: true }],
     [{ icon: 'rotate-ccw', label: 'Girar izquierda', act: () => rotatePages(targetPages(), -1) }, { icon: 'rotate-cw', label: 'Girar derecha', act: () => rotatePages(targetPages(), 1) }, { icon: 'copy', label: 'Duplicar', act: () => duplicatePages(targetPages()) }, { icon: 'trash-2', label: 'Eliminar', act: () => deletePages(targetPages()) }],
     [{ icon: 'file-output', label: 'Extraer', act: extractDialog }, { icon: 'scissors', label: 'Dividir', act: splitDialog }, { icon: 'arrow-down-up', label: 'Invertir orden', act: reversePages }],
+    [{ icon: 'folder-archive', label: 'Armar expediente', act: dossierDialog, nodoc: true }],
     [{ icon: 'crop', label: 'Recortar', act: cropDialog }]] },
   { id: 'convert', label: 'Convertir', groups: [
     [{ icon: 'file-text', label: 'A Word', act: () => convertDialog('word') }, { icon: 'sheet', label: 'A Excel', act: () => convertDialog('excel') }, { icon: 'file-image', label: 'A imágenes', act: () => convertDialog('image') }, { icon: 'file-type', label: 'A texto', act: () => convertDialog('text') }],
@@ -85,6 +86,7 @@ function renderHome() {
       CAP ? null : card('cloud', 'Abrir de OneDrive', CLOUD.onedrive.label2(), () => openFromCloud('onedrive')),
       CAP ? null : card('cloud', 'Abrir de Google Drive', CLOUD.gdrive.label2(), () => openFromCloud('gdrive')),
       card('combine', 'Combinar archivos', 'Unir varios PDF e imágenes', () => combineDialog(false)),
+      card('folder-archive', 'Armar expediente', 'Portada, índice, marcadores y Bates', dossierDialog),
       card('images', 'PDF desde imágenes', 'Fotos o escaneos a un PDF', () => combineDialog(true)),
       card('file-plus', 'Documento en blanco', 'Carta, A4, Oficio…', newBlankDialog)),
     CAP ? null : el('div', { class: 'home-drop', html: ic('upload') + '<br>Arrastre aquí archivos PDF o imágenes para abrirlos' }));

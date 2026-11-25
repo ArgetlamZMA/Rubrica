@@ -50,18 +50,26 @@ Actualización sin verificación	Unverified update	Atualização sem verificaç�
 Actualizar	Update	Atualizar
 Actualizar ahora	Update now	Atualizar agora
 Acuerdo de claves	Key agreement	Acordo de chaves
+Aduana	Customs office	Alfândega
+Aduanas: importación / exportación	Customs: import / export	Alfândega: importação / exportação
+Agente aduanero	Customs broker	Despachante aduaneiro
+Agregando «{0}»…	Adding "{0}"…	Adicionando «{0}»…
 Agregar comentarios	Add comments	Adicionar comentários
+Agregar dato	Add field	Adicionar dado
 Agregar fuente desde archivo…	Add font from file…	Adicionar fonte de arquivo…
 Agregar fuente…	Add font…	Adicionar fonte…
 Agregar texto	Add text	Adicionar texto
+Agregue al menos un documento.	Add at least one document.	Adicione pelo menos um documento.
 Agregue archivos.	Add files.	Adicione arquivos.
 Agregue dos o más archivos PDF o imágenes	Add two or more PDF files or images	Adicione dois ou mais arquivos PDF ou imagens
 Agregue imágenes (JPG, PNG…)	Add images (JPG, PNG…)	Adicione imagens (JPG, PNG…)
+Agregue los documentos del expediente (PDF o imágenes)	Add the dossier documents (PDF or images)	Adicione os documentos do dossiê (PDF ou imagens)
 Ajustando tamaño…	Fitting size…	Ajustando tamanho…
 Ajustar	Fit	Ajustar
 Ajustar a cada imagen	Fit each image	Ajustar a cada imagem
 Ajustar a la página	Fit page	Ajustar à página
 Ajustar a tamaño	Fit to size	Ajustar ao tamanho
+Ajustar a un tamaño máximo (MB)	Fit to a maximum size (MB)	Ajustar a um tamanho máximo (MB)
 Ajustar al ancho	Fit width	Ajustar à largura
 Ajustar al tamaño de un portal	Fit to an upload portal's size limit	Ajustar ao limite de um portal
 Ajustar ancho	Fit width	Ajustar largura
@@ -93,7 +101,9 @@ Archivo (teléfono, Drive, OneDrive…)	File (phone, Drive, OneDrive…)	Arquivo
 Archivo de identificación digital	Digital ID file	Arquivo de identidade digital
 Archivo:	File:	Arquivo:
 Archivos .p12 / .pfx	.p12 / .pfx files	Arquivos .p12 / .pfx
+Armando expediente…	Building dossier…	Montando dossiê…
 Armando parte {0} de {1}…	Building part {0} of {1}…	Montando parte {0} de {1}…
+Armar expediente	Build dossier	Montar dossiê
 Arrastre aquí archivos PDF o imágenes para abrirlos	Drag PDF files or images here to open them	Arraste arquivos PDF ou imagens aqui para abri-los
 Arrastre en la página para definir dónde se verá la firma digital. Esc para cancelar.	Drag on the page to set where the digital signature will appear. Esc to cancel.	Arraste na página para definir onde a assinatura digital aparecerá. Esc para cancelar.
 Arrastre para dibujar un recuadro (mínimo 40 × 18 pt).	Drag to draw a box (minimum 40 × 18 pt).	Arraste para desenhar uma caixa (mínimo 40 × 18 pt).
@@ -171,6 +181,7 @@ Cifrado AES-256. La protección se aplica al guardar el documento.	AES-256 encry
 Cifrado de clave	Key encipherment	Cifragem de chave
 Cifrado de datos	Data encipherment	Cifragem de dados
 Clic para editar este texto	Click to edit this text	Clique para editar este texto
+Cliente	Client	Cliente
 Colocar firma	Place signature	Colocar assinatura
 Color	Color	Cor
 Color de fondo	Background color	Cor de fundo
@@ -188,6 +199,7 @@ Compartidos conmigo	Shared with me	Compartilhados comigo
 Compartir	Share	Compartilhar
 Complete el inicio de sesión en la ventana emergente.	Complete the sign-in in the pop-up window.	Conclua o login na janela pop-up.
 Comprimiendo páginas…	Compressing pages…	Comprimindo páginas…
+Comprimiendo «{0}» a {1} ppp…	Compressing "{0}" at {1} dpi…	Comprimindo «{0}» a {1} ppp…
 Comprimiendo…	Compressing…	Comprimindo…
 Comprimir	Compress	Comprimir
 Comprimir PDF	Compress PDF	Comprimir PDF
@@ -211,7 +223,10 @@ Confirmar contraseña	Confirm password	Confirmar senha
 Consultando	Querying	Consultando
 Consultar…	Browse…	Procurar…
 Contacto	Contact	Contato
+Contenedor(es)	Container(s)	Contêiner(es)
 Contenido	Content	Conteúdo
+Contenido: {0} documentos · {1} páginas	Contents: {0} documents · {1} pages	Conteúdo: {0} documentos · {1} páginas
+Contenido: {0} documentos · {1} páginas · Bates {2} a {3}	Contents: {0} documents · {1} pages · Bates {2} to {3}	Conteúdo: {0} documentos · {1} páginas · Bates {2} a {3}
 Continuar	Continue	Continuar
 Contraseña	Password	Senha
 Contraseña de permisos (restringe impresión, copia y edición)	Permissions password (restricts printing, copying and editing)	Senha de permissões (restringe impressão, cópia e edição)
@@ -257,9 +272,11 @@ Código insertado: muévalo o cambie su tamaño en la página.	Code inserted: mo
 Cómo obtener el ID de cliente de Google (Drive)	How to get the Google client ID (Drive)	Como obter o ID do cliente do Google (Drive)
 Cómo obtener el ID de cliente de Microsoft (OneDrive)	How to get the Microsoft client ID (OneDrive)	Como obter o ID do cliente da Microsoft (OneDrive)
 DESPACHADO	CLEARED	DESEMBARAÇADO
+Dato	Field	Dado
 Datos del certificado disponibles después de usarlo por primera vez (escriba la contraseña y pulse «Verificar»).	Certificate details are available after first use (enter the password and press "Verify").	Os dados do certificado ficam disponíveis após o primeiro uso (digite a senha e clique em "Verificar").
 De derecha a izquierda	Right to left	Da direita para a esquerda
 De izquierda a derecha	Left to right	Da esquerda para a direita
+Declaración (DUCA) No.	Declaration (DUCA) No.	Declaração (DUCA) nº
 Der.	Right	Dir.
 Derecha	Right	Direita
 Derecho	Right	Direito
@@ -269,6 +286,7 @@ Descargando y verificando la actualización…	Downloading and verifying the upd
 Descargando…	Downloading…	Baixando…
 Descargar .txt	Download .txt	Baixar .txt
 Descargar a la carpeta de descargas	Download to the Downloads folder	Baixar para a pasta Downloads
+Desde	From	De
 Desde archivo	From file	De arquivo
 Desde imágenes	From images	De imagens
 Deshacer	Undo	Desfazer
@@ -279,17 +297,22 @@ Dibujar	Draw	Desenhar
 Dibuje en la página el recuadro donde aparecerá la firma.	Draw on the page the box where the signature will appear.	Desenhe na página a caixa onde a assinatura aparecerá.
 Dibuje la firma primero.	Draw the signature first.	Desenhe a assinatura primeiro.
 Dirección del texto	Text direction	Direção do texto
+Diseñando la portada…	Designing the cover…	Desenhando a capa…
 Diseño exacto (cada página como imagen)	Exact layout (each page as an image)	Layout exato (cada página como imagem)
 Distinguir mayúsculas	Match case	Diferenciar maiúsculas
 Distribución	Layout	Layout
 Dividiendo…	Splitting…	Dividindo…
 Dividir	Split	Dividir
 Dividir documento	Split document	Dividir documento
+Documento	Document	Documento
 Documento PDF	PDF document	Documento PDF
+Documento de transporte (BL / guía)	Transport document (B/L / AWB)	Documento de transporte (BL / AWB)
 Documento en blanco	Blank document	Documento em branco
 Documento firmado digitalmente	Digitally signed document	Documento assinado digitalmente
 Documento protegido	Protected document	Documento protegido
 Documento siguiente / anterior	Next / previous document	Documento seguinte / anterior
+Documentos	Documents	Documentos
+Documentos abiertos	Open documents	Documentos abertos
 Duplicar	Duplicate	Duplicar
 Dígitos	Digits	Dígitos
 ENTREGADO	DELIVERED	ENTREGUE
@@ -317,6 +340,8 @@ El documento no tiene contraseña.	The document has no password.	O documento nã
 El documento no tiene páginas.	The document has no pages.	O documento não tem páginas.
 El documento no tiene un formulario existente.	The document has no existing form.	O documento não tem um formulário existente.
 El escáner está disponible en la app de Android. Aquí puede usar «PDF desde imágenes».	The scanner is available in the Android app. Here you can use "PDF from images".	O scanner está disponível no aplicativo Android. Aqui você pode usar "PDF de imagens".
+El expediente no cabe en {0} aun comprimido: se descargó en {1} partes.	The dossier does not fit in {0} even when compressed: it was downloaded in {1} parts.	O dossiê não cabe em {0} mesmo comprimido: foi baixado em {1} partes.
+El logotipo pesa más de 600 KB; use una imagen más pequeña.	The logo is larger than 600 KB; use a smaller image.	O logotipo tem mais de 600 KB; use uma imagem menor.
 El modo texto recupera el contenido para editarlo; el modo diseño conserva la apariencia exacta pero no es editable.	Text mode recovers the content for editing; layout mode keeps the exact appearance but is not editable.	O modo texto recupera o conteúdo para edição; o modo layout mantém a aparência exata, mas não é editável.
 El navegador bloqueó la ventana emergente. Permita ventanas emergentes para esta página.	The browser blocked the pop-up window. Allow pop-ups for this page.	O navegador bloqueou a janela pop-up. Permita pop-ups para esta página.
 El navegador no puede contactar el servidor de marca de tiempo. Use la app de Windows o de Android.	The browser cannot reach the timestamp server. Use the Windows or Android app.	O navegador não consegue contatar o servidor de carimbo do tempo. Use o aplicativo de Windows ou Android.
@@ -351,6 +376,7 @@ Encabezado y pie	Header & footer	Cabeçalho e rodapé
 Encabezado y pie de página	Header and footer	Cabeçalho e rodapé
 Enlace, número de contenedor, guía, DUCA…	Link, container number, waybill, customs declaration…	Link, número de contêiner, guia, declaração…
 Entendido	Got it	Entendi
+Entidad contratante	Contracting entity	Entidade contratante
 Entre a	Go to	Acesse
 Enviar atrás	Send to back	Enviar para trás
 Error al convertir:	Conversion error:	Erro ao converter:
@@ -391,11 +417,18 @@ Estilo de apariencia	Appearance style	Estilo de aparência
 Estilo estándar	Standard style	Estilo padrão
 Estándar PDF	PDF standard	Padrão PDF
 Etiquetas	Labels	Rótulos
+Expediente	Dossier	Dossiê
+Expediente de importación	Import dossier	Dossiê de importação
+Expediente generado con Rúbrica	Dossier generated with Rúbrica	Dossiê gerado com o Rúbrica
+Expediente listo: {0} páginas, {1} (documentos a {2} ppp).	Dossier ready: {0} pages, {1} (documents at {2} dpi).	Dossiê pronto: {0} páginas, {1} (documentos a {2} ppp).
+Expediente listo: {0} páginas, {1}.	Dossier ready: {0} pages, {1}.	Dossiê pronto: {0} páginas, {1}.
 Exportar datos (CSV)	Export data (CSV)	Exportar dados (CSV)
 Externo	External	Externo
 Extraer	Extract	Extrair
 Extraer páginas	Extract pages	Extrair páginas
+Factura(s) comercial(es)	Commercial invoice(s)	Fatura(s) comercial(is)
 Fecha	Date	Data
+Fecha de presentación	Submission date	Data de apresentação
 Fecha:	Date:	Data:
 Fin	End	End
 Firma	Signature	Assinatura
@@ -478,6 +511,7 @@ Idioma de la interfaz	Interface language	Idioma da interface
 Idioma del documento	Document language	Idioma do documento
 Igual a la página actual	Same as the current page	Igual à página atual
 Imagen	Image	Imagem
+Importador / exportador	Importer / exporter	Importador / exportador
 Importar certificado (.cer / .crt / .pem)	Import certificate (.cer / .crt / .pem)	Importar certificado (.cer / .crt / .pem)
 Importar certificados de confianza	Import trusted certificates	Importar certificados confiáveis
 Imprimir	Print	Imprimir
@@ -527,12 +561,16 @@ La raíz «{0}» no está en sus certificados de confianza.	The root "{0}" is no
 La versión {0} no trae el manifiesto firmado, así que Rúbrica no la instalará automáticamente.	Version {0} has no signed manifest, so Rúbrica will not install it automatically.	A versão {0} não traz o manifesto assinado, então o Rúbrica não a instalará automaticamente.
 Las contraseñas no coinciden.	The passwords do not match.	As senhas não coincidem.
 Las firmas emitidas por «{0}» dejarán de mostrarse como de confianza.	Signatures issued by "{0}" will no longer be shown as trusted.	As assinaturas emitidas por "{0}" deixarão de ser mostradas como confiáveis.
+Licitación / propuesta	Tender / proposal	Licitação / proposta
 Lista	List	Lista
 Lista desplegable	Dropdown list	Lista suspensa
 Listo: {0} (límite {1}) · páginas a {2} ppp.	Done: {0} (limit {1}) · pages at {2} dpi.	Pronto: {0} (limite {1}) · páginas a {2} ppp.
 Listo: {0} (límite {1}) · sin pérdida.	Done: {0} (limit {1}) · no loss.	Pronto: {0} (limite {1}) · sem perda.
 Logo	Logo	Logotipo
+Logotipo guardado	Saved logo	Logotipo salvo
+Logotipo…	Logo…	Logotipo…
 Los archivos viajan directamente entre este equipo y su nube; no hay servidores intermedios ni suscripción.	Files travel directly between this computer and your cloud; there are no intermediate servers or subscription.	Os arquivos trafegam diretamente entre este computador e sua nuvem; não há servidores intermediários nem assinatura.
+Los formularios de los documentos se aplanan y sus firmas digitales no se conservan al unirlos: firme el expediente completo al final. Si debe dividirse en partes, cada parte se entrega sin marcadores.	Document forms are flattened and their digital signatures are not kept when merged: sign the complete dossier at the end. If it has to be split into parts, each part comes without bookmarks.	Os formulários dos documentos são achatados e suas assinaturas digitais não são mantidas ao uni-los: assine o dossiê completo no final. Se precisar ser dividido em partes, cada parte é entregue sem marcadores.
 Los márgenes son demasiado grandes.	The margins are too large.	As margens são grandes demais.
 Los niveles con pérdida convierten cada página en imagen: el tamaño baja mucho en documentos escaneados, pero el texto deja de ser seleccionable (puede aplicar OCR después). El resultado se abre en una pestaña nueva para que lo revise antes de guardar.	Lossy levels turn each page into an image: the size drops a lot for scanned documents, but the text is no longer selectable (you can apply OCR afterwards). The result opens in a new tab so you can review it before saving.	Os níveis com perda convertem cada página em imagem: o tamanho cai muito em documentos digitalizados, mas o texto deixa de ser selecionável (pode aplicar OCR depois). O resultado abre em uma nova aba para revisar antes de salvar.
 Lápiz	Pen	Lápis
@@ -546,6 +584,7 @@ Marca de tiempo ilegible	Unreadable timestamp	Carimbo do tempo ilegível
 Marca de tiempo:	Timestamp:	Carimbo do tempo:
 Marcada por defecto	Checked by default	Marcada por padrão
 Marcadores	Bookmarks	Marcadores
+Marcadores por documento	Bookmarks per document	Marcadores por documento
 Margen (mm)	Margin (mm)	Margem (mm)
 Marque las zonas a ocultar.	Mark the areas to hide.	Marque as áreas a ocultar.
 Mayús+F3	Shift+F3	Shift+F3
@@ -615,12 +654,15 @@ Nombre:	Name:	Nome:
 Normal (200 ppp)	Normal (200 dpi)	Normal (200 ppp)
 Nota	Note	Nota
 Nota / comentario	Note / comment	Nota / comentário
+Notas	Notes	Notas
+Notas u observaciones (opcional)	Notes or remarks (optional)	Notas ou observações (opcional)
 Nube	Cloud	Nuvem
 Nueva carpeta	New folder	Nova pasta
 Nuevo documento en blanco	New blank document	Novo documento em branco
 Nuevo estilo	New style	Novo estilo
 Nuevo registro	New registration	Novo registro
 Numeración Bates	Bates numbering	Numeração Bates
+Numeración Bates en las páginas de los documentos	Bates numbering on the document pages	Numeração Bates nas páginas dos documentos
 Número de identidad / RTN	ID number / Tax ID	Nº de identidade / identificação fiscal
 Número inicial	Start number	Número inicial
 Números de página	Page numbers	Números de página
@@ -629,9 +671,11 @@ ORIGINAL	ORIGINAL	ORIGINAL
 Objeto copiado.	Object copied.	Objeto copiado.
 Objeto cortado.	Object cut.	Objeto recortado.
 Ocultar panel	Hide panel	Ocultar painel
+Oferente	Bidder	Proponente
 Oficio / Legal	Legal	Ofício / Legal
 Opacidad	Opacity	Opacidade
 Opacidad (%)	Opacity (%)	Opacidade (%)
+Opciones	Options	Opções
 Opciones (una por línea)	Options (one per line)	Opções (uma por linha)
 Optimizando sin pérdida…	Optimizing without loss…	Otimizando sem perda…
 Organizar	Organize	Organizar
@@ -664,6 +708,9 @@ Personalizado…	Custom…	Personalizado…
 Pie de página	Footer	Rodapé
 Por rangos personalizados	By custom ranges	Por intervalos personalizados
 Por seguridad no se ejecutó nada. Puede descargar el instalador desde la {1}.	For security nothing was run. You can download the installer from the {1}.	Por segurança nada foi executado. Você pode baixar o instalador na {1}.
+Portada	Cover	Capa
+Portada con los datos	Cover page with the details	Capa com os dados
+Portada, índice, marcadores y Bates	Cover, index, bookmarks and Bates	Capa, índice, marcadores e Bates
 Portugués	Portuguese	Português
 Posición	Position	Posição
 Predeterminada	Default	Padrão
@@ -671,8 +718,11 @@ Predeterminado	Default	Padrão
 Preferencias de firma	Signature preferences	Preferências de assinatura
 Preferencias de firma…	Signature preferences…	Preferências de assinatura…
 Prefijo	Prefix	Prefixo
+Prefijo Bates	Bates prefix	Prefixo Bates
+Preparado por	Prepared by	Preparado por
 Preparando impresión…	Preparing to print…	Preparando impressão…
 Preparando páginas…	Preparing pages…	Preparando páginas…
+Preparando «{0}»…	Preparing "{0}"…	Preparando «{0}»…
 Preparando…	Preparing…	Preparando…
 Primer número	First number	Primeiro número
 Primera / última página	First / last page	Primeira / última página
@@ -680,11 +730,13 @@ Primero elija una imagen o firma.	First choose an image or signature.	Primeiro e
 Probando {0} ppp…	Trying {0} dpi…	Testando {0} ppp…
 Probar	Test	Testar
 Procesando {0}…	Processing {0}…	Processando {0}…
+Proceso No.	Procurement No.	Processo nº
 Propiedades	Properties	Propriedades
 Propiedades del campo	Field properties	Propriedades do campo
 Propiedades del documento	Document properties	Propriedades do documento
 Propiedades del documento (o duplicar el objeto seleccionado)	Document properties (or duplicate the selected object)	Propriedades do documento (ou duplicar o objeto selecionado)
 Propiedades…	Properties…	Propriedades…
+Propuesta	Proposal	Proposta
 Protección configurada. Guarde el documento para aplicarla.	Protection configured. Save the document to apply it.	Proteção configurada. Salve o documento para aplicá-la.
 Proteger	Protect	Proteger
 Proteger con contraseña	Protect with password	Proteger com senha
@@ -713,6 +765,7 @@ Quitar de la lista	Remove from the list	Remover da lista
 Quitar fondo	Remove background	Remover fundo
 Quitar identificación	Remove ID	Remover identidade
 Quitar la selección / volver a Seleccionar	Clear the selection / back to Select	Limpar a seleção / voltar a Selecionar
+Quitar logotipo	Remove logo	Remover logotipo
 Quitar marca de agua	Remove watermark	Remover marca-d'água
 Quitar numeración	Remove numbering	Remover numeração
 Quitar recorte (restaurar página completa)	Remove crop (restore full page)	Remover recorte (restaurar página inteira)
@@ -722,6 +775,7 @@ RECHAZADO	REJECTED	REJEITADO
 RECIBIDO	RECEIVED	RECEBIDO
 RECIBIDO CONFORME	RECEIVED IN GOOD ORDER	RECEBIDO CONFORME
 REVISADO	REVIEWED	REVISADO
+RTN	Tax ID	CNPJ / CPF
 Rango	Range	Intervalo
 Rango no válido:	Invalid range:	Intervalo inválido:
 Rangos (separe archivos con ;)	Ranges (separate files with ;)	Intervalos (separe arquivos com ;)
@@ -745,11 +799,14 @@ Redactar	Redact	Tarjar
 Redactar todas	Redact all	Tarjar todas
 Reemplazar	Replace	Substituir
 Reemplazar archivo	Replace file	Substituir arquivo
+Referencia	Reference	Referência
+Referencia interna	Internal reference	Referência interna
 Registros de aplicaciones	App registrations	Registros de aplicativo
 Regular	Regular	Regular
 Rehacer	Redo	Refazer
 Rellenar formularios	Fill in forms	Preencher formulários
 Relleno	Fill	Preenchimento
+Representante legal	Legal representative	Representante legal
 Requiere configuración (una sola vez)	Requires setup (once)	Requer configuração (uma única vez)
 Resaltar	Highlight	Realçar
 Resaltar campos	Highlight fields	Realçar campos
@@ -762,6 +819,7 @@ Resultado siguiente / anterior	Next / previous result	Resultado seguinte / anter
 Resultados de «{0}»	Results for "{0}"	Resultados de "{0}"
 Rotación (°)	Rotation (°)	Rotação (°)
 Rápida (144 ppp)	Fast (144 dpi)	Rápida (144 ppp)
+Régimen	Customs regime	Regime
 Rúbrica tratará como	Rúbrica will treat as	O Rúbrica tratará como
 San Pedro Sula, Honduras	San Pedro Sula, Honduras	San Pedro Sula, Honduras
 Se agotó el tiempo de espera del inicio de sesión.	The sign-in timed out.	O tempo de login esgotou.
@@ -784,6 +842,7 @@ Servidores de marca de tiempo	Timestamp servers	Servidores de carimbo do tempo
 Si no aparece, revise que el navegador permita ventanas emergentes.	If it does not appear, check that the browser allows pop-ups.	Se não aparecer, verifique se o navegador permite pop-ups.
 Sin gráfico	No graphic	Sem gráfico
 Sin guardar	Unsaved	Não salvo
+Sin logotipo	No logo	Sem logotipo
 Sin marca de tiempo (hora de este equipo)	No timestamp (this computer's time)	Sem carimbo do tempo (hora deste computador)
 Sin marcadores.	No bookmarks.	Sem marcadores.
 Sin pérdida — optimiza la estructura interna	Lossless — optimizes the internal structure	Sem perda — otimiza a estrutura interna
@@ -805,8 +864,10 @@ Tachar	Strikethrough	Tachar
 Tamaño	Size	Tamanho
 Tamaño (pt)	Size (pt)	Tamanho (pt)
 Tamaño de la imagen	Image size	Tamanho da imagem
+Tamaño de la portada y el índice	Cover and index page size	Tamanho da capa e do índice
 Tamaño de página de los escaneos	Page size for scans	Tamanho de página das digitalizações
 Tamaño de página para imágenes	Page size for images	Tamanho de página para imagens
+Tamaño máximo (MB)	Maximum size (MB)	Tamanho máximo (MB)
 Tamaño máximo por archivo (MB)	Maximum size per file (MB)	Tamanho máximo por arquivo (MB)
 Tamaño original:	Original size:	Tamanho original:
 Tamaño real (100 %)	Actual size (100 %)	Tamanho real (100 %)
@@ -820,10 +881,14 @@ Texto editado	Edited text	Texto editado
 Texto reconocido	Recognized text	Texto reconhecido
 Tiene la última versión ({0}).	You have the latest version ({0}).	Você tem a versão mais recente ({0}).
 Tipo	Type	Tipo
+Tipo de expediente	Dossier type	Tipo de dossiê
 Todas	All	Todas
 Todas las páginas	All pages	Todas as páginas
+Todos los documentos abiertos ya están en la lista.	All open documents are already in the list.	Todos os documentos abertos já estão na lista.
 Traer al frente	Bring to front	Trazer para a frente
 Título	Title	Título
+Título del expediente	Dossier title	Título do dossiê
+Título en el índice	Title in the index	Título no índice
 URGENTE	URGENT	URGENTE
 URI de redireccionamiento autorizados:	Authorized redirect URIs:	URIs de redirecionamento autorizados:
 URI de redirección de esta instalación:	Redirect URI for this installation:	URI de redirecionamento desta instalação:
@@ -838,6 +903,7 @@ Uso previsto	Intended use	Uso previsto
 Usuarios de prueba	Test users	Usuários de teste
 VERIFICADO	VERIFIED	VERIFICADO
 Vacío = todas	Empty = all	Vazio = todas
+Valor	Value	Valor
 Valor inicial	Initial value	Valor inicial
 Variables:	Variables:	Variáveis:
 Varias líneas	Multiple lines	Várias linhas
@@ -854,6 +920,7 @@ Válido hasta	Valid until	Válido até
 Ya estaban en la lista.	They were already in the list.	Já estavam na lista.
 Ya existe «{0}» en esta carpeta. ¿Reemplazarlo?	"{0}" already exists in this folder. Replace it?	"{0}" já existe nesta pasta. Substituí-lo?
 Ya puede cerrar esta ventana.	You can close this window now.	Já pode fechar esta janela.
+abierto	open	aberto
 acepta cuentas personales y de empresa. Use su dominio (p. ej.	accepts personal and work accounts. Use your domain (e.g.	aceita contas pessoais e corporativas. Use seu domínio (ex.:
 agregue de Microsoft Graph (delegados):	add from Microsoft Graph (delegated):	adicione do Microsoft Graph (delegadas):
 agregue las cuentas que usarán la app.	add the accounts that will use the app.	adicione as contas que usarão o aplicativo.
@@ -906,6 +973,9 @@ y péguelo abajo.	and paste it below.	e cole abaixo.
 ¿Eliminar {0} páginas?	Delete {0} pages?	Excluir {0} páginas?
 ¿Eliminar «{0}»?	Delete "{0}"?	Excluir "{0}"?
 ¿Firmar sin marca de tiempo (con la hora de este equipo)?	Sign without a timestamp (with this computer's time)?	Assinar sem carimbo do tempo (com a hora deste computador)?
+Índice	Index	Índice
+Índice ({0} de {1})	Index ({0} of {1})	Índice ({0} de {1})
+Índice con enlaces a cada documento	Index with links to each document	Índice com links para cada documento
 → habilite	→ enable	→ habilite
 → tipo	→ type	→ tipo
 ⚙ Configuración	⚙ Settings	⚙ Configurações

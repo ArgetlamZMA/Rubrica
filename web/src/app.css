@@ -326,3 +326,12 @@ table.kv td { padding: 3px 0; word-break: break-word; }
 .kbd-list kbd { font-family: inherit; font-size: 11.5px; background: var(--panel2, rgba(127,127,127,.12)); border: 1px solid var(--line); border-radius: 4px; padding: 0 5px; white-space: nowrap; }
 @media (max-width: 760px) { .kbd-list { grid-template-columns: 1fr; } }
 .code-err { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 11px; color: var(--danger); background: #fff; border: 1px dashed var(--danger); padding: 4px; }
+
+/* Armar expediente */
+.dossier-list .recent-row{cursor:default;gap:8px;padding:6px 10px}
+.dossier-list .recent-row input{flex:1;min-width:0}
+.dossier-fields{display:flex;flex-direction:column;gap:6px;margin:6px 0 8px}
+.df-row{display:grid;grid-template-columns:minmax(120px,2fr) 3fr auto;gap:6px;align-items:center}
+.fm.dossier h5{margin:14px 0 6px}
+.fm.dossier h5:first-child{margin-top:0}
+@media (max-width:600px){.df-row{grid-template-columns:1fr auto}.df-row input:nth-child(2){grid-column:1}}
