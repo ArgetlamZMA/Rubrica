@@ -145,15 +145,16 @@ async function drawOverlays(pdf, pg, p, ctx, doc) {
       }
       case 'ink': pg.drawSvgPath(smoothPath(inkAbs(o, o.x, o.y)), { x: 0, y: Hc, borderColor: col, borderWidth: sw, borderOpacity: op, borderLineCap: PL.LineCapStyle.Round }); break;
       case 'image': { const img = await assetImage(pdf, ctx, doc, o.asset); if (img) pg.drawImage(img, { x: o.x, y: Y(o.y, o.h), width: o.w, height: o.h, opacity: op }); break; }
+      case 'code': await drawCodePdf(pg, o, Y, pdf, ctx); break;
       case 'stamp': {
         const bw = Math.max(1.5, o.h * 0.06), r = o.h * 0.14;
         pg.drawSvgPath(roundRectPath(o.x + bw / 2, o.y + bw / 2, o.w - bw, o.h - bw, r), { x: 0, y: Hc, borderColor: col, borderWidth: bw, opacity: op, borderOpacity: op });
         const font = await getFont(pdf, ctx, 'Helvetica', true, false);
-        const fs = o.h * (o.date ? 0.36 : 0.46), ds = o.h * 0.2;
-        const lab = safeText(font, o.label), total = 1.05 * fs + (o.date ? 1.05 * ds : 0);
+        const sub = o.date || o.who, fs = o.h * (sub ? 0.36 : 0.46), ds = o.h * 0.2;
+        const lab = safeText(font, o.label), total = 1.05 * fs + (sub ? 1.05 * ds : 0);
         const top = o.y + (o.h - total) / 2;
         pg.drawText(lab, { x: o.x + (o.w - font.widthOfTextAtSize(lab, fs)) / 2, y: Y(top + 0.8715 * fs), size: fs, font, color: col, opacity: op });
-        if (o.date) { const f2 = await getFont(pdf, ctx, 'Helvetica', true, false), dt = safeText(f2, o.dateText || todayStr()); pg.drawText(dt, { x: o.x + (o.w - f2.widthOfTextAtSize(dt, ds)) / 2, y: Y(top + 1.05 * fs + 0.8715 * ds), size: ds, font: f2, color: col, opacity: op }); }
+        if (sub) { const f2 = await getFont(pdf, ctx, 'Helvetica', true, false), dt = safeText(f2, o.dateText || todayStr()); pg.drawText(dt, { x: o.x + (o.w - f2.widthOfTextAtSize(dt, ds)) / 2, y: Y(top + 1.05 * fs + 0.8715 * ds), size: ds, font: f2, color: col, opacity: op }); }
         break;
       }
       case 'text': case 'textedit': {

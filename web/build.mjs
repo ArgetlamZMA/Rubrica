@@ -28,6 +28,7 @@ const parts = {
   '/*__JSZIP__*/': safeJs(rd(path.join(NM, 'jszip/dist/jszip.min.js'))),
   '/*__FONTKIT__*/': safeJs(rd(path.join(NM, '@cantoo/fontkit/dist/fontkit.umd.min.js'))),
   '/*__FORGE__*/': safeJs(rd(path.join(NM, 'node-forge/dist/forge.min.js'))),
+  '/*__QRCODE__*/': safeJs(rd(path.join(NM, 'qrcode-generator/dist/qrcode.js'))),
   '/*__ICONS__*/': 'const ICONS = ' + JSON.stringify(icons) + ';',
   '/*__APP__*/': safeJs(js),
 };

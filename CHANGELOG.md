@@ -1,5 +1,9 @@
 # Cambios
 
+## 1.4.0 — en preparación
+- **Códigos QR y de barras (Code 128)** en *Editar → Código QR / barras*: vectoriales (nítidos al imprimir), con el contenido editable en el panel de propiedades y texto legible opcional bajo el código de barras. Para enlaces, números de contenedor, guías, DUCA, etc.
+- **Sellos para logística y aduanas**: RECIBIDO CONFORME, LIQUIDADO, AFORADO, ENTREGADO, COPIA FIEL, NO NEGOCIABLE y los anteriores, con color según el tipo, fecha, hora y nombre del usuario. Se escriben en el idioma de la interfaz.
+
 ## 1.3.0 — en preparación
 - **Confianza en las firmas**: el panel Firmas distingue *Firma válida · emisor de confianza* (cadena verificada hasta una raíz de confianza), *Firma íntegra · emisor no verificado* (el documento no cambió, pero no se puede confirmar quién emitió el certificado) y *Firma NO válida*. Antes cualquier firma íntegra se mostraba en verde, aunque el certificado fuera autofirmado.
 - Raíces de confianza: certificados importados (`.cer`, `.crt`, `.pem`) en *Preferencias de firma → Certificados de confianza*, «Confiar en este emisor» desde el panel Firmas (con la huella SHA-256 para compararla), el almacén de Windows y los certificados de CA instalados en Android. Se comprueba la firma de cada eslabón y la vigencia de cada certificado en la fecha de la firma (o de la marca de tiempo).

@@ -849,3 +849,37 @@ y péguelo abajo.	and paste it below.	e cole abaixo.
 Idioma de la interfaz	Interface language	Idioma da interface
 Automático (idioma del sistema)	Automatic (system language)	Automático (idioma do sistema)
 buscar	search	pesquisar
+APROBADO	APPROVED	APROVADO
+RECIBIDO	RECEIVED	RECEBIDO
+RECIBIDO CONFORME	RECEIVED IN GOOD ORDER	RECEBIDO CONFORME
+REVISADO	REVIEWED	REVISADO
+VERIFICADO	VERIFIED	VERIFICADO
+PAGADO	PAID	PAGO
+LIQUIDADO	SETTLED	LIQUIDADO
+AFORADO	INSPECTED	CONFERIDO
+DESPACHADO	CLEARED	DESEMBARAÇADO
+ENTREGADO	DELIVERED	ENTREGUE
+ORIGINAL	ORIGINAL	ORIGINAL
+COPIA	COPY	CÓPIA
+COPIA FIEL	TRUE COPY	CÓPIA FIEL
+NO NEGOCIABLE	NON-NEGOTIABLE	NÃO NEGOCIÁVEL
+CONFIDENCIAL	CONFIDENTIAL	CONFIDENCIAL
+URGENTE	URGENT	URGENTE
+BORRADOR	DRAFT	RASCUNHO
+ANULADO	VOID	ANULADO
+RECHAZADO	REJECTED	REJEITADO
+Incluir hora	Include time	Incluir hora
+Incluir mi nombre	Include my name	Incluir meu nome
+(configure su nombre en Configuración)	(set your name in Settings)	(configure seu nome em Configurações)
+Código	Code	Código
+Código QR / barras	QR / barcode	QR / código de barras
+Código QR o de barras	QR code or barcode	Código QR ou de barras
+Código QR	QR code	Código QR
+Código de barras (Code 128)	Barcode (Code 128)	Código de barras (Code 128)
+Contenido	Content	Conteúdo
+Enlace, número de contenedor, guía, DUCA…	Link, container number, waybill, customs declaration…	Link, número de contêiner, guia, declaração…
+Mostrar el texto bajo el código de barras	Show the text under the barcode	Mostrar o texto sob o código de barras
+El QR admite cualquier texto o enlace. El código de barras admite letras sin tilde, números y símbolos básicos (por ejemplo MSCU7781234 o HN-2026-000123).	QR accepts any text or link. The barcode accepts unaccented letters, numbers and basic symbols (for example MSCU7781234 or HN-2026-000123).	O QR aceita qualquer texto ou link. O código de barras aceita letras sem acento, números e símbolos básicos (por exemplo MSCU7781234 ou HN-2026-000123).
+Escriba el contenido del código.	Enter the code content.	Digite o conteúdo do código.
+El código de barras solo admite letras sin tilde, números y símbolos básicos (no «{0}»).	The barcode only accepts unaccented letters, numbers and basic symbols (not "{0}").	O código de barras só aceita letras sem acento, números e símbolos básicos (não "{0}").
+Código insertado: muévalo o cambie su tamaño en la página.	Code inserted: move or resize it on the page.	Código inserido: mova-o ou redimensione-o na página.

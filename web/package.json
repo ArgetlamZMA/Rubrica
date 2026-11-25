@@ -1,6 +1,6 @@
 {
   "name": "rubrica-web",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "private": true,
   "description": "Interfaz del editor Rúbrica (HTML/JS). Se compila en un solo index.html.",
   "license": "MIT",
@@ -19,6 +19,7 @@
     "lucide-static": "0.460.0",
     "node-forge": "1.3.1",
     "pdfjs-dist": "3.11.174",
+    "qrcode-generator": "2.0.4",
     "tesseract.js": "5.1.1",
     "tesseract.js-core": "5.1.1"
   }

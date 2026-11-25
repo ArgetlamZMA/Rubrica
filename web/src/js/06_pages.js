@@ -23,7 +23,7 @@ function rotateOverlays(p, dir) {
   const mapRect = o => { const a = mp(o.x, o.y), b = mp(o.x + o.w, o.y + o.h); o.x = Math.min(a[0], b[0]); o.y = Math.min(a[1], b[1]); o.w = Math.abs(a[0] - b[0]); o.h = Math.abs(a[1] - b[1]); };
   for (let k = 0; k < p.ov.length; k++) {
     const o = p.ov[k];
-    if (['text', 'note', 'stamp', 'image', 'field'].includes(o.type)) { const [cx, cy] = mp(o.x + o.w / 2, o.y + o.h / 2); o.x = cx - o.w / 2; o.y = cy - o.h / 2; }
+    if (['text', 'note', 'stamp', 'image', 'field', 'code'].includes(o.type)) { const [cx, cy] = mp(o.x + o.w / 2, o.y + o.h / 2); o.x = cx - o.w / 2; o.y = cy - o.h / 2; }
     else if (o.type === 'line' || o.type === 'arrow') { const [x1, y1, x2, y2] = lineAbs(o); const a = mp(x1, y1), b = mp(x2, y2); setLineAbs(o, a[0], a[1], b[0], b[1]); }
     else if (o.type === 'ink') {
       const pts = inkAbs(o, o.x, o.y).map(q => mp(q[0], q[1]));

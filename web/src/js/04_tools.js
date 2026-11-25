@@ -4,11 +4,21 @@
 const CREATE = new Set(['sigbox', 'highlight', 'underline', 'strike', 'note', 'text', 'ink', 'rect', 'ellipse', 'line', 'arrow', 'stamp', 'image', 'whiteout', 'redact', 'field-text', 'field-check', 'field-drop']);
 const TOOL_NAMES = {
   select: 'Seleccionar', hand: 'Mano', highlight: 'Resaltar', underline: 'Subrayar', strike: 'Tachar', note: 'Nota', text: 'Cuadro de texto', ink: 'Lápiz',
-  rect: 'Rectángulo', ellipse: 'Elipse', line: 'Línea', arrow: 'Flecha', stamp: 'Sello', eraser: 'Borrador', edittext: 'Editar texto', image: 'Imagen',
+  rect: 'Rectángulo', ellipse: 'Elipse', line: 'Línea', arrow: 'Flecha', stamp: 'Sello', code: 'Código', eraser: 'Borrador', edittext: 'Editar texto', image: 'Imagen',
   whiteout: 'Corrector (tapar)', redact: 'Redactar', 'field-text': 'Campo de texto', 'field-check': 'Casilla', 'field-drop': 'Lista desplegable',
   textedit: 'Texto editado', field: 'Campo de formulario', sigbox: 'Recuadro de firma digital'
 };
-const STAMPS = ['APROBADO', 'RECIBIDO', 'REVISADO', 'PAGADO', 'VERIFICADO', 'DESPACHADO', 'CONFIDENCIAL', 'URGENTE', 'BORRADOR', 'ORIGINAL', 'COPIA', 'ANULADO', 'RECHAZADO'];
+const STAMPS = ['APROBADO', 'RECIBIDO', 'RECIBIDO CONFORME', 'REVISADO', 'VERIFICADO', 'PAGADO', 'LIQUIDADO', 'AFORADO', 'DESPACHADO', 'ENTREGADO', 'ORIGINAL', 'COPIA', 'COPIA FIEL', 'NO NEGOCIABLE', 'CONFIDENCIAL', 'URGENTE', 'BORRADOR', 'ANULADO', 'RECHAZADO'];
+const STAMP_COLORS = { green: '#1d8a4e', blue: '#1f5fbf', red: '#c2362b', gray: '#6b7686' };
+const STAMP_COLOR = s => ({ APROBADO: 'green', 'RECIBIDO CONFORME': 'green', VERIFICADO: 'green', PAGADO: 'green', LIQUIDADO: 'green', AFORADO: 'green', DESPACHADO: 'green', ENTREGADO: 'green',
+  RECIBIDO: 'blue', REVISADO: 'blue', ORIGINAL: 'blue', COPIA: 'blue', 'COPIA FIEL': 'blue', BORRADOR: 'gray' })[s] || 'red';
+/** Segunda línea del sello: fecha (y hora) y nombre del usuario, según las opciones. */
+function stampSub(o) {
+  const parts = [];
+  if (o.date) parts.push(o.time ? new Date().toLocaleString(LOC(), { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : todayStr());
+  if (o.who && S.settings.author) parts.push(S.settings.author);
+  return parts.join(' · ');
+}
 const SWATCHES = ['#111111', '#ffffff', '#d1242f', '#f08c00', '#ffe14d', '#1a7f37', '#1f5fbf', '#8250df', '#ff66c4', '#6b7686'];
 
 function setTool(t) {
@@ -106,7 +116,7 @@ function startPan(e) {
   const up = () => { v.style.cursor = ''; window.removeEventListener('pointermove', mv); window.removeEventListener('pointerup', up); };
   window.addEventListener('pointermove', mv); window.addEventListener('pointerup', up);
 }
-const keepAspect = o => o.type === 'image' || o.type === 'stamp' || o.type === 'note';
+const keepAspect = o => o.type === 'image' || o.type === 'stamp' || o.type === 'note' || (o.type === 'code' && o.kind === 'qr');
 function setLineAbs(o, x1, y1, x2, y2) {
   const pad = Math.max(4, (o.sw || 2) * 3);
   const L = Math.min(x1, x2) - pad, T = Math.min(y1, y2) - pad, Rr = Math.max(x1, x2) + pad, B = Math.max(y1, y2) + pad;
@@ -223,9 +233,10 @@ async function finishCreate(p, t, opt, r, dragged, g) {
       o.text = txt.text; o.author = txt.author; add.push(o); break;
     }
     case 'stamp': {
-      const label = opt.label || 'APROBADO', h = opt.date ? 46 : 38;
-      const w = metricWidth(label, 'Helvetica', true, false, h * (opt.date ? 0.36 : 0.46)) + h * 0.7;
-      const o = { ...base(), type: 'stamp', label, color: opt.color, date: !!opt.date, dateText: todayStr() };
+      const label = opt.label || tr('APROBADO'), sub = !!(opt.date || (opt.who && S.settings.author)), h = sub ? 46 : 38;
+      const o = { ...base(), type: 'stamp', label, color: opt.color, date: !!opt.date, time: !!opt.time, who: !!opt.who, dateText: '' };
+      o.dateText = stampSub(o);
+      const w = Math.max(metricWidth(label, 'Helvetica', true, false, h * (sub ? 0.36 : 0.46)), sub ? metricWidth(o.dateText, 'Helvetica', true, false, h * 0.2) : 0) + h * 0.7;
       Object.assign(o, dragged && r.w > 20 ? { x: r.x, y: r.y, w: r.w, h: r.w * h / w } : { x: r.x - w / 2, y: r.y - h / 2, w, h });
       add.push(o); break;
     }
@@ -457,14 +468,27 @@ function renderProps() {
     pp.append(el('div', { class: 'row' }, el('label', { text: 'Alineación' }), seg));
   }
   if (kind === 'stamp') {
-    const sel = el('select'); for (const s of STAMPS) sel.append(el('option', { value: s, text: s })); sel.append(el('option', { value: '__custom', text: 'Personalizado…' }));
-    const custom = el('input', { type: 'text', placeholder: 'Texto del sello', value: STAMPS.includes(target.label) ? '' : target.label });
-    sel.value = STAMPS.includes(target.label) ? target.label : '__custom'; custom.style.display = sel.value === '__custom' ? '' : 'none';
-    sel.onchange = () => { custom.style.display = sel.value === '__custom' ? '' : 'none'; if (sel.value !== '__custom') set('label', sel.value); };
+    // los sellos predefinidos se escriben en el idioma de la interfaz
+    const labels = STAMPS.map(s => [s, tr(s)]), known = labels.find(([, t]) => t === target.label);
+    const sel = el('select'); for (const [s, t] of labels) sel.append(el('option', { value: s, text: t })); sel.append(el('option', { value: '__custom', text: 'Personalizado…' }));
+    const custom = el('input', { type: 'text', placeholder: 'Texto del sello', value: known ? '' : target.label });
+    sel.value = known ? known[0] : '__custom'; custom.style.display = sel.value === '__custom' ? '' : 'none';
+    sel.onchange = () => { custom.style.display = sel.value === '__custom' ? '' : 'none'; if (sel.value !== '__custom') { set('label', tr(sel.value)); set('color', STAMP_COLORS[STAMP_COLOR(sel.value)]); renderProps(); } };
     custom.onchange = () => custom.value.trim() && set('label', custom.value.trim().toUpperCase());
     pp.append(el('div', { class: 'row' }, el('label', { text: 'Sello' }), sel, custom));
-    const ck = el('input', { type: 'checkbox' }); ck.checked = !!target.date; ck.onchange = () => set('date', ck.checked);
-    pp.append(el('label', { class: 'inline', style: { marginBottom: '10px' } }, ck, 'Incluir fecha'));
+    const sub = () => { if (o) { set('dateText', stampSub(o)); } };
+    const ckRow = (k, label, extra) => { const c = el('input', { type: 'checkbox' }); c.checked = !!target[k]; c.onchange = () => { set(k, c.checked); sub(); }; return el('label', { class: 'inline', style: { marginBottom: '6px', display: 'flex' } }, c, label, extra || null); };
+    pp.append(ckRow('date', 'Incluir fecha'), ckRow('time', 'Incluir hora'), ckRow('who', 'Incluir mi nombre', S.settings.author ? null : el('span', { class: 'muted', text: ' (configure su nombre en Configuración)' })));
+  }
+  if (kind === 'code' && o) {
+    const typ = el('select'); for (const [v, l] of [['qr', 'Código QR'], ['c128', 'Código de barras (Code 128)']]) typ.append(el('option', { value: v, text: l }));
+    typ.value = o.kind;
+    const data = el('textarea', { rows: 3, value: o.data });
+    const apply = (k, v) => { try { codeGeometry({ ...o, [k]: v }); } catch (e) { toast(e.message, 'err', 6000); return false; } set(k, v); return true; };
+    typ.onchange = () => { if (apply('kind', typ.value)) { if (typ.value === 'qr') { set('h', o.w); } else if (o.h > o.w * 0.5) set('h', Math.round(o.w * 0.3)); renderProps(); } else typ.value = o.kind; };
+    data.onchange = () => { const v = data.value.trim(); if (!v) { data.value = o.data; return; } if (!apply('data', v)) data.value = o.data; };
+    pp.append(el('div', { class: 'row' }, el('label', { text: 'Tipo' }), typ), el('div', { class: 'row' }, el('label', { text: 'Contenido' }), data));
+    if (o.kind !== 'qr') { const c = el('input', { type: 'checkbox' }); c.checked = o.caption !== false; c.onchange = () => set('caption', c.checked); pp.append(el('label', { class: 'inline', style: { marginBottom: '10px' } }, c, 'Mostrar el texto bajo el código de barras')); }
   }
   if (has('color')) colorRow(kind === 'rect' || kind === 'ellipse' ? 'Color del borde' : kind === 'whiteout' ? 'Color de relleno' : 'Color', 'color');
   if (has('fill') && (kind === 'rect' || kind === 'ellipse')) colorRow('Relleno', 'fill', true);

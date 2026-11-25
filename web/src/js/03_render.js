@@ -311,11 +311,12 @@ function ovEl(o, s, d) {
     case 'redact': break;
     case 'note': e.style.background = o.color || '#ffd400'; e.innerHTML = ic('message-square'); e.title = (o.author ? o.author + ': ' : '') + (o.text || ''); break;
     case 'image': { const a = d.assets[o.asset]; e.append(el('img', { src: a ? a.url : '', draggable: 'false' })); break; }
+    case 'code': e.innerHTML = codeSvg(o); break;
     case 'stamp': {
       const bw = Math.max(1.5, o.h * 0.06);
-      Object.assign(e.style, { color: o.color, borderColor: o.color, borderWidth: bw * s + 'px', borderRadius: o.h * 0.14 * s + 'px', fontSize: o.h * (o.date ? 0.36 : 0.46) * s + 'px' });
+      Object.assign(e.style, { color: o.color, borderColor: o.color, borderWidth: bw * s + 'px', borderRadius: o.h * 0.14 * s + 'px', fontSize: o.h * (o.date || o.who ? 0.36 : 0.46) * s + 'px' });
       e.append(el('span', { text: o.label }));
-      if (o.date) e.append(el('small', { text: o.dateText || todayStr(), style: { fontSize: o.h * 0.2 * s + 'px' } }));
+      if (o.date || o.who) e.append(el('small', { text: o.dateText || todayStr(), style: { fontSize: o.h * 0.2 * s + 'px' } }));
       break;
     }
     case 'text': case 'textedit': {

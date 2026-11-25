@@ -15,7 +15,7 @@ const RIBBON = [
     [T('ink'), T('rect'), T('ellipse'), T('line'), T('arrow')],
     [T('eraser'), { icon: 'eye', label: 'Mostrar / ocultar', act: () => document.body.classList.toggle('hide-ann') }]] },
   { id: 'edit', label: 'Editar', groups: [
-    [T('edittext'), { ...T('text'), label: 'Agregar texto' }, { icon: 'image-plus', label: 'Imagen', act: insertImage }, T('whiteout')],
+    [T('edittext'), { ...T('text'), label: 'Agregar texto' }, { icon: 'image-plus', label: 'Imagen', act: insertImage }, { icon: 'qr-code', label: 'Código QR / barras', act: insertCodeDialog }, T('whiteout')],
     [{ icon: 'droplets', label: 'Marca de agua', act: watermarkDialog }, { icon: 'paint-bucket', label: 'Fondo', act: backgroundDialog }, { icon: 'panel-top', label: 'Encabezado y pie', act: headerFooterDialog }, { icon: 'list-ordered', label: 'Números de página', act: pageNumbersDialog }, { icon: 'hash', label: 'Bates', act: batesDialog }],
     [{ icon: 'crop', label: 'Recortar', act: cropDialog }]] },
   { id: 'pages', label: 'Organizar', groups: [

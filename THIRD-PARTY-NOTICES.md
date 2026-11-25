@@ -7,6 +7,7 @@
 | [@cantoo/fontkit](https://github.com/cantoo-scribe/fontkit) 2.0 | Fuentes TrueType/OpenType | MIT |
 | [node-forge](https://github.com/digitalbazaar/forge) 1.3 | Certificados .p12 y firma CMS | BSD-3-Clause (doble licencia BSD/GPL; se usa bajo BSD) |
 | [JSZip](https://github.com/Stuk/jszip) 3.10 | Archivos ZIP, DOCX y XLSX | MIT (doble licencia MIT/GPLv3; se usa bajo MIT) |
+| [qrcode-generator](https://github.com/kazuhikoarase/qrcode-generator) 2.0 | Códigos QR | MIT |
 | [Lucide](https://lucide.dev) 0.460 | Íconos | ISC |
 | [Tesseract.js](https://github.com/naptha/tesseract.js) 5.1 y [tesseract.js-core](https://github.com/naptha/tesseract.js-core) (Tesseract OCR) | OCR en escritorio y web, incluido en la app (carpeta `ocr/`) | Apache-2.0 |
 | Modelos de idioma [tessdata](https://github.com/tesseract-ocr/tessdata) (español, inglés, portugués, francés; paquetes `@tesseract.js-data`) | Idiomas del OCR | Apache-2.0 |
