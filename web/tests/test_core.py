@@ -55,6 +55,10 @@ async def main():
         await pg.evaluate("D().pages[0].ov.push({id:uid(),type:'redact',x:60,y:60,w:500,h:150})")
         r = PdfReader(save_b64('core5.pdf', await pg.evaluate(EXPORT)))
         check('Factura' not in (r.pages[0].extract_text() or '') and 'Factura' in r.pages[1].extract_text(), 'redacción elimina el texto subyacente')
+        # el texto tapado tampoco debe quedar en objetos huérfanos del archivo (solo en las páginas 2 y 3, sin tapar)
+        needle, live = b'4661637475726120', {r.pages[k].raw_get('/Contents')[0].idnum for k in (1, 2)}
+        orphans = [n for g, d in r.xref.items() for n in d if n not in live and hasattr(r.get_object(n), 'get_data') and needle in r.get_object(n).get_data()]
+        check(not orphans, f'redacción no deja el contenido original escondido en el archivo {orphans}')
         # ---------- 6. interacción: resaltar, texto, deshacer, editar texto ----------
         await open_fixture(pg, 'texto.pdf', 'ui.pdf'); await pg.wait_for_timeout(1000)
         async def P(x, y):

@@ -215,7 +215,7 @@ function addFields(pdf, fields) {
 async function rasterizePagesInLib(bytes, indices, dpi = 150, quality = 0.85, progress) {
   const pj = await pdfjsLib.getDocument({ data: bytes.slice(), isEvalSupported: false }).promise;
   const lib = await PL.PDFDocument.load(bytes, { updateMetadata: false });
-  let n = 0;
+  let n = 0; const gone = [];
   for (const i of indices) {
     progress && progress(null, (n++ / indices.length) * 100);
     const pg = await pj.getPage(i + 1);
@@ -227,10 +227,52 @@ async function rasterizePagesInLib(bytes, indices, dpi = 150, quality = 0.85, pr
     cv.width = cv.height = 0;
     const np = lib.insertPage(i, [vp1.width, vp1.height]);
     np.drawImage(img, { x: 0, y: 0, width: vp1.width, height: vp1.height });
+    gone.push(wipePageNode(lib, lib.getPage(i + 1)));
     lib.removePage(i + 1);
   }
   pj.destroy();
+  dropWidgets(lib, new Set(gone.flat()));
+  pruneUnreachable(lib);
   return lib;
+}
+/** Vacía una página que se va a quitar (contenido, recursos, anotaciones) para que nada de ella sobreviva en el archivo. Devuelve las anotaciones que tenía. */
+function wipePageNode(lib, page) {
+  const N = PL.PDFName.of, node = page.node, annots = node.lookup(N('Annots'));
+  const refs = [];
+  if (annots instanceof PL.PDFArray) for (let k = 0; k < annots.size(); k++) { const a = annots.get(k); if (a instanceof PL.PDFRef) refs.push(a.toString()); }
+  for (const key of ['Contents', 'Resources', 'Annots', 'Thumb', 'PieceInfo', 'Metadata', 'B', 'StructParents']) node.delete(N(key));
+  return refs;
+}
+/** Quita del formulario los campos cuyos widgets estaban en páginas convertidas a imagen (ya quedaron dibujados en ella). */
+function dropWidgets(lib, refs) {
+  if (!refs.size) return;
+  const N = PL.PDFName.of, acro = lib.catalog.lookup(N('AcroForm'));
+  if (!(acro instanceof PL.PDFDict)) return;
+  const prune = (arr) => {
+    if (!(arr instanceof PL.PDFArray)) return 0;
+    for (let k = arr.size() - 1; k >= 0; k--) {
+      const r = arr.get(k), o = r instanceof PL.PDFRef ? lib.context.lookup(r) : r;
+      if (r instanceof PL.PDFRef && refs.has(r.toString())) { arr.remove(k); continue; }
+      if (o instanceof PL.PDFDict) { const kids = o.lookup(N('Kids')); if (kids instanceof PL.PDFArray && prune(kids) === 0 && kids.size() === 0) arr.remove(k); }
+    }
+    return arr.size();
+  };
+  prune(acro.lookup(N('Fields')));
+}
+/** Elimina los objetos que ya nadie referencia (pdf-lib no los recolecta al guardar). */
+function pruneUnreachable(lib) {
+  const ctx = lib.context, seen = new Set(), stack = [ctx.trailerInfo.Root, ctx.trailerInfo.Info];
+  while (stack.length) {
+    let o = stack.pop();
+    if (!o) continue;
+    if (o instanceof PL.PDFRef) { const k = o.toString(); if (seen.has(k)) continue; seen.add(k); o = ctx.lookup(o); }
+    if (o instanceof PL.PDFStream) o = o.dict;
+    if (o instanceof PL.PDFDict) for (const [, v] of o.entries()) stack.push(v);
+    else if (o instanceof PL.PDFArray) for (let k = 0; k < o.size(); k++) stack.push(o.get(k));
+  }
+  let n = 0;
+  for (const [ref] of ctx.enumerateIndirectObjects()) if (!seen.has(ref.toString())) { ctx.delete(ref); n++; }
+  return n;
 }
 function isInPlace(doc) {
   const s0 = doc.sources[doc.pages[0]?.src];

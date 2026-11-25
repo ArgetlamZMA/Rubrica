@@ -1,6 +1,7 @@
 es	en	pt
 (Autoridad de Certificación Raíz y Subordinada).	(Root and Subordinate Certification Authority).	(Autoridade Certificadora Raiz e Subordinada).
 (con cambios posteriores permitidos)	(with later changes allowed)	(com alterações posteriores permitidas)
+(configure su nombre en Configuración)	(set your name in Settings)	(configure seu nome em Configurações)
 (de la 5 al final)	(from 5 to the end)	(da 5 até o fim)
 (es su propia app).	(it is your own app).	(é o seu próprio aplicativo).
 (estado {0}).	(status {0}).	(status {0}).
@@ -16,13 +17,20 @@ es	en	pt
 , el PDF quedará buscable y seleccionable.	, the PDF will be searchable and selectable.	, o PDF ficará pesquisável e selecionável.
 , las páginas afectadas se convierten en imagen para eliminar de forma permanente el texto e imágenes que quedan debajo.	, the affected pages are converted to images to permanently remove the text and images underneath.	, as páginas afetadas são convertidas em imagem para remover permanentemente o texto e as imagens que ficam por baixo.
 , nombre de la app y su correo. En	, app name and your email. In	, nome do app e seu e-mail. Em
+110 ppp	110 dpi	110 ppp
+150 ppp (texto muy nítido)	150 dpi (very sharp text)	150 ppp (texto muito nítido)
+72 ppp (máxima compresión)	72 dpi (maximum compression)	72 ppp (compressão máxima)
+96 ppp (recomendado)	96 dpi (recommended)	96 ppp (recomendado)
 : sin sesión	: not signed in	: sem sessão
 A Excel	To Excel	Para Excel
 A Word	To Word	Para Word
 A imágenes	To images	Para imagens
 A texto	To text	Para texto
 A4 (210 × 297 mm)	A4 (210 × 297 mm)	A4 (210 × 297 mm)
+AFORADO	INSPECTED	CONFERIDO
+ANULADO	VOID	ANULADO
 APIs y servicios	APIs & Services	APIs e serviços
+APROBADO	APPROVED	APROVADO
 Abajo	Bottom	Abaixo
 Abierto como archivo local.	Opened as a local file.	Aberto como arquivo local.
 Abriendo	Opening	Abrindo
@@ -49,9 +57,13 @@ Agregar texto	Add text	Adicionar texto
 Agregue archivos.	Add files.	Adicione arquivos.
 Agregue dos o más archivos PDF o imágenes	Add two or more PDF files or images	Adicione dois ou mais arquivos PDF ou imagens
 Agregue imágenes (JPG, PNG…)	Add images (JPG, PNG…)	Adicione imagens (JPG, PNG…)
+Ajustando tamaño…	Fitting size…	Ajustando tamanho…
+Ajustar	Fit	Ajustar
 Ajustar a cada imagen	Fit each image	Ajustar a cada imagem
 Ajustar a la página	Fit page	Ajustar à página
+Ajustar a tamaño	Fit to size	Ajustar ao tamanho
 Ajustar al ancho	Fit width	Ajustar à largura
+Ajustar al tamaño de un portal	Fit to an upload portal's size limit	Ajustar ao limite de um portal
 Ajustar ancho	Fit width	Ajustar largura
 Al final	At the end	No final
 Al firmar se aplican primero todos los cambios del documento y luego se le pedirá dónde guardar el PDF firmado.	When signing, all document changes are applied first and then you will be asked where to save the signed PDF.	Ao assinar, todas as alterações do documento são aplicadas primeiro e depois será perguntado onde salvar o PDF assinado.
@@ -81,6 +93,7 @@ Archivo (teléfono, Drive, OneDrive…)	File (phone, Drive, OneDrive…)	Arquivo
 Archivo de identificación digital	Digital ID file	Arquivo de identidade digital
 Archivo:	File:	Arquivo:
 Archivos .p12 / .pfx	.p12 / .pfx files	Arquivos .p12 / .pfx
+Armando parte {0} de {1}…	Building part {0} of {1}…	Montando parte {0} de {1}…
 Arrastre aquí archivos PDF o imágenes para abrirlos	Drag PDF files or images here to open them	Arraste arquivos PDF ou imagens aqui para abri-los
 Arrastre en la página para definir dónde se verá la firma digital. Esc para cancelar.	Drag on the page to set where the digital signature will appear. Esc to cancel.	Arraste na página para definir onde a assinatura digital aparecerá. Esc para cancelar.
 Arrastre para dibujar un recuadro (mínimo 40 × 18 pt).	Drag to draw a box (minimum 40 × 18 pt).	Arraste para desenhar uma caixa (mínimo 40 × 18 pt).
@@ -89,9 +102,11 @@ Aspecto	Appearance	Aparência
 Aspecto de la firma	Signature appearance	Aparência da assinatura
 Asunto	Subject	Assunto
 Atajos de teclado	Keyboard shortcuts	Atalhos de teclado
+Automático (idioma del sistema)	Automatic (system language)	Automático (idioma do sistema)
 Autor	Author	Autor
 Autoridad intermedia	Intermediate authority	Autoridade intermediária
 Autoridad:	Authority:	Autoridade:
+AvPág	PgDn	PgDn
 Ayuda	Help	Ajuda
 Añada su certificado .p12/.pfx (por ejemplo, la firma electrónica del SAR).	Add your .p12/.pfx certificate (for example, your SAR electronic signature).	Adicione seu certificado .p12/.pfx (por exemplo, a assinatura eletrônica do SAR).
 Añada su certificado .p12/.pfx o elija uno de la lista.	Add your .p12/.pfx certificate or choose one from the list.	Adicione seu certificado .p12/.pfx ou escolha um da lista.
@@ -100,6 +115,7 @@ Añadir archivo .p12 / .pfx	Add .p12 / .pfx file	Adicionar arquivo .p12 / .pfx
 Añadir archivo .p12 / .pfx…	Add .p12 / .pfx file…	Adicionar arquivo .p12 / .pfx…
 Añadir servidor de marca de tiempo	Add timestamp server	Adicionar servidor de carimbo do tempo
 Aún no hay certificados. Importe la raíz y la subordinada del SAR, o use «Confiar en este emisor» en el panel Firmas.	No certificates yet. Import the SAR root and subordinate, or use "Trust this issuer" in the Signatures panel.	Ainda não há certificados. Importe a raiz e a subordinada do SAR, ou use "Confiar neste emissor" no painel Assinaturas.
+BORRADOR	DRAFT	RASCUNHO
 Bajar	Move down	Descer
 Biblioteca	Library	Biblioteca
 Borde	Border	Borda
@@ -113,6 +129,9 @@ Buscar en	Search in	Pesquisar em
 Buscar en el documento…	Search in the document…	Pesquisar no documento…
 Buscar y redactar	Search and redact	Pesquisar e tarjar
 CN=Nombre del firmante, O=Organización, C=HN	CN=Signer name, O=Organization, C=HN	CN=Nome do signatário, O=Organização, C=HN
+CONFIDENCIAL	CONFIDENTIAL	CONFIDENCIAL
+COPIA	COPY	CÓPIA
+COPIA FIEL	TRUE COPY	CÓPIA FIEL
 Cada N páginas	Every N pages	A cada N páginas
 Cadena de certificados demasiado larga.	Certificate chain too long.	Cadeia de certificados longa demais.
 Cadena:	Chain:	Cadeia:
@@ -172,7 +191,9 @@ Comprimiendo páginas…	Compressing pages…	Comprimindo páginas…
 Comprimiendo…	Compressing…	Comprimindo…
 Comprimir	Compress	Comprimir
 Comprimir PDF	Compress PDF	Comprimir PDF
+Comprimir y, si no alcanza, dividir en partes	Compress and, if that is not enough, split into parts	Comprimir e, se não bastar, dividir em partes
 Con un servidor	With a server	Com um servidor
+Con {0} ppp el documento pesa {1}, más que {2}. Baje la resolución mínima o use «dividir en partes».	At {0} dpi the document is {1}, more than {2}. Lower the minimum resolution or use "split into parts".	Com {0} ppp o documento tem {1}, mais que {2}. Baixe a resolução mínima ou use «dividir em partes».
 Conceder consentimiento de administrador	Grant admin consent	Conceder consentimento do administrador
 Conectado:	Connected:	Conectado:
 Confiar	Trust	Confiar
@@ -190,6 +211,7 @@ Confirmar contraseña	Confirm password	Confirmar senha
 Consultando	Querying	Consultando
 Consultar…	Browse…	Procurar…
 Contacto	Contact	Contato
+Contenido	Content	Conteúdo
 Continuar	Continue	Continuar
 Contraseña	Password	Senha
 Contraseña de permisos (restringe impresión, copia y edición)	Permissions password (restricts printing, copying and editing)	Senha de permissões (restringe impressão, cópia e edição)
@@ -218,23 +240,23 @@ Crear PDF	Create PDF	Criar PDF
 Crear PDF desde imágenes	Create PDF from images	Criar PDF a partir de imagens
 Crear credenciales	Create credentials	Criar credenciais
 Credenciales	Credentials	Credenciais
+Ctrl+Mayús+R	Ctrl+Shift+R	Ctrl+Shift+R
 Ctrl+Mayús+S	Ctrl+Shift+S	Ctrl+Shift+S
 Ctrl+Mayús+Tab	Ctrl+Shift+Tab	Ctrl+Shift+Tab
 Ctrl+Mayús+Z	Ctrl+Shift+Z	Ctrl+Shift+Z
-Ctrl+Mayús+R	Ctrl+Shift+R	Ctrl+Shift+R
-Mayús+F3	Shift+F3	Shift+F3
-Mayús+Flechas	Shift+Arrows	Shift+Setas
-Flechas	Arrows	Setas
-Supr	Del	Del
-RePág	PgUp	PgUp
-AvPág	PgDn	PgDn
-Fin	End	End
 Cuadro de texto	Text box	Caixa de texto
 Cuentas en cualquier directorio organizativo y cuentas personales de Microsoft	Accounts in any organizational directory and personal Microsoft accounts	Contas em qualquer diretório organizacional e contas pessoais da Microsoft
 Cursiva	Italic	Itálico
 Cámara con detección de bordes y OCR	Camera with edge detection and OCR	Câmera com detecção de bordas e OCR
+Código	Code	Código
+Código QR	QR code	Código QR
+Código QR / barras	QR / barcode	QR / código de barras
+Código QR o de barras	QR code or barcode	Código QR ou de barras
+Código de barras (Code 128)	Barcode (Code 128)	Código de barras (Code 128)
+Código insertado: muévalo o cambie su tamaño en la página.	Code inserted: move or resize it on the page.	Código inserido: mova-o ou redimensione-o na página.
 Cómo obtener el ID de cliente de Google (Drive)	How to get the Google client ID (Drive)	Como obter o ID do cliente do Google (Drive)
 Cómo obtener el ID de cliente de Microsoft (OneDrive)	How to get the Microsoft client ID (OneDrive)	Como obter o ID do cliente da Microsoft (OneDrive)
+DESPACHADO	CLEARED	DESEMBARAÇADO
 Datos del certificado disponibles después de usarlo por primera vez (escriba la contraseña y pulse «Verificar»).	Certificate details are available after first use (enter the password and press "Verify").	Os dados do certificado ficam disponíveis após o primeiro uso (digite a senha e clique em "Verificar").
 De derecha a izquierda	Right to left	Da direita para a esquerda
 De izquierda a derecha	Left to right	Da esquerda para a direita
@@ -270,6 +292,7 @@ Documento protegido	Protected document	Documento protegido
 Documento siguiente / anterior	Next / previous document	Documento seguinte / anterior
 Duplicar	Duplicate	Duplicar
 Dígitos	Digits	Dígitos
+ENTREGADO	DELIVERED	ENTREGUE
 Edición	Editing	Edição
 Editar	Edit	Editar
 Editar texto	Edit text	Editar texto
@@ -278,6 +301,7 @@ Editor PDF local: lectura, comentarios, edición, páginas, formularios, firmas,
 Ej.: 1-3, 5	E.g.: 1-3, 5	Ex.: 1-3, 5
 Ej.: 2- para omitir la portada	E.g.: 2- to skip the cover	Ex.: 2- para pular a capa
 Ejemplos:	Examples:	Exemplos:
+El QR admite cualquier texto o enlace. El código de barras admite letras sin tilde, números y símbolos básicos (por ejemplo MSCU7781234 o HN-2026-000123).	QR accepts any text or link. The barcode accepts unaccented letters, numbers and basic symbols (for example MSCU7781234 or HN-2026-000123).	O QR aceita qualquer texto ou link. O código de barras aceita letras sem acento, números e símbolos básicos (por exemplo MSCU7781234 ou HN-2026-000123).
 El almacén de Android no devolvió la firma.	The Android store did not return the signature.	O repositório do Android não retornou a assinatura.
 El archivo no contiene certificados.	The file contains no certificates.	O arquivo não contém certificados.
 El archivo no contiene una clave privada compatible (se requiere RSA). Si su certificado es de otro tipo, use el almacén de Windows en la app de escritorio.	The file does not contain a compatible private key (RSA required). If your certificate is of another type, use the Windows store in the desktop app.	O arquivo não contém uma chave privada compatível (requer RSA). Se seu certificado for de outro tipo, use o repositório do Windows no aplicativo de desktop.
@@ -286,6 +310,7 @@ El certificado del firmante no se pudo leer aquí (p. ej. clave EC).	The signer'
 El certificado elegido no trae su cadena.	The chosen certificate does not include its chain.	O certificado escolhido não traz sua cadeia.
 El certificado está vencido.	The certificate has expired.	O certificado está vencido.
 El certificado «{0}» no estaba vigente en la fecha de la firma.	The certificate "{0}" was not valid on the signing date.	O certificado "{0}" não estava válido na data da assinatura.
+El código de barras solo admite letras sin tilde, números y símbolos básicos (no «{0}»).	The barcode only accepts unaccented letters, numbers and basic symbols (not "{0}").	O código de barras só aceita letras sem acento, números e símbolos básicos (não "{0}").
 El documento no cambió desde que se firmó, pero Rúbrica no puede confirmar quién emitió el certificado.	The document has not changed since it was signed, but Rúbrica cannot confirm who issued the certificate.	O documento não mudou desde que foi assinado, mas o Rúbrica não pode confirmar quem emitiu o certificado.
 El documento no tiene campos de formulario.	The document has no form fields.	O documento não tem campos de formulário.
 El documento no tiene contraseña.	The document has no password.	O documento não tem senha.
@@ -324,6 +349,7 @@ En el navegador	In the browser	No navegador
 Encabezado	Header	Cabeçalho
 Encabezado y pie	Header & footer	Cabeçalho e rodapé
 Encabezado y pie de página	Header and footer	Cabeçalho e rodapé
+Enlace, número de contenedor, guía, DUCA…	Link, container number, waybill, customs declaration…	Link, número de contêiner, guia, declaração…
 Entendido	Got it	Entendi
 Entre a	Go to	Acesse
 Enviar atrás	Send to back	Enviar para trás
@@ -335,12 +361,14 @@ Escanear con la cámara	Scan with the camera	Digitalizar com a câmera
 Escanear documento	Scan document	Digitalizar documento
 Escanear páginas	Scan pages	Digitalizar páginas
 Escaneo	Scan	Digitalização
+Escriba el contenido del código.	Enter the code content.	Digite o conteúdo do código.
 Escriba la contraseña de «{0}» para comprobarlo. No se guarda: se pedirá al firmar.	Enter the password for "{0}" to check it. It is not saved: it will be asked when signing.	Digite a senha de "{0}" para verificá-lo. Ela não é salva: será pedida ao assinar.
 Escriba la contraseña del certificado.	Enter the certificate password.	Digite a senha do certificado.
 Escriba la contraseña y pulse «Verificar certificado» para ver los datos.	Enter the password and press "Verify certificate" to see the details.	Digite a senha e clique em "Verificar certificado" para ver os dados.
 Escriba su nombre	Type your name	Digite seu nome
 Escriba un nombre de archivo.	Enter a file name.	Digite um nome de arquivo.
 Escriba un nombre.	Enter a name.	Digite um nome.
+Escriba un tamaño en MB mayor que 0.	Enter a size in MB greater than 0.	Digite um tamanho em MB maior que 0.
 Escriba un título.	Enter a title.	Digite um título.
 Escribiendo archivo…	Writing file…	Gravando arquivo…
 Escribir	Type	Digitar
@@ -369,6 +397,7 @@ Extraer	Extract	Extrair
 Extraer páginas	Extract pages	Extrair páginas
 Fecha	Date	Data
 Fecha:	Date:	Data:
+Fin	End	End
 Firma	Signature	Assinatura
 Firma NO válida: el contenido firmado fue alterado	Signature NOT valid: the signed content was altered	Assinatura NÃO válida: o conteúdo assinado foi alterado
 Firma cancelada.	Signing canceled.	Assinatura cancelada.
@@ -390,6 +419,7 @@ Firmar sin marca de tiempo	Sign without timestamp	Assinar sem carimbo do tempo
 Firmas	Signatures	Assinaturas
 Firmas guardadas (clic para usar):	Saved signatures (click to use):	Assinaturas salvas (clique para usar):
 Flecha	Arrow	Seta
+Flechas	Arrows	Setas
 Fondo	Background	Fundo
 Formato	Format	Formato
 Formato no soportado:	Unsupported format:	Formato não suportado:
@@ -444,6 +474,7 @@ ID de cliente de OAuth	OAuth client ID	ID do cliente OAuth
 Id. de aplicación (cliente)	Application (client) ID	ID do aplicativo (cliente)
 Identificación digital	Digital ID	Identidade digital
 Identificación digital añadida.	Digital ID added.	Identidade digital adicionada.
+Idioma de la interfaz	Interface language	Idioma da interface
 Idioma del documento	Document language	Idioma do documento
 Igual a la página actual	Same as the current page	Igual à página atual
 Imagen	Image	Imagem
@@ -452,6 +483,8 @@ Importar certificados de confianza	Import trusted certificates	Importar certific
 Imprimir	Print	Imprimir
 Incluido	Included	Incluído
 Incluir fecha	Include date	Incluir data
+Incluir hora	Include time	Incluir hora
+Incluir mi nombre	Include my name	Incluir meu nome
 Indique al menos una contraseña.	Enter at least one password.	Informe pelo menos uma senha.
 Inferior	Bottom	Inferior
 Información sobre el certificado	Certificate information	Informações do certificado
@@ -478,6 +511,7 @@ Ir a la página…	Go to page…	Ir para a página…
 Izq.	Left	Esq.
 Izquierda	Left	Esquerda
 Izquierdo	Left	Esquerdo
+LIQUIDADO	SETTLED	LIQUIDADO
 La TSA del SAR no requiere usuario. Si su servidor lo pide, la contraseña se guarda en este equipo.	The SAR TSA does not require a user. If your server asks for one, the password is saved on this computer.	A TSA do SAR não exige usuário. Se o seu servidor pedir, a senha é salva neste computador.
 La capa de texto se agregó al documento: ya puede buscar y, al	The text layer was added to the document: you can now search and, on	A camada de texto foi adicionada ao documento: já pode pesquisar e, ao
 La contraseña de los archivos	The password of the files	A senha dos arquivos
@@ -488,12 +522,15 @@ La lista está vacía.	The list is empty.	A lista está vazia.
 La marca de tiempo recibida no corresponde a esta firma.	The received timestamp does not match this signature.	O carimbo do tempo recebido não corresponde a esta assinatura.
 La marca de tiempo recibida no corresponde a esta solicitud.	The received timestamp does not match this request.	O carimbo do tempo recebido não corresponde a esta solicitação.
 La página de este marcador ya no está en el documento.	This bookmark's page is no longer in the document.	A página deste marcador não está mais no documento.
+La página {0} pesa {1}, más que el límite de {2}. Comprímala más o reduzca su resolución.	Page {0} is {1}, more than the {2} limit. Compress it further or lower its resolution.	A página {0} tem {1}, mais que o limite de {2}. Comprima-a mais ou reduza sua resolução.
 La raíz «{0}» no está en sus certificados de confianza.	The root "{0}" is not among your trusted certificates.	A raiz "{0}" não está entre seus certificados confiáveis.
 La versión {0} no trae el manifiesto firmado, así que Rúbrica no la instalará automáticamente.	Version {0} has no signed manifest, so Rúbrica will not install it automatically.	A versão {0} não traz o manifesto assinado, então o Rúbrica não a instalará automaticamente.
 Las contraseñas no coinciden.	The passwords do not match.	As senhas não coincidem.
 Las firmas emitidas por «{0}» dejarán de mostrarse como de confianza.	Signatures issued by "{0}" will no longer be shown as trusted.	As assinaturas emitidas por "{0}" deixarão de ser mostradas como confiáveis.
 Lista	List	Lista
 Lista desplegable	Dropdown list	Lista suspensa
+Listo: {0} (límite {1}) · páginas a {2} ppp.	Done: {0} (limit {1}) · pages at {2} dpi.	Pronto: {0} (limite {1}) · páginas a {2} ppp.
+Listo: {0} (límite {1}) · sin pérdida.	Done: {0} (limit {1}) · no loss.	Pronto: {0} (limite {1}) · sem perda.
 Logo	Logo	Logotipo
 Los archivos viajan directamente entre este equipo y su nube; no hay servidores intermedios ni suscripción.	Files travel directly between this computer and your cloud; there are no intermediate servers or subscription.	Os arquivos trafegam diretamente entre este computador e sua nuvem; não há servidores intermediários nem assinatura.
 Los márgenes son demasiado grandes.	The margins are too large.	As margens são grandes demais.
@@ -511,23 +548,29 @@ Marcada por defecto	Checked by default	Marcada por padrão
 Marcadores	Bookmarks	Marcadores
 Margen (mm)	Margin (mm)	Margem (mm)
 Marque las zonas a ocultar.	Mark the areas to hide.	Marque as áreas a ocultar.
+Mayús+F3	Shift+F3	Shift+F3
+Mayús+Flechas	Shift+Arrows	Shift+Setas
 Media — páginas como imagen 150 ppp	Medium — pages as 150 dpi images	Média — páginas como imagem 150 ppp
 Mi unidad	My Drive	Meu Drive
 Microsoft · ID de aplicación (cliente)	Microsoft · Application (client) ID	Microsoft · ID do aplicativo (cliente)
 Microsoft · Inquilino	Microsoft · Tenant	Microsoft · Locatário
+Midiendo página {0} de {1}…	Measuring page {0} of {1}…	Medindo página {0} de {1}…
 Miniaturas	Thumbnails	Miniaturas
 Mis archivos	My files	Meus arquivos
 Modificar el documento	Modify the document	Modificar o documento
 Modo	Mode	Modo
 Mosaico	Tile	Mosaico
 Mostrar / ocultar	Show / hide	Mostrar / ocultar
+Mostrar el texto bajo el código de barras	Show the text under the barcode	Mostrar o texto sob o código de barras
 Mostrar u ocultar el panel lateral	Show or hide the side panel	Mostrar ou ocultar o painel lateral
 Motivo	Reason	Motivo
 Motivo:	Reason:	Motivo:
 Mover el objeto 1 / 10 puntos	Move the object 1 / 10 points	Mover o objeto 1 / 10 pontos
 Márgenes a recortar, en milímetros, medidos sobre la página tal como se ve en pantalla.	Margins to crop, in millimeters, measured on the page as shown on screen.	Margens a recortar, em milímetros, medidas na página como é exibida na tela.
 Máxima — páginas como imagen 72 ppp	Maximum — pages as 72 dpi images	Máxima — páginas como imagem 72 ppp
+Método	Method	Método
 N (para «Cada N páginas»)	N (for "Every N pages")	N (para "A cada N páginas")
+NO NEGOCIABLE	NON-NEGOTIABLE	NÃO NEGOCIÁVEL
 Negrita	Bold	Negrito
 Ninguna	None	Nenhuma
 Ninguno	None	Nenhum
@@ -582,6 +625,7 @@ Número de identidad / RTN	ID number / Tax ID	Nº de identidade / identificaçã
 Número inicial	Start number	Número inicial
 Números de página	Page numbers	Números de página
 OCR:	OCR:	OCR:
+ORIGINAL	ORIGINAL	ORIGINAL
 Objeto copiado.	Object copied.	Objeto copiado.
 Objeto cortado.	Object cut.	Objeto recortado.
 Ocultar panel	Hide panel	Ocultar painel
@@ -589,12 +633,14 @@ Oficio / Legal	Legal	Ofício / Legal
 Opacidad	Opacity	Opacidade
 Opacidad (%)	Opacity (%)	Opacidade (%)
 Opciones (una por línea)	Options (one per line)	Opções (uma por linha)
+Optimizando sin pérdida…	Optimizing without loss…	Otimizando sem perda…
 Organizar	Organize	Organizar
 Orientación	Orientation	Orientação
 Origen	Source	Origem
 Orígenes de JavaScript autorizados:	Authorized JavaScript origins:	Origens JavaScript autorizadas:
 Otro	Other	Outro
 Otro color	Other color	Outra cor
+PAGADO	PAID	PAGO
 PDF descargado.	PDF downloaded.	PDF baixado.
 PDF desde imágenes	PDF from images	PDF de imagens
 PDF e imágenes	PDFs and images	PDFs e imagens
@@ -606,8 +652,10 @@ Pantalla de consentimiento OAuth	OAuth consent screen	Tela de consentimento OAut
 Para abrir y guardar en la nube, configure OneDrive o Google Drive una sola vez en	To open and save in the cloud, set up OneDrive or Google Drive once in	Para abrir e salvar na nuvem, configure o OneDrive ou o Google Drive uma única vez em
 Para conectar la nube, abra la app con	To connect the cloud, open the app with	Para conectar a nuvem, abra o aplicativo com
 Para firmar:	To sign:	Para assinar:
+Para portales con límite de carga (aduanas, SAR, bancos, licitaciones). Primero se intenta sin pérdida; si hace falta, las páginas se convierten en imagen bajando la resolución hasta la mínima elegida (el texto deja de ser seleccionable; puede aplicar OCR después).	For portals with an upload limit (customs, tax authority, banks, tenders). It first tries without loss; if needed, pages are turned into images, lowering the resolution down to the chosen minimum (text is no longer selectable; you can run OCR afterwards).	Para portais com limite de envio (alfândega, receita, bancos, licitações). Primeiro tenta-se sem perda; se necessário, as páginas são convertidas em imagem, baixando a resolução até a mínima escolhida (o texto deixa de ser selecionável; você pode aplicar OCR depois).
 Para usar	To use	Para usar
 Para usar Aptos u otra fuente, copie el archivo .ttf al teléfono y use «Agregar fuente…».	To use Aptos or another font, copy the .ttf file to the phone and use "Add font…".	Para usar Aptos ou outra fonte, copie o arquivo .ttf para o telefone e use "Adicionar fonte…".
+Parte {0}: páginas {1}–{2} · {3}	Part {0}: pages {1}–{2} · {3}	Parte {0}: páginas {1}–{2} · {3}
 Pase el ratón sobre el texto del documento: los bloques editables se marcan en azul. Haga clic para modificarlos.	Hover over the document text: editable blocks are highlighted in blue. Click to modify them.	Passe o mouse sobre o texto do documento: os blocos editáveis ficam marcados em azul. Clique para modificá-los.
 Permiso de escritura denegado.	Write permission denied.	Permissão de gravação negada.
 Permisos de API	API permissions	Permissões de API
@@ -629,6 +677,7 @@ Preparando…	Preparing…	Preparando…
 Primer número	First number	Primeiro número
 Primera / última página	First / last page	Primeira / última página
 Primero elija una imagen o firma.	First choose an image or signature.	Primeiro escolha uma imagem ou assinatura.
+Probando {0} ppp…	Trying {0} dpi…	Testando {0} ppp…
 Probar	Test	Testar
 Procesando {0}…	Processing {0}…	Processando {0}…
 Propiedades	Properties	Propriedades
@@ -669,12 +718,17 @@ Quitar numeración	Remove numbering	Remover numeração
 Quitar recorte (restaurar página completa)	Remove crop (restore full page)	Remover recorte (restaurar página inteira)
 Quitar seguridad	Remove security	Remover segurança
 Quite la contraseña antes de firmar (un PDF cifrado no se puede firmar aquí).	Remove the password before signing (an encrypted PDF cannot be signed here).	Remova a senha antes de assinar (um PDF criptografado não pode ser assinado aqui).
+RECHAZADO	REJECTED	REJEITADO
+RECIBIDO	RECEIVED	RECEBIDO
+RECIBIDO CONFORME	RECEIVED IN GOOD ORDER	RECEBIDO CONFORME
+REVISADO	REVIEWED	REVISADO
 Rango	Range	Intervalo
 Rango no válido:	Invalid range:	Intervalo inválido:
 Rangos (separe archivos con ;)	Ranges (separate files with ;)	Intervalos (separe arquivos com ;)
 Rango…	Range…	Intervalo…
 Razón	Reason	Razão
 Raíz (autofirmado)	Root (self-signed)	Raiz (autoassinado)
+RePág	PgUp	PgUp
 RePág · AvPág	PgUp · PgDn	PgUp · PgDn
 Recientes	Recent	Recentes
 Reconocer texto	Recognize text	Reconhecer texto
@@ -700,6 +754,7 @@ Requiere configuración (una sola vez)	Requires setup (once)	Requer configuraç�
 Resaltar	Highlight	Realçar
 Resaltar campos	Highlight fields	Realçar campos
 Resolución	Resolution	Resolução
+Resolución mínima	Minimum resolution	Resolução mínima
 Respuesta no válida del servidor de marca de tiempo.	Invalid response from the timestamp server.	Resposta inválida do servidor de carimbo do tempo.
 Restablecer	Reset	Redefinir
 Restablecer formulario	Reset form	Redefinir formulário
@@ -714,6 +769,8 @@ Se descargará el instalador desde GitHub, se comprobará su firma y la aplicaci
 Se devolverán todos los campos a sus valores originales.	All fields will be returned to their original values.	Todos os campos voltarão aos valores originais.
 Se extrajeron {0} página(s) a un documento nuevo.	{0} page(s) were extracted to a new document.	{0} página(s) foram extraídas para um novo documento.
 Se generaron {0} archivos (ZIP).	{0} files were generated (ZIP).	Foram gerados {0} arquivos (ZIP).
+Se generaron {0} partes de máximo {1} (páginas a {2} ppp):	{0} parts of at most {1} were created (pages at {2} dpi):	Foram geradas {0} partes de no máximo {1} (páginas a {2} ppp):
+Se generaron {0} partes de máximo {1} sin perder calidad:	{0} parts of at most {1} were created with no quality loss:	Foram geradas {0} partes de no máximo {1} sem perder qualidade:
 Se quitará de la lista de Rúbrica. El archivo original y el certificado no se borran.	It will be removed from Rúbrica's list. The original file and the certificate are not deleted.	Será removido da lista do Rúbrica. O arquivo original e o certificado não são apagados.
 Seguridad eliminada. Guarde para aplicar.	Security removed. Save to apply.	Segurança removida. Salve para aplicar.
 Seguridad:	Security:	Segurança:
@@ -733,13 +790,16 @@ Sin pérdida — optimiza la estructura interna	Lossless — optimizes the inter
 Sin resultados	No results	Sem resultados
 Sin título.pdf	Untitled.pdf	Sem título.pdf
 Solo cifrado	Encipher only	Somente cifragem
+Solo comprimir	Compress only	Somente comprimir
 Solo descifrado	Decipher only	Somente decifragem
+Solo dividir en partes (sin perder calidad)	Split into parts only (no quality loss)	Somente dividir em partes (sem perder qualidade)
 Soy el autor de este documento	I am the author of this document	Sou o autor deste documento
 Subiendo a	Uploading to	Enviando para
 Subir	Move up	Subir
 Subrayar	Underline	Sublinhar
 Sufijo	Suffix	Sufixo
 Superior	Top	Superior
+Supr	Del	Del
 Sí	Yes	Sim
 Tachar	Strikethrough	Tachar
 Tamaño	Size	Tamanho
@@ -747,6 +807,7 @@ Tamaño (pt)	Size (pt)	Tamanho (pt)
 Tamaño de la imagen	Image size	Tamanho da imagem
 Tamaño de página de los escaneos	Page size for scans	Tamanho de página das digitalizações
 Tamaño de página para imágenes	Page size for images	Tamanho de página para imagens
+Tamaño máximo por archivo (MB)	Maximum size per file (MB)	Tamanho máximo por arquivo (MB)
 Tamaño original:	Original size:	Tamanho original:
 Tamaño real (100 %)	Actual size (100 %)	Tamanho real (100 %)
 Tamaño y estilo	Size and style	Tamanho e estilo
@@ -763,6 +824,7 @@ Todas	All	Todas
 Todas las páginas	All pages	Todas as páginas
 Traer al frente	Bring to front	Trazer para a frente
 Título	Title	Título
+URGENTE	URGENT	URGENTE
 URI de redireccionamiento autorizados:	Authorized redirect URIs:	URIs de redirecionamento autorizados:
 URI de redirección de esta instalación:	Redirect URI for this installation:	URI de redirecionamento desta instalação:
 URI de redirección: plataforma	Redirect URI: platform	URI de redirecionamento: plataforma
@@ -774,6 +836,7 @@ Unir varios PDF e imágenes	Merge several PDFs and images	Unir vários PDFs e im
 Usar esta firma	Use this signature	Usar esta assinatura
 Uso previsto	Intended use	Uso previsto
 Usuarios de prueba	Test users	Usuários de teste
+VERIFICADO	VERIFIED	VERIFICADO
 Vacío = todas	Empty = all	Vazio = todas
 Valor inicial	Initial value	Valor inicial
 Variables:	Variables:	Variáveis:
@@ -794,6 +857,7 @@ Ya puede cerrar esta ventana.	You can close this window now.	Já pode fechar est
 acepta cuentas personales y de empresa. Use su dominio (p. ej.	accepts personal and work accounts. Use your domain (e.g.	aceita contas pessoais e corporativas. Use seu domínio (ex.:
 agregue de Microsoft Graph (delegados):	add from Microsoft Graph (delegated):	adicione do Microsoft Graph (delegadas):
 agregue las cuentas que usarán la app.	add the accounts that will use the app.	adicione as contas que usarão o aplicativo.
+buscar	search	pesquisar
 con la que publica la autoridad (por ejemplo, el SAR en sar.gob.hn/firmaelectronica). Cualquiera puede crear un certificado con el nombre de una institución: confíe solo en raíces de autoridades reconocidas.	with the one published by the authority (for example, the SAR at sar.gob.hn/firmaelectronica). Anyone can create a certificate with an institution's name: only trust roots from recognized authorities.	com a publicada pela autoridade (por exemplo, o SAR em sar.gob.hn/firmaelectronica). Qualquer pessoa pode criar um certificado com o nome de uma instituição: confie apenas em raízes de autoridades reconhecidas.
 con marca de tiempo	with timestamp	com carimbo do tempo
 con texto reconocido	with recognized text	com texto reconhecido
@@ -846,40 +910,3 @@ y péguelo abajo.	and paste it below.	e cole abaixo.
 → tipo	→ type	→ tipo
 ⚙ Configuración	⚙ Settings	⚙ Configurações
 ✔ Inicio de sesión completado.	✔ Sign-in complete.	✔ Login concluído.
-Idioma de la interfaz	Interface language	Idioma da interface
-Automático (idioma del sistema)	Automatic (system language)	Automático (idioma do sistema)
-buscar	search	pesquisar
-APROBADO	APPROVED	APROVADO
-RECIBIDO	RECEIVED	RECEBIDO
-RECIBIDO CONFORME	RECEIVED IN GOOD ORDER	RECEBIDO CONFORME
-REVISADO	REVIEWED	REVISADO
-VERIFICADO	VERIFIED	VERIFICADO
-PAGADO	PAID	PAGO
-LIQUIDADO	SETTLED	LIQUIDADO
-AFORADO	INSPECTED	CONFERIDO
-DESPACHADO	CLEARED	DESEMBARAÇADO
-ENTREGADO	DELIVERED	ENTREGUE
-ORIGINAL	ORIGINAL	ORIGINAL
-COPIA	COPY	CÓPIA
-COPIA FIEL	TRUE COPY	CÓPIA FIEL
-NO NEGOCIABLE	NON-NEGOTIABLE	NÃO NEGOCIÁVEL
-CONFIDENCIAL	CONFIDENTIAL	CONFIDENCIAL
-URGENTE	URGENT	URGENTE
-BORRADOR	DRAFT	RASCUNHO
-ANULADO	VOID	ANULADO
-RECHAZADO	REJECTED	REJEITADO
-Incluir hora	Include time	Incluir hora
-Incluir mi nombre	Include my name	Incluir meu nome
-(configure su nombre en Configuración)	(set your name in Settings)	(configure seu nome em Configurações)
-Código	Code	Código
-Código QR / barras	QR / barcode	QR / código de barras
-Código QR o de barras	QR code or barcode	Código QR ou de barras
-Código QR	QR code	Código QR
-Código de barras (Code 128)	Barcode (Code 128)	Código de barras (Code 128)
-Contenido	Content	Conteúdo
-Enlace, número de contenedor, guía, DUCA…	Link, container number, waybill, customs declaration…	Link, número de contêiner, guia, declaração…
-Mostrar el texto bajo el código de barras	Show the text under the barcode	Mostrar o texto sob o código de barras
-El QR admite cualquier texto o enlace. El código de barras admite letras sin tilde, números y símbolos básicos (por ejemplo MSCU7781234 o HN-2026-000123).	QR accepts any text or link. The barcode accepts unaccented letters, numbers and basic symbols (for example MSCU7781234 or HN-2026-000123).	O QR aceita qualquer texto ou link. O código de barras aceita letras sem acento, números e símbolos básicos (por exemplo MSCU7781234 ou HN-2026-000123).
-Escriba el contenido del código.	Enter the code content.	Digite o conteúdo do código.
-El código de barras solo admite letras sin tilde, números y símbolos básicos (no «{0}»).	The barcode only accepts unaccented letters, numbers and basic symbols (not "{0}").	O código de barras só aceita letras sem acento, números e símbolos básicos (não "{0}").
-Código insertado: muévalo o cambie su tamaño en la página.	Code inserted: move or resize it on the page.	Código inserido: mova-o ou redimensione-o na página.
