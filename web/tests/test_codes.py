@@ -1,10 +1,11 @@
 """Sellos predefinidos y códigos QR / Code 128: se exporta el PDF, se rasteriza y se leen los códigos con zxing-cpp."""
-import asyncio, os, subprocess, sys
+import asyncio, base64, os, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from playwright.async_api import async_playwright
 from common import launch, open_fixture, check, done, save_b64, URL, OUT
 import zxingcpp
 from PIL import Image
+from pypdf import PdfReader
 
 CASES = [('qr', 'https://www.sar.gob.hn/firmaelectronica/ · DUCA 2026-HN-000123 · Puerto Cortés'),
          ('c128', 'MSCU7781234'), ('c128', 'HN-2026-000123'), ('c128', '0501198904985'), ('c128', 'A1')]
@@ -43,13 +44,20 @@ async def main():
         # exportar, rasterizar y leer los códigos
         out = save_b64('codigos.pdf', await pg.evaluate("async () => u8ToB64(await buildPdf(D(), {}))"))
         png = os.path.join(OUT, 'codigos-1.png')
-        subprocess.run(['pdftoppm', '-r', '200', '-f', '1', '-l', '1', '-png', '-singlefile', out, png[:-4]], check=True)
+        # se rasteriza el PDF exportado (no la vista) con PDF.js, a 200 ppp: sin depender de Poppler en Windows
+        b64png = await pg.evaluate("""async () => { const bytes = await buildPdf(D(), {});
+          const pj = await pdfjsLib.getDocument({ data: bytes }).promise, page = await pj.getPage(1), vp = page.getViewport({ scale: 200 / 72 });
+          const c = document.createElement('canvas'); c.width = Math.ceil(vp.width); c.height = Math.ceil(vp.height);
+          const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height);
+          await page.render({ canvasContext: g, viewport: vp }).promise; pj.destroy();
+          return c.toDataURL('image/png').split(',')[1]; }""")
+        open(png, 'wb').write(base64.b64decode(b64png))
         found = {r.text: r.format.name for r in zxingcpp.read_barcodes(Image.open(png))}
         for kind, data in CASES:
             check(data in found, f'zxing lee {kind} «{data}» ({found.get(data, "no encontrado")})')
-        txt = subprocess.run(['pdftotext', '-f', '1', '-l', '1', out, '-'], capture_output=True, text=True).stdout
+        txt = PdfReader(out).pages[0].extract_text() or ''
         check('MSCU7781234' in txt and 'COPIA FIEL' in txt and 'Christian' in txt, 'texto legible del código y del sello en el PDF')
-        check(not errs, str(errs[:3]))
+        check(not errs, f'sin errores de JavaScript {errs[:3]}')
         await b.close()
     done()
 asyncio.run(main())
