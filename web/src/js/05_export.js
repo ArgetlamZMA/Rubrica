@@ -213,10 +213,10 @@ function addFields(pdf, fields) {
 }
 /** Sustituye páginas por imágenes (redacción permanente / compresión fuerte) */
 /**
- * Convierte páginas en imagen (redacción permanente o compresión). keepText: índices cuyas palabras se vuelven a
- * escribir como capa invisible sobre la imagen para que sigan buscables (nunca en páginas con redacción).
+ * Convierte páginas en imagen (redacción permanente o compresión). keepText: Map índice → recuadros excluidos;
+ * el texto de esas páginas se vuelve a escribir como capa invisible, salvo las palabras que tocan un recuadro.
  */
-async function rasterizePagesInLib(bytes, indices, dpi = 150, quality = 0.85, progress, keepText = null) {
+async function rasterizePagesInLib(bytes, indices, dpi = 150, quality = 0.85, progress, keepText = null, { keepAnnots = false } = {}) {
   const pj = await pdfjsLib.getDocument({ data: bytes.slice(), isEvalSupported: false }).promise;
   const lib = await PL.PDFDocument.load(bytes, { updateMetadata: false });
   let n = 0, helv = null; const gone = [];
@@ -226,14 +226,28 @@ async function rasterizePagesInLib(bytes, indices, dpi = 150, quality = 0.85, pr
     const vp = pg.getViewport({ scale: dpi / 72 }), vp1 = pg.getViewport({ scale: 1 });
     const cv = el('canvas'); cv.width = Math.ceil(vp.width); cv.height = Math.ceil(vp.height);
     const c2 = cv.getContext('2d'); c2.fillStyle = '#fff'; c2.fillRect(0, 0, cv.width, cv.height);
-    await pg.render({ canvasContext: c2, viewport: vp, annotationMode: pdfjsLib.AnnotationMode.ENABLE }).promise;
+    // si las anotaciones se conservan como objetos, no se pintan también en la imagen
+    await pg.render({ canvasContext: c2, viewport: vp, annotationMode: keepAnnots ? pdfjsLib.AnnotationMode.DISABLE : pdfjsLib.AnnotationMode.ENABLE }).promise;
     const img = await lib.embedJpg(await canvasToBytes(cv, 'image/jpeg', quality));
     cv.width = cv.height = 0;
     const np = lib.insertPage(i, [vp1.width, vp1.height]);
     np.drawImage(img, { x: 0, y: 0, width: vp1.width, height: vp1.height });
     if (keepText && keepText.has(i)) {
       helv = helv || await lib.embedFont(PL.StandardFonts.Helvetica);
-      await redrawTextLayer(pg, vp1, np, helv);
+      await redrawTextLayer(pg, vp1, np, helv, keepText.get(i) || []);
+    }
+    if (keepAnnots) {
+      // las anotaciones pasan a la página nueva (la rotación y el recorte de la página original se aplican en la vista: mismas coordenadas solo si no hay giro)
+      const old = lib.getPage(i + 1).node, ann = old.lookup(PL.PDFName.of('Annots'));
+      if (ann instanceof PL.PDFArray && !(lib.getPage(i + 1).getRotation().angle % 360)) {
+        const N = PL.PDFName.of, ob = lib.getPage(i + 1).getCropBox();
+        for (let k = 0; k < ann.size(); k++) {
+          const a = lib.context.lookup(ann.get(k)); if (!(a instanceof PL.PDFDict)) continue;
+          a.set(N('P'), np.ref);
+          const r = a.lookup(N('Rect')); if (r instanceof PL.PDFArray && r.size() === 4) a.set(N('Rect'), lib.context.obj([0, 1, 2, 3].map(j => r.lookup(j).asNumber() - (j % 2 ? ob.y : ob.x))));
+        }
+        np.node.set(N('Annots'), ann); old.delete(N('Annots'));
+      }
     }
     gone.push(wipePageNode(lib, lib.getPage(i + 1)));
     lib.removePage(i + 1);
@@ -243,22 +257,40 @@ async function rasterizePagesInLib(bytes, indices, dpi = 150, quality = 0.85, pr
   pruneUnreachable(lib);
   return lib;
 }
-/** Escribe el texto de una página de PDF.js como capa invisible (mismo lugar y ancho) sobre la página nueva. */
-async function redrawTextLayer(pg, vp1, np, font) {
+/**
+ * Escribe el texto de una página de PDF.js como capa invisible (mismo lugar y ancho) sobre la página nueva.
+ * exclude: recuadros (coordenadas de la vista) cuyo texto NO debe sobrevivir — cualquier palabra que los toque se omite.
+ */
+async function redrawTextLayer(pg, vp1, np, font, exclude = []) {
   let tc; try { tc = await pg.getTextContent(); } catch { return 0; }
   const H = vp1.height; let k = 0;
+  const boxes = exclude.map(r => ({ x0: r.x - 2, y0: r.y - 2, x1: r.x + r.w + 2, y1: r.y + r.h + 2 }));
+  const hits = (x0, y0, x1, y1) => boxes.some(r => !(x1 < r.x0 || x0 > r.x1 || y1 < r.y0 || y0 > r.y1));
   np.setFont(font); const key = np.fontKey;
+  const draw = (str, a, b, c, d, e, f, width) => {
+    const sx = Math.hypot(a, b), w1 = font.widthOfTextAtSize(str, 1) * sx || 1, tz = clamp(width / w1 * 100, 1, 1000);
+    np.pushOperators(PL.beginText(), PL.setFontAndSize(key, 1), PL.setTextRenderingMode(PL.TextRenderingMode.Invisible),
+      PL.PDFOperator.of('Tz', [PL.PDFNumber.of(tz)]), PL.setTextMatrix(a, -b, -c, d, e, H - f), PL.showText(font.encodeText(str)), PL.endText());
+    k++;
+  };
   np.pushOperators(PL.pushGraphicsState());
   for (const it of tc.items) {
     const str = safeText(font, it.str || '').replace(/\n/g, ' ');
     if (!str.trim() || !(it.width > 0)) continue;
     const [a, b, c, d, e, f] = pdfjsLib.Util.transform(vp1.transform, it.transform);
     const sx = Math.hypot(a, b), sy = Math.hypot(c, d); if (!sx || !sy) continue;
-    // de la vista (y hacia abajo) al espacio PDF (y hacia arriba); tamaño de fuente 1 escalado por la matriz
-    const w1 = font.widthOfTextAtSize(str, 1) * sx || 1, tz = clamp(it.width / w1 * 100, 1, 1000);
-    np.pushOperators(PL.beginText(), PL.setFontAndSize(key, 1), PL.setTextRenderingMode(PL.TextRenderingMode.Invisible),
-      PL.PDFOperator.of('Tz', [PL.PDFNumber.of(tz)]), PL.setTextMatrix(a, -b, -c, d, e, H - f), PL.showText(font.encodeText(str)), PL.endText());
-    k++;
+    // caja del tramo en la vista: desde la línea base hacia arriba (altura de la fuente) y un poco hacia abajo
+    const ux = a / sx, uy = b / sx, vx = -c / sy, vy = -d / sy; // dirección del texto y «arriba»
+    const corners = (o0, o1) => [[o0, -0.25], [o1, -0.25], [o0, 1], [o1, 1]].map(([o, h]) => [e + ux * o + vx * h * sy, f + uy * o + vy * h * sy]);
+    const bbox = pts => [Math.min(...pts.map(p => p[0])), Math.min(...pts.map(p => p[1])), Math.max(...pts.map(p => p[0])), Math.max(...pts.map(p => p[1]))];
+    if (!boxes.length || !hits(...bbox(corners(0, it.width)))) { draw(str, a, b, c, d, e, f, it.width); continue; }
+    // el tramo toca un recuadro: se escriben solo las palabras que quedan completamente fuera
+    const total = font.widthOfTextAtSize(str, 1) || 1;
+    for (const m of str.matchAll(/\S+/g)) {
+      const o0 = font.widthOfTextAtSize(str.slice(0, m.index), 1) / total * it.width, o1 = font.widthOfTextAtSize(str.slice(0, m.index + m[0].length), 1) / total * it.width;
+      if (hits(...bbox(corners(o0, o1)))) continue;
+      draw(m[0], a, b, c, d, e + ux * o0, f + uy * o0, o1 - o0);
+    }
   }
   np.pushOperators(PL.popGraphicsState());
   return k;
@@ -375,8 +407,8 @@ async function buildPdf(doc, opts = {}) {
   if (rasterIdx.length) {
     prog(opts.raster ? 'Comprimiendo páginas…' : 'Aplicando redacción permanente…', 80);
     const tmp = await pdf.save({ useObjectStreams: false, addDefaultPage: false });
-    // al comprimir, el texto (también el de OCR) sigue buscable; en páginas con redacción, nunca
-    const keep = opts.raster ? new Set(rasterIdx.filter(i => !redactIdx.includes(i))) : null;
+    // el texto (también el de OCR) sigue buscable; en páginas con redacción, solo las palabras fuera de los recuadros
+    const keep = new Map(rasterIdx.map(i => [i, pages[i].ov.filter(o => o.type === 'redact').map(o => ({ x: o.x, y: o.y, w: o.w, h: o.h }))]));
     pdf = await rasterizePagesInLib(tmp, rasterIdx, opts.raster?.dpi || 150, opts.raster?.quality || 0.85, (mm, pp) => prog(null, 80 + pp * 0.15), keep);
   }
   const sec = doc.security;

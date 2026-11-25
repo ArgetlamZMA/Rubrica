@@ -37,7 +37,7 @@ const RIBBON = [
   { id: 'protect', label: 'Proteger', groups: [
     [{ icon: 'lock', label: 'Contraseña', act: protectDialog }, { icon: 'lock-open', label: 'Quitar seguridad', act: removeSecurity }],
     [{ icon: 'shield-check', label: 'Firma digital', act: digitalSignDialog }, { icon: 'signature', label: 'Firma manuscrita', act: signatureDialog }, { icon: 'file-badge', label: 'Ver firmas', act: () => { S.side = 'signatures'; S.sideOpen = true; renderSide(); } }, { icon: 'sliders-horizontal', label: 'Preferencias de firma', act: () => signPrefsDialog(), nodoc: true }],
-    [T('redact'), { icon: 'search', label: 'Buscar y redactar', act: () => { S.side = 'search'; S.sideOpen = true; renderSide(); } }]] }
+    [T('redact'), { icon: 'search', label: 'Buscar y redactar', act: () => { S.side = 'search'; S.sideOpen = true; renderSide(); } }, { icon: 'shield-x', label: 'Quitar información oculta', act: sanitizeDialog }]] }
 ];
 function renderRibbon() {
   const tabs = $('#ribbon-tabs'); tabs.innerHTML = '';

@@ -1,6 +1,6 @@
 {
   "name": "rubrica-mobile",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "private": true,
   "description": "Rúbrica para Android (Capacitor). Usa la misma interfaz de /web.",
   "license": "MIT",

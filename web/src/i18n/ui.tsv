@@ -128,6 +128,7 @@ Archivo de identificación digital	Digital ID file	Arquivo de identidade digital
 Archivo:	File:	Arquivo:
 Archivos	Files	Arquivos
 Archivos .p12 / .pfx	.p12 / .pfx files	Arquivos .p12 / .pfx
+Archivos adjuntos	Attachments	Anexos
 Armando expediente…	Building dossier…	Montando dossiê…
 Armando parte {0} de {1}…	Building part {0} of {1}…	Montando parte {0} de {1}…
 Armar expediente	Build dossier	Montar dossiê
@@ -185,8 +186,10 @@ Cambió el tamaño de la página	The page size changed	O tamanho da página mudo
 Campo	Field	Campo
 Campo de formulario	Form field	Campo de formulário
 Campo de texto	Text field	Campo de texto
+Campos de formulario (se aplanan: queda el valor escrito)	Form fields (flattened: the typed value remains)	Campos de formulário (são achatados: fica o valor digitado)
 Cancelar	Cancel	Cancelar
 Cantidad	Quantity	Quantidade
+Capas ocultas (las páginas que las tienen se convierten en imagen sin texto)	Hidden layers (pages that have them are converted to images without text)	Camadas ocultas (as páginas que as têm são convertidas em imagem sem texto)
 Cargando idioma…	Loading language…	Carregando idioma…
 Cargando motor OCR…	Loading OCR engine…	Carregando mecanismo de OCR…
 Cargando motor…	Loading engine…	Carregando mecanismo…
@@ -228,6 +231,7 @@ Combinar archivos	Combine files	Combinar arquivos
 Comentar	Comment	Comentar
 Comentario	Comment	Comentário
 Comentarios	Comments	Comentários
+Comentarios y marcas de revisión	Comments and review marks	Comentários e marcas de revisão
 Comparación	Comparison	Comparação
 Comparación - {0}	Comparison - {0}	Comparação - {0}
 Comparando el texto…	Comparing the text…	Comparando o texto…
@@ -298,10 +302,12 @@ Copiar texto e imágenes	Copy text and images	Copiar texto e imagens
 Copiar, cortar y pegar el objeto seleccionado	Copy, cut and paste the selected object	Copiar, recortar e colar o objeto selecionado
 Copie el	Copy the	Copie o
 Corrector (tapar)	Correction (cover)	Corretivo (cobrir)
+Crea una copia limpia para publicar o entregar. Lo que marque se borra del archivo, no solo de la vista. Revise la copia antes de guardarla.	Creates a clean copy to publish or hand over. What you select is erased from the file, not just from view. Review the copy before saving it.	Cria uma cópia limpa para publicar ou entregar. O que você marcar é apagado do arquivo, não só da visualização. Revise a cópia antes de salvá-la.
 Creando PDF…	Creating PDF…	Criando PDF…
 Crear	Create	Criar
 Crear PDF	Create PDF	Criar PDF
 Crear PDF desde imágenes	Create PDF from images	Criar PDF a partir de imagens
+Crear copia limpia	Create clean copy	Criar cópia limpa
 Crear credenciales	Create credentials	Criar credenciais
 Credenciales	Credentials	Credenciais
 Ctrl+Mayús+R	Ctrl+Shift+R	Ctrl+Shift+R
@@ -613,6 +619,7 @@ Ir a la página…	Go to page…	Ir para a página…
 Izq.	Left	Esq.
 Izquierda	Left	Esquerda
 Izquierdo	Left	Esquerdo
+JavaScript, acciones automáticas y enlaces que ejecutan programas	JavaScript, automatic actions and links that run programs	JavaScript, ações automáticas e links que executam programas
 LIQUIDADO	SETTLED	LIQUIDADO
 La TSA del SAR no requiere usuario. Si su servidor lo pide, la contraseña se guarda en este equipo.	The SAR TSA does not require a user. If your server asks for one, the password is saved on this computer.	A TSA do SAR não exige usuário. Se o seu servidor pedir, a senha é salva neste computador.
 La capa de texto se agregó al documento: ya puede buscar y, al	The text layer was added to the document: you can now search and, on	A camada de texto foi adicionada ao documento: já pode pesquisar e, ao
@@ -630,6 +637,7 @@ La raíz «{0}» no está en sus certificados de confianza.	The root "{0}" is no
 La versión {0} no trae el manifiesto firmado, así que Rúbrica no la instalará automáticamente.	Version {0} has no signed manifest, so Rúbrica will not install it automatically.	A versão {0} não traz o manifesto assinado, então o Rúbrica não a instalará automaticamente.
 Las contraseñas no coinciden.	The passwords do not match.	As senhas não coincidem.
 Las firmas emitidas por «{0}» dejarán de mostrarse como de confianza.	Signatures issued by "{0}" will no longer be shown as trusted.	As assinaturas emitidas por "{0}" deixarão de ser mostradas como confiáveis.
+Las páginas con capas ocultas se convirtieron en imagen sin texto, para que lo oculto no quede en el archivo. Si necesita buscar en ellas, aplique OCR a la copia.	Pages with hidden layers were converted to images without text, so the hidden content does not remain in the file. If you need to search them, run OCR on the copy.	As páginas com camadas ocultas foram convertidas em imagem sem texto, para que o conteúdo oculto não fique no arquivo. Se precisar pesquisar nelas, aplique OCR à cópia.
 Leyendo el texto…	Reading the text…	Lendo o texto…
 LibreOffice no pudo convertir el archivo: {0}	LibreOffice could not convert the file: {0}	O LibreOffice não conseguiu converter o arquivo: {0}
 LibreOffice tardó demasiado en convertir el archivo.	LibreOffice took too long to convert the file.	O LibreOffice demorou demais para converter o arquivo.
@@ -642,6 +650,7 @@ Logo	Logo	Logotipo
 Logotipo guardado	Saved logo	Logotipo salvo
 Logotipo…	Logo…	Logotipo…
 Los archivos viajan directamente entre este equipo y su nube; no hay servidores intermedios ni suscripción.	Files travel directly between this computer and your cloud; there are no intermediate servers or subscription.	Os arquivos trafegam diretamente entre este computador e sua nuvem; não há servidores intermediários nem assinatura.
+Los campos de formulario quedaron aplanados.	Form fields were flattened.	Os campos de formulário foram achatados.
 Los formularios de los documentos se aplanan y sus firmas digitales no se conservan al unirlos: firme el expediente completo al final. Si debe dividirse en partes, cada parte se entrega sin marcadores.	Document forms are flattened and their digital signatures are not kept when merged: sign the complete dossier at the end. If it has to be split into parts, each part comes without bookmarks.	Os formulários dos documentos são achatados e suas assinaturas digitais não são mantidas ao uni-los: assine o dossiê completo no final. Se precisar ser dividido em partes, cada parte é entregue sem marcadores.
 Los márgenes son demasiado grandes.	The margins are too large.	As margens são grandes demais.
 Los niveles con pérdida convierten cada página en imagen: el tamaño baja mucho en documentos escaneados. El texto se conserva como capa invisible, así que el PDF sigue siendo buscable y se puede copiar. El resultado se abre en una pestaña nueva para que lo revise antes de guardar.	Lossy levels turn each page into an image: scanned documents shrink a lot. The text is kept as an invisible layer, so the PDF stays searchable and copyable. The result opens in a new tab so you can review it before saving.	Os níveis com perda convertem cada página em imagem: o tamanho cai muito em documentos digitalizados. O texto é mantido como camada invisível, então o PDF continua pesquisável e copiável. O resultado abre em uma nova aba para você revisar antes de salvar.
@@ -664,11 +673,13 @@ Mayús+F3	Shift+F3	Shift+F3
 Mayús+Flechas	Shift+Arrows	Shift+Setas
 Media (150 ppp)	Medium (150 dpi)	Média (150 ppp)
 Media — páginas como imagen 150 ppp	Medium — pages as 150 dpi images	Média — páginas como imagem 150 ppp
+Metadatos (título, autor, programa, fechas, XMP)	Metadata (title, author, program, dates, XMP)	Metadados (título, autor, programa, datas, XMP)
 Mi unidad	My Drive	Meu Drive
 Microsoft · ID de aplicación (cliente)	Microsoft · Application (client) ID	Microsoft · ID do aplicativo (cliente)
 Microsoft · Inquilino	Microsoft · Tenant	Microsoft · Locatário
 Midiendo página {0} de {1}…	Measuring page {0} of {1}…	Medindo página {0} de {1}…
 Miniaturas	Thumbnails	Miniaturas
+Miniaturas incrustadas y datos privados de otras aplicaciones	Embedded thumbnails and private data from other applications	Miniaturas incorporadas e dados privados de outros aplicativos
 Mis archivos	My files	Meus arquivos
 Modificado	Modified	Modificado
 Modificar el documento	Modify the document	Modificar o documento
@@ -704,6 +715,7 @@ No se encontraron diferencias entre los dos documentos.	No differences were foun
 No se encontró el espacio de la firma.	The signature space was not found.	O espaço da assinatura não foi encontrado.
 No se encontró el motor OCR (carpeta «ocr» de la aplicación).	The OCR engine was not found (the app's "ocr" folder).	O mecanismo de OCR não foi encontrado (pasta "ocr" do aplicativo).
 No se encontró el valor de la firma.	The signature value was not found.	O valor da assinatura não foi encontrado.
+No se encontró información oculta de los tipos elegidos. La copia está lista.	No hidden information of the chosen types was found. The copy is ready.	Não foram encontradas informações ocultas dos tipos escolhidos. A cópia está pronta.
 No se instaló la actualización	The update was not installed	A atualização não foi instalada
 No se pudo compartir:	Could not share:	Não foi possível compartilhar:
 No se pudo comprobar actualizaciones:	Could not check for updates:	Não foi possível verificar atualizações:
@@ -860,12 +872,15 @@ Páginas	Pages	Páginas
 Páginas (vacío = todas)	Pages (empty = all)	Páginas (vazio = todas)
 Páginas a insertar (vacío = todas)	Pages to insert (empty = all)	Páginas a inserir (vazio = todas)
 Páginas:	Pages:	Páginas:
+Quitando capas ocultas…	Removing hidden layers…	Removendo camadas ocultas…
+Quitando información oculta…	Removing hidden information…	Removendo informações ocultas…
 Quitar	Remove	Remover
 Quitar Bates	Remove Bates	Remover Bates
 Quitar certificado de confianza	Remove trusted certificate	Remover certificado confiável
 Quitar de la lista	Remove from the list	Remover da lista
 Quitar fondo	Remove background	Remover fundo
 Quitar identificación	Remove ID	Remover identidade
+Quitar información oculta	Remove hidden information	Remover informações ocultas
 Quitar la selección / volver a Seleccionar	Clear the selection / back to Select	Limpar a seleção / voltar a Selecionar
 Quitar logotipo	Remove logo	Remover logotipo
 Quitar marca de agua	Remove watermark	Remover marca-d'água
@@ -921,6 +936,7 @@ Restablecer formulario	Reset form	Redefinir formulário
 Resultado de la comparación	Comparison result	Resultado da comparação
 Resultado siguiente / anterior	Next / previous result	Resultado seguinte / anterior
 Resultados de «{0}»	Results for "{0}"	Resultados de "{0}"
+Revisando el documento…	Reviewing the document…	Revisando o documento…
 Rotación (°)	Rotation (°)	Rotação (°)
 Rápida (144 ppp)	Fast (144 dpi)	Rápida (144 ppp)
 Régimen	Customs regime	Regime
@@ -936,6 +952,7 @@ Se generaron {0} partes de máximo {1} sin perder calidad:	{0} parts of at most 
 Se procesaron {0} archivo(s).	{0} file(s) were processed.	{0} arquivo(s) processado(s).
 Se procesaron {0} de {1} archivos; revise los errores.	{0} of {1} files were processed; check the errors.	{0} de {1} arquivos processados; verifique os erros.
 Se quitará de la lista de Rúbrica. El archivo original y el certificado no se borran.	It will be removed from Rúbrica's list. The original file and the certificate are not deleted.	Será removido da lista do Rúbrica. O arquivo original e o certificado não são apagados.
+Se quitó de la copia:	Removed from the copy:	Removido da cópia:
 Seguridad eliminada. Guarde para aplicar.	Security removed. Save to apply.	Segurança removida. Salve para aplicar.
 Seguridad:	Security:	Segurança:
 Seleccionar	Select	Selecionar
@@ -1033,12 +1050,15 @@ abierto	open	aberto
 acepta cuentas personales y de empresa. Use su dominio (p. ej.	accepts personal and work accounts. Use your domain (e.g.	aceita contas pessoais e corporativas. Use seu domínio (ex.:
 agregue de Microsoft Graph (delegados):	add from Microsoft Graph (delegated):	adicione do Microsoft Graph (delegadas):
 agregue las cuentas que usarán la app.	add the accounts that will use the app.	adicione as contas que usarão o aplicativo.
+archivos adjuntos	attachments	anexos
 buscar	search	pesquisar
+comentarios	comments	comentários
 con la que publica la autoridad (por ejemplo, el SAR en sar.gob.hn/firmaelectronica). Cualquiera puede crear un certificado con el nombre de una institución: confíe solo en raíces de autoridades reconocidas.	with the one published by the authority (for example, the SAR at sar.gob.hn/firmaelectronica). Anyone can create a certificate with an institution's name: only trust roots from recognized authorities.	com a publicada pela autoridade (por exemplo, o SAR em sar.gob.hn/firmaelectronica). Qualquer pessoa pode criar um certificado com o nome de uma instituição: confie apenas em raízes de autoridades reconhecidas.
 con marca de tiempo	with timestamp	com carimbo do tempo
 con texto reconocido	with recognized text	com texto reconhecido
 correo o teléfono (opcional)	email or phone (optional)	e-mail ou telefone (opcional)
 cuando el certificado del firmante encadena hasta uno de estos certificados{0}. Descargue los del SAR en	when the signer's certificate chains up to one of these certificates{0}. Download the SAR ones at	quando o certificado do signatário encadeia até um destes certificados{0}. Baixe os do SAR em
+datos privados o miniaturas	private data or thumbnails	dados privados ou miniaturas
 deshacer ·	undo ·	desfazer ·
 detección de fuente	font detection	detecção de fonte
 duplicar · flechas para mover ·	duplicate · arrows to move ·	duplicar · setas para mover ·
@@ -1051,6 +1071,8 @@ incluida en Rúbrica	included in Rúbrica	incluída no Rúbrica
 las firmas cuyos certificados emita:	signatures whose certificates it issues:	as assinaturas cujos certificados emitir:
 los certificados instalados en Android	the certificates installed on Android	os certificados instalados no Android
 los servidores de marca de tiempo no suelen aceptar conexiones: use la app de Windows o de Android.	timestamp servers usually do not accept connections: use the Windows or Android app.	os servidores de carimbo do tempo geralmente não aceitam conexões: use o aplicativo de Windows ou Android.
+marcadores	bookmarks	marcadores
+metadatos	metadata	metadados
 móvil	mobile	celular
 nº de página ·	page no. ·	nº da página ·
 o hasta un certificado de CA instalado en Android	or up to a CA certificate installed on Android	ou até um certificado de AC instalado no Android
@@ -1059,8 +1081,10 @@ o use una firma manuscrita guardada…	or use a saved handwritten signature…	o
 p. {0}	p. {0}	p. {0}
 página de la versión	release page	página da versão
 página(s).	page(s).	página(s).
+páginas con capas ocultas	pages with hidden layers	páginas com camadas ocultas
 raíces incluidas en Rúbrica	roots included in Rúbrica	raízes incluídas no Rúbrica
 respondió correctamente.	responded correctly.	respondeu corretamente.
+scripts o acciones	scripts or actions	scripts ou ações
 se guarda. Los certificados del almacén de Windows (incluidos tokens USB) se usan con el PIN de Windows; la clave privada no sale del sistema.	saved. Certificates in the Windows store (including USB tokens) are used with the Windows PIN; the private key never leaves the system.	salva. Os certificados do repositório do Windows (incluindo tokens USB) são usados com o PIN do Windows; a chave privada não sai do sistema.
 sus certificados de confianza	your trusted certificates	seus certificados confiáveis
 total ·	total ·	total ·

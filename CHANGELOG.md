@@ -1,5 +1,9 @@
 # Cambios
 
+## 1.5.0 — en preparación
+- **Redacción que conserva el texto**: la página redactada sigue siendo buscable y se puede copiar, excepto lo que está bajo los recuadros. Cualquier palabra que toque un recuadro se elimina del archivo.
+- **Quitar información oculta** (*Proteger*): crea una copia limpia sin metadatos ni XMP, adjuntos, JavaScript y acciones automáticas, enlaces que ejecutan programas, capas ocultas, miniaturas ni datos privados de otras aplicaciones; opcionalmente sin comentarios, formularios ni marcadores. Muestra un informe de lo que quitó.
+
 ## 1.4.0 — en preparación
 - **Códigos QR y de barras (Code 128)** en *Editar → Código QR / barras*: vectoriales (nítidos al imprimir), con el contenido editable en el panel de propiedades y texto legible opcional bajo el código de barras. Para enlaces, números de contenedor, guías, DUCA, etc.
 - **Sellos para logística y aduanas**: RECIBIDO CONFORME, LIQUIDADO, AFORADO, ENTREGADO, COPIA FIEL, NO NEGOCIABLE y los anteriores, con color según el tipo, fecha, hora y nombre del usuario. Se escriben en el idioma de la interfaz.
