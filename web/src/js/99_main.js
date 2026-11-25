@@ -27,7 +27,7 @@ const RIBBON = [
     [{ icon: 'crop', label: 'Recortar', act: cropDialog }]] },
   { id: 'convert', label: 'Convertir', groups: [
     [{ icon: 'file-text', label: 'A Word', act: () => convertDialog('word') }, { icon: 'sheet', label: 'A Excel', act: () => convertDialog('excel') }, { icon: 'file-image', label: 'A imágenes', act: () => convertDialog('image') }, { icon: 'file-type', label: 'A texto', act: () => convertDialog('text') }],
-    [{ icon: 'scan-text', label: 'OCR', act: ocrDialog }], [{ icon: 'file-archive', label: 'Comprimir', act: compressDialog }, { icon: 'file-down', label: 'Ajustar a tamaño', act: fitSizeDialog }],
+    [{ icon: 'scan-text', label: 'OCR', act: ocrDialog }, { icon: 'file-type-2', label: 'Desde Office', act: officeFromDisk, nodoc: true, native: true }], [{ icon: 'file-archive', label: 'Comprimir', act: compressDialog }, { icon: 'file-down', label: 'Ajustar a tamaño', act: fitSizeDialog }],
     [{ icon: 'combine', label: 'Combinar', act: () => combineDialog(false), nodoc: true }, { icon: 'images', label: 'Desde imágenes', act: () => combineDialog(true), nodoc: true }]] },
   { id: 'form', label: 'Formulario', groups: [
     [T('field-text'), T('field-check'), T('field-drop')], [T('select')],
@@ -47,6 +47,7 @@ function renderRibbon() {
     for (const b of g) {
       if (b.android === true && !CAP) continue;
       if (b.android === false && CAP) continue;
+      if (b.native === true && !NATIVE) continue;
       if (b.touch && !CAP && !isTouch()) continue;
       const be = el('button', { class: 'rbtn', html: ic(b.icon) + `<span>${escapeHtml(b.label)}</span>`, title: b.title || b.label, dataset: b.tool ? { tool: b.tool } : {} });
       be._def = b;
@@ -87,9 +88,10 @@ function renderHome() {
       CAP ? null : card('cloud', 'Abrir de Google Drive', CLOUD.gdrive.label2(), () => openFromCloud('gdrive')),
       card('combine', 'Combinar archivos', 'Unir varios PDF e imágenes', () => combineDialog(false)),
       card('folder-archive', 'Armar expediente', 'Portada, índice, marcadores y Bates', dossierDialog),
+      NATIVE ? card('file-type-2', 'Desde Word, Excel o PowerPoint', 'Convertir documentos de Office a PDF', officeFromDisk) : null,
       card('images', 'PDF desde imágenes', 'Fotos o escaneos a un PDF', () => combineDialog(true)),
       card('file-plus', 'Documento en blanco', 'Carta, A4, Oficio…', newBlankDialog)),
-    CAP ? null : el('div', { class: 'home-drop', html: ic('upload') + '<br>Arrastre aquí archivos PDF o imágenes para abrirlos' }));
+    CAP ? null : el('div', { class: 'home-drop', html: ic('upload') + '<br>' + escapeHtml(tr(NATIVE ? 'Arrastre aquí archivos PDF, imágenes o documentos de Office para abrirlos' : 'Arrastre aquí archivos PDF o imágenes para abrirlos')) }));
   const rec = store.get('recent', []).filter(r => NATIVE || r.kind !== 'native');
   if (rec.length) {
     const list = el('div', { class: 'recent-list' });

@@ -13,7 +13,7 @@ namespace Rubrica;
 internal sealed class LocalServer : IDisposable
 {
     private static readonly JsonSerializerOptions JsonOpts = new(JsonSerializerDefaults.Web);
-    private static readonly string[] ReadableExt = { ".pdf", ".png", ".jpg", ".jpeg", ".gif", ".bmp", ".webp", ".tif", ".tiff" };
+    private static readonly string[] ReadableExt = new[] { ".pdf", ".png", ".jpg", ".jpeg", ".gif", ".bmp", ".webp", ".tif", ".tiff" }.Concat(OfficeConverter.Extensions).ToArray();
     private static readonly Dictionary<string, string> Mime = new(StringComparer.OrdinalIgnoreCase)
     {
         [".html"] = "text/html; charset=utf-8", [".js"] = "text/javascript; charset=utf-8", [".json"] = "application/json",
@@ -171,7 +171,8 @@ internal sealed class LocalServer : IDisposable
                     {
                         Title = "Abrir",
                         Multiselect = true,
-                        Filter = "PDF e imágenes|*.pdf;*.png;*.jpg;*.jpeg;*.gif;*.bmp;*.webp|Documentos PDF (*.pdf)|*.pdf|Todos los archivos|*.*",
+                        Filter = "PDF, imágenes y Office|*.pdf;*.png;*.jpg;*.jpeg;*.gif;*.bmp;*.webp;" + string.Join(";", OfficeConverter.Extensions.Select(e => "*" + e))
+                               + "|Documentos PDF (*.pdf)|*.pdf|Documentos de Office|" + string.Join(";", OfficeConverter.Extensions.Select(e => "*" + e)) + "|Todos los archivos|*.*",
                     };
                     return d.ShowDialog(_form) == DialogResult.OK ? d.FileNames : Array.Empty<string>();
                 });
@@ -264,6 +265,19 @@ internal sealed class LocalServer : IDisposable
                 if (string.IsNullOrWhiteSpace(url) || req.HttpMethod != "POST") { res.StatusCode = 400; return; }
                 var reply = await Tsa.RequestAsync(url, await ReadBodyAsync(req), req.Headers["X-Tsa-Auth"]);
                 await WriteBytesAsync(res, reply, "application/timestamp-reply");
+                break;
+            }
+
+            case "office-info":
+                await WriteJsonAsync(res, await Task.Run(OfficeConverter.Info));
+                break;
+
+            case "office-to-pdf":
+            {
+                var fname = Uri.UnescapeDataString(req.Headers["X-File-Name"] ?? "");
+                if (req.HttpMethod != "POST" || OfficeConverter.KindOf(fname) == OfficeConverter.Kind.None) { res.StatusCode = 400; return; }
+                var pdf = await OfficeConverter.ConvertAsync(await ReadBodyAsync(req), fname);
+                await WriteBytesAsync(res, pdf, "application/pdf");
                 break;
             }
 

@@ -22,12 +22,12 @@ El instalador no requiere permisos de administrador, instala WebView2 si falta y
 
 | Área | Funciones |
 |---|---|
-| **Inicio** | Abrir (equipo, OneDrive, Google Drive, arrastrar y soltar, «Abrir con» de Windows), pestañas, recientes, guardar / guardar como, imprimir, combinar, PDF desde imágenes, documento en blanco, deshacer/rehacer |
-| **Comentar** | Resaltar, subrayar y tachar ajustados al texto; notas (comentarios PDF reales); cuadros de texto; sellos (APROBADO, RECIBIDO, PAGADO… o propios); lápiz, rectángulo, elipse, línea, flecha; borrador |
-| **Editar** | Editar el texto existente (detecta la fuente original), agregar texto e imágenes, corrector, marca de agua, fondo, encabezado y pie, números de página, numeración Bates, recortar |
+| **Inicio** | Abrir (equipo, OneDrive, Google Drive, arrastrar y soltar, «Abrir con» de Windows), pestañas, recientes, guardar / guardar como, imprimir, combinar, **armar expediente** (portada con datos, índice con enlaces, marcadores, Bates y tamaño máximo; plantillas para aduanas y licitaciones), PDF desde imágenes, documento en blanco, deshacer/rehacer |
+| **Comentar** | Resaltar, subrayar y tachar ajustados al texto; notas (comentarios PDF reales); cuadros de texto; sellos (APROBADO, RECIBIDO CONFORME, LIQUIDADO, AFORADO, COPIA FIEL… o propios, con fecha, hora y nombre); lápiz, rectángulo, elipse, línea, flecha; borrador |
+| **Editar** | Editar el texto existente (detecta la fuente original), agregar texto e imágenes, códigos QR y de barras (Code 128), corrector, marca de agua, fondo, encabezado y pie, números de página, numeración Bates, recortar |
 | **Fuentes** | **Aptos** como fuente predeterminada (igual que Microsoft Office), cualquier fuente instalada o de Microsoft 365, fuentes propias (.ttf/.otf); todas se incrustan en el PDF |
 | **Organizar** | Miniaturas con arrastrar para reordenar, girar, insertar, duplicar, eliminar, extraer, dividir, invertir |
-| **Convertir** | A Word, Excel, imágenes y texto; OCR (español/inglés); comprimir |
+| **Convertir** | A Word, Excel, imágenes y texto; **desde Word, Excel y PowerPoint** (app de Windows, con Office o LibreOffice); OCR sin internet (español, inglés, portugués, francés); comprimir; **ajustar al tamaño de un portal** (comprimir o dividir en partes de máximo X MB) |
 | **Formulario** | Rellenar formularios, crear campos (texto, casilla, lista), exportar datos a CSV |
 | **Android** | Escáner de documentos con la cámara (bordes, perspectiva, filtros, OCR sin conexión), abrir/guardar en el teléfono, Drive y OneDrive, «Abrir con», compartir, imprimir, interfaz táctil para teléfono y Fold |
 | **Proteger** | **Firma digital** con certificado `.p12/.pfx` (p. ej. el emitido por el SAR) o del almacén de Windows / token USB; verificación de firmas; firma manuscrita; contraseña AES‑256 y permisos; redacción permanente |

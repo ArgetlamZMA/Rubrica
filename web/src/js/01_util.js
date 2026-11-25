@@ -87,6 +87,8 @@ function todayStr() { return new Date().toLocaleDateString(LOC(), { day: '2-digi
 function baseName(n) { return String(n || 'documento').replace(/\.[a-z0-9]{2,5}$/i, ''); }
 function isPdfName(n) { return /\.pdf$/i.test(n || ''); }
 function isImageName(n) { return /\.(png|jpe?g|gif|bmp|webp|tiff?)$/i.test(n || ''); }
+const OFFICE_EXT = ['doc', 'docx', 'docm', 'dot', 'dotx', 'rtf', 'odt', 'xls', 'xlsx', 'xlsm', 'xlsb', 'csv', 'ods', 'ppt', 'pptx', 'pptm', 'pps', 'ppsx', 'odp'];
+function isOfficeName(n) { const m = /\.([a-z0-9]+)$/i.exec(n || ''); return !!m && OFFICE_EXT.includes(m[1].toLowerCase()); }
 function isImageMime(m) { return /^image\//.test(m || ''); }
 
 /** "1-3,5,8-" → índices base 0 (n = total). Vacío o "todas" → todas. */

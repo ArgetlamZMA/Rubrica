@@ -14,7 +14,7 @@ function pickLocal(accept = '.pdf,image/*', multiple = true) {
 async function pickFiles(from = 'local', multiple = true, accept) {
   if (from === 'local' && PSN) return androidOpen(accept === 'image/*');
   if (from === 'local') {
-    const fs = await pickLocal(accept || '.pdf,.png,.jpg,.jpeg,.gif,.webp,.bmp', multiple);
+    const fs = await pickLocal(accept || '.pdf,.png,.jpg,.jpeg,.gif,.webp,.bmp' + (NATIVE ? ',' + OFFICE_EXT.map(e => '.' + e).join(',') : ''), multiple);
     return Promise.all(fs.map(async f => ({ name: f.name, bytes: await readFileBytes(f), mime: f.type })));
   }
   const r = await openCloudBrowser({ mode: 'open', provider: from, multiple });
@@ -48,7 +48,7 @@ async function openFromCloud(provider) {
 }
 async function openDroppedFiles(list) {
   for (const f of list) {
-    if (!isPdfName(f.name) && !isImageName(f.name)) { toast('Formato no soportado: ' + f.name, 'err'); continue; }
+    if (!isPdfName(f.name) && !isImageName(f.name) && !isOfficeName(f.name)) { toast('Formato no soportado: ' + f.name, 'err'); continue; }
     await openBytes(f.name, await readFileBytes(f), { mime: f.type }).catch(e => toast(e.message, 'err'));
   }
 }

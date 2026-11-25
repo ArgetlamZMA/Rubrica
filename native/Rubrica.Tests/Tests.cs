@@ -190,3 +190,42 @@ public class UpdaterArchTests
     public void EligeElInstaladorDeLaArquitectura(string candidate, string current, bool arm64, bool better) =>
         Assert.Equal(better, Updater.IsBetterSetup(candidate, current, arm64));
 }
+
+public class OfficeConverterTests
+{
+    [Theory]
+    [InlineData("Factura.DOCX", OfficeConverter.Kind.Word)]
+    [InlineData("contrato.rtf", OfficeConverter.Kind.Word)]
+    [InlineData("liquidacion.xlsx", OfficeConverter.Kind.Excel)]
+    [InlineData("datos.csv", OfficeConverter.Kind.Excel)]
+    [InlineData("presentacion.pptx", OfficeConverter.Kind.PowerPoint)]
+    [InlineData("foto.jpg", OfficeConverter.Kind.None)]
+    [InlineData("documento.pdf", OfficeConverter.Kind.None)]
+    [InlineData("", OfficeConverter.Kind.None)]
+    public void ReconoceElTipoPorLaExtension(string nombre, OfficeConverter.Kind esperado) =>
+        Assert.Equal(esperado, OfficeConverter.KindOf(nombre));
+
+    [Fact]
+    public async Task RechazaTiposNoConvertibles() =>
+        await Assert.ThrowsAsync<NotSupportedException>(() => OfficeConverter.ConvertAsync(new byte[] { 1, 2, 3 }, "programa.exe"));
+
+    [Fact]
+    public void InformaLosConvertidoresDisponibles()
+    {
+        var json = System.Text.Json.JsonSerializer.Serialize(OfficeConverter.Info());
+        Assert.Contains("\"word\":", json);
+        Assert.Contains("\"libreoffice\":", json);
+        Assert.Contains("\"docx\"", json);
+    }
+
+    /// <summary>Conversión real solo si el equipo tiene Word o LibreOffice (los ejecutores de CI normalmente no).</summary>
+    [Fact]
+    public async Task ConvierteRtfSiHayConvertidor()
+    {
+        if (!OfficeConverter.HasOffice(OfficeConverter.Kind.Word) && OfficeConverter.LibreOfficePath() == null) return;
+        var rtf = System.Text.Encoding.ASCII.GetBytes(@"{\rtf1\ansi{\fonttbl{\f0 Arial;}}\f0\fs24 Factura comercial No. 1000\par Rubrica prueba de conversion\par}");
+        var pdf = await OfficeConverter.ConvertAsync(rtf, "prueba.rtf", TimeSpan.FromMinutes(4));
+        Assert.True(pdf.Length > 500);
+        Assert.Equal("%PDF", System.Text.Encoding.ASCII.GetString(pdf, 0, 4));
+    }
+}

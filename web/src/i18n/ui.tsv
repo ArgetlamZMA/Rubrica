@@ -105,6 +105,7 @@ Armando expediente…	Building dossier…	Montando dossiê…
 Armando parte {0} de {1}…	Building part {0} of {1}…	Montando parte {0} de {1}…
 Armar expediente	Build dossier	Montar dossiê
 Arrastre aquí archivos PDF o imágenes para abrirlos	Drag PDF files or images here to open them	Arraste arquivos PDF ou imagens aqui para abri-los
+Arrastre aquí archivos PDF, imágenes o documentos de Office para abrirlos	Drag PDF files, images or Office documents here to open them	Arraste aqui arquivos PDF, imagens ou documentos do Office para abri-los
 Arrastre en la página para definir dónde se verá la firma digital. Esc para cancelar.	Drag on the page to set where the digital signature will appear. Esc to cancel.	Arraste na página para definir onde a assinatura digital aparecerá. Esc para cancelar.
 Arrastre para dibujar un recuadro (mínimo 40 × 18 pt).	Drag to draw a box (minimum 40 × 18 pt).	Arraste para desenhar uma caixa (mínimo 40 × 18 pt).
 Arriba	Top	Acima
@@ -240,6 +241,7 @@ Convertir a Excel (.xlsx)	Convert to Excel (.xlsx)	Converter para Excel (.xlsx)
 Convertir a Word (.docx)	Convert to Word (.docx)	Converter para Word (.docx)
 Convertir a imágenes	Convert to images	Converter para imagens
 Convertir a texto (.txt)	Convert to text (.txt)	Converter para texto (.txt)
+Convertir documentos de Office a PDF	Convert Office documents to PDF	Converter documentos do Office em PDF
 Convierte páginas escaneadas en texto buscable y seleccionable (se agrega una capa de texto invisible sobre la imagen). Funciona sin internet: el motor y los idiomas vienen incluidos en Rúbrica.	Turns scanned pages into searchable, selectable text (an invisible text layer is added over the image). Works offline: the engine and languages are included in Rúbrica.	Converte páginas digitalizadas em texto pesquisável e selecionável (uma camada de texto invisível é adicionada sobre a imagem). Funciona sem internet: o mecanismo e os idiomas vêm incluídos no Rúbrica.
 Convirtiendo…	Converting…	Convertendo…
 Copiado.	Copied.	Copiado.
@@ -287,6 +289,8 @@ Descargando…	Downloading…	Baixando…
 Descargar .txt	Download .txt	Baixar .txt
 Descargar a la carpeta de descargas	Download to the Downloads folder	Baixar para a pasta Downloads
 Desde	From	De
+Desde Office	From Office	Do Office
+Desde Word, Excel o PowerPoint	From Word, Excel or PowerPoint	Do Word, Excel ou PowerPoint
 Desde archivo	From file	De arquivo
 Desde imágenes	From images	De imagens
 Deshacer	Undo	Desfazer
@@ -412,6 +416,7 @@ Este elemento pertenece a un grupo aplicado a varias páginas (marca de agua, en
 Este equipo	This computer	Este computador
 Este navegador no permite leer las fuentes del equipo. Use «Agregar fuente…».	This browser cannot read system fonts. Use "Add font…".	Este navegador não permite ler as fontes do computador. Use "Adicionar fonte…".
 Este servidor requiere que me conecte	This server requires me to sign in	Este servidor exige que eu me conecte
+Este tipo de archivo no se puede convertir a PDF: {0}	This file type cannot be converted to PDF: {0}	Este tipo de arquivo não pode ser convertido em PDF: {0}
 Estilo	Style	Estilo
 Estilo de apariencia	Appearance style	Estilo de aparência
 Estilo estándar	Standard style	Estilo padrão
@@ -550,6 +555,7 @@ La TSA del SAR no requiere usuario. Si su servidor lo pide, la contraseña se gu
 La capa de texto se agregó al documento: ya puede buscar y, al	The text layer was added to the document: you can now search and, on	A camada de texto foi adicionada ao documento: já pode pesquisar e, ao
 La contraseña de los archivos	The password of the files	A senha dos arquivos
 La contraseña no se guarda: se pide en cada firma.	The password is not saved: it is asked for each signature.	A senha não é salva: é pedida em cada assinatura.
+La conversión no produjo un PDF.	The conversion did not produce a PDF.	A conversão não gerou um PDF.
 La firma no cabe en el espacio reservado.	The signature does not fit in the reserved space.	A assinatura não cabe no espaço reservado.
 La firma no incluye el certificado del emisor «{0}» y no está en sus certificados de confianza.	The signature does not include the issuer certificate "{0}" and it is not among your trusted certificates.	A assinatura não inclui o certificado do emissor "{0}" e ele não está entre seus certificados confiáveis.
 La lista está vacía.	The list is empty.	A lista está vazia.
@@ -561,6 +567,8 @@ La raíz «{0}» no está en sus certificados de confianza.	The root "{0}" is no
 La versión {0} no trae el manifiesto firmado, así que Rúbrica no la instalará automáticamente.	Version {0} has no signed manifest, so Rúbrica will not install it automatically.	A versão {0} não traz o manifesto assinado, então o Rúbrica não a instalará automaticamente.
 Las contraseñas no coinciden.	The passwords do not match.	As senhas não coincidem.
 Las firmas emitidas por «{0}» dejarán de mostrarse como de confianza.	Signatures issued by "{0}" will no longer be shown as trusted.	As assinaturas emitidas por "{0}" deixarão de ser mostradas como confiáveis.
+LibreOffice no pudo convertir el archivo: {0}	LibreOffice could not convert the file: {0}	O LibreOffice não conseguiu converter o arquivo: {0}
+LibreOffice tardó demasiado en convertir el archivo.	LibreOffice took too long to convert the file.	O LibreOffice demorou demais para converter o arquivo.
 Licitación / propuesta	Tender / proposal	Licitação / proposta
 Lista	List	Lista
 Lista desplegable	Dropdown list	Lista suspensa
@@ -634,6 +642,7 @@ No se pudo guardar en	Could not save to	Não foi possível salvar em
 No se pudo guardar la lista:	Could not save the list:	Não foi possível salvar a lista:
 No se pudo guardar:	Could not save:	Não foi possível salvar:
 No se pudo incrustar	Could not embed	Não foi possível incorporar
+No se pudo iniciar LibreOffice.	LibreOffice could not be started.	Não foi possível iniciar o LibreOffice.
 No se pudo leer	Could not read	Não foi possível ler
 No se pudo leer el PDF:	Could not read the PDF:	Não foi possível ler o PDF:
 No se pudo leer el certificado:	Could not read the certificate:	Não foi possível ler o certificado:
@@ -672,6 +681,8 @@ Objeto copiado.	Object copied.	Objeto copiado.
 Objeto cortado.	Object cut.	Objeto recortado.
 Ocultar panel	Hide panel	Ocultar painel
 Oferente	Bidder	Proponente
+Office no pudo abrir o convertir el archivo (puede estar dañado o protegido con contraseña). {0}	Office could not open or convert the file (it may be damaged or password-protected). {0}	O Office não conseguiu abrir ou converter o arquivo (pode estar danificado ou protegido por senha). {0}
+Office tardó demasiado en convertir el archivo. Ábralo en Office para revisar si muestra algún aviso.	Office took too long to convert the file. Open it in Office to check whether it shows a warning.	O Office demorou demais para converter o arquivo. Abra-o no Office para ver se ele mostra algum aviso.
 Oficio / Legal	Legal	Ofício / Legal
 Opacidad	Opacity	Opacidade
 Opacidad (%)	Opacity (%)	Opacidade (%)
@@ -695,6 +706,9 @@ Pantalla completa no disponible.	Full screen not available.	Tela cheia não disp
 Pantalla de consentimiento OAuth	OAuth consent screen	Tela de consentimento OAuth
 Para abrir y guardar en la nube, configure OneDrive o Google Drive una sola vez en	To open and save in the cloud, set up OneDrive or Google Drive once in	Para abrir e salvar na nuvem, configure o OneDrive ou o Google Drive uma única vez em
 Para conectar la nube, abra la app con	To connect the cloud, open the app with	Para conectar a nuvem, abra o aplicativo com
+Para convertir documentos de Word se necesita Microsoft Word o LibreOffice instalados en este equipo.	Converting Word documents requires Microsoft Word or LibreOffice installed on this computer.	Para converter documentos do Word é preciso ter o Microsoft Word ou o LibreOffice instalado neste computador.
+Para convertir hojas de Excel se necesita Microsoft Excel o LibreOffice instalados en este equipo.	Converting Excel sheets requires Microsoft Excel or LibreOffice installed on this computer.	Para converter planilhas do Excel é preciso ter o Microsoft Excel ou o LibreOffice instalado neste computador.
+Para convertir presentaciones se necesita Microsoft PowerPoint o LibreOffice instalados en este equipo.	Converting presentations requires Microsoft PowerPoint or LibreOffice installed on this computer.	Para converter apresentações é preciso ter o Microsoft PowerPoint ou o LibreOffice instalado neste computador.
 Para firmar:	To sign:	Para assinar:
 Para portales con límite de carga (aduanas, SAR, bancos, licitaciones). Primero se intenta sin pérdida; si hace falta, las páginas se convierten en imagen bajando la resolución hasta la mínima elegida (el texto deja de ser seleccionable; puede aplicar OCR después).	For portals with an upload limit (customs, tax authority, banks, tenders). It first tries without loss; if needed, pages are turned into images, lowering the resolution down to the chosen minimum (text is no longer selectable; you can run OCR afterwards).	Para portais com limite de envio (alfândega, receita, bancos, licitações). Primeiro tenta-se sem perda; se necessário, as páginas são convertidas em imagem, baixando a resolução até a mínima escolhida (o texto deixa de ser selecionável; você pode aplicar OCR depois).
 Para usar	To use	Para usar
@@ -965,6 +979,7 @@ y péguelo abajo.	and paste it below.	e cole abaixo.
 {0} resultado(s)	{0} result(s)	{0} resultado(s)
 {0} seleccionada(s)	{0} selected	{0} selecionada(s)
 «Logo» dibuja la marca de Rúbrica atenuada al fondo del recuadro. El texto se ajusta solo al tamaño del recuadro que dibuje en la página.	"Logo" draws the Rúbrica mark faded in the background of the box. The text fits automatically to the size of the box you draw on the page.	"Logotipo" desenha a marca do Rúbrica esmaecida ao fundo da caixa. O texto se ajusta sozinho ao tamanho da caixa que você desenhar na página.
+«{0}» es un documento de Office. La app de Rúbrica para Windows lo convierte a PDF; en el navegador, guárdelo como PDF desde Office y ábralo aquí.	"{0}" is an Office document. The Rúbrica app for Windows converts it to PDF; in the browser, save it as PDF from Office and open it here.	"{0}" é um documento do Office. O app Rúbrica para Windows o converte em PDF; no navegador, salve-o como PDF no Office e abra-o aqui.
 «{0}» no es un certificado válido.	"{0}" is not a valid certificate.	"{0}" não é um certificado válido.
 «{0}» no es una autoridad de certificación.	"{0}" is not a certification authority.	"{0}" não é uma autoridade certificadora.
 «{0}» requiere contraseña para abrirse.	"{0}" requires a password to open.	"{0}" exige senha para ser aberto.

@@ -15,6 +15,15 @@ async function natJson(path, opt) { return (await nat(path, opt)).json(); }
 async function natBytes(path, opt) { return new Uint8Array(await (await nat(path, opt)).arrayBuffer()); }
 const natPost = (path, obj) => natJson(path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(obj || {}) });
 
+/** Convierte un documento de Office a PDF con el Office (o LibreOffice) instalado en Windows. */
+async function officeToPdf(bytes, name) {
+  if (!NATIVE) throw new Error(`«${name}» es un documento de Office. La app de Rúbrica para Windows lo convierte a PDF; en el navegador, guárdelo como PDF desde Office y ábralo aquí.`);
+  return natBytes('office-to-pdf', { method: 'POST', headers: { 'Content-Type': 'application/octet-stream', 'X-File-Name': encodeURIComponent(name) }, body: bytes });
+}
+async function officeFromDisk() {
+  const fs = await pickFiles('local', true, OFFICE_EXT.map(e => '.' + e).join(','));
+  for (const f of fs) await openBytes(f.name, f.bytes, { mime: f.mime }).catch(e => toast(e.message, 'err', 9000));
+}
 async function nativeOpenFiles() {
   const r = await natPost('open-dialog', { multiple: true, filter: 'pdf' });
   for (const f of r.files || []) await openNativePath(f.path).catch(e => toast(e.message, 'err'));

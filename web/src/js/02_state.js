@@ -155,6 +155,7 @@ function blankPage(w = 595.28, h = 841.89) { return { id: uid(), src: null, idx:
 
 /** Agrega un archivo (PDF o imagen) a un documento; devuelve las páginas nuevas */
 async function addFileToDoc(doc, bytes, name, mime, imgSize = 'fit') {
+  if (isOfficeName(name)) { bytes = await officeToPdf(bytes, name); name = baseName(name) + '.pdf'; mime = 'application/pdf'; }
   if (isPdfName(name) || mime === 'application/pdf' || (bytes[0] === 0x25 && bytes[1] === 0x50)) {
     const src = await loadPdfSource(bytes, name);
     doc.sources[src.id] = src;
