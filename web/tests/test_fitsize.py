@@ -1,8 +1,8 @@
 """Ajustar al tamaño de un portal: comprimir hasta X MB y dividir en partes de máximo X MB."""
-import asyncio, os, sys, io
+import asyncio, os, sys, io, base64
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from playwright.async_api import async_playwright
-from common import launch, check, done, URL, OUT
+from common import launch, check, done, URL, OUT, open_fixture
 from pypdf import PdfReader
 
 HEAVY = """async (n) => {
@@ -38,11 +38,28 @@ async def main():
         check(len(pages) == 6 and r[0]['from'] == 1 and r[-1]['to'] == 6 and all(r[k]['to'] + 1 == r[k + 1]['from'] for k in range(len(r) - 1)), 'las partes cubren todas las páginas, en orden')
         r = await pg.evaluate("async (max) => { try { await fitToSize(D(), max, { minDpi: 150, mode: 'split' }); return 'ok'; } catch (e) { return e.message; } }", 200_000)
         check('pesa' in r and 'límite' in r, f'avisa si una sola página excede el límite: {r[:80]}')
+        # al comprimir (páginas como imagen) el texto sigue buscable: el original, en páginas giradas y el de OCR
+        await open_fixture(pg, 'texto.pdf'); await pg.wait_for_timeout(500)
+        b64 = await pg.evaluate("""async () => { const d = D(); d.pages[2].ov.push({ id: uid(), type: 'ocrword', t: 'MSCU7781234', x: 100, y: 400, w: 120, h: 14 });
+          return u8ToB64(await buildPdf(d, { raster: { dpi: 96, quality: 0.6 } })); }""")
+        rc = PdfReader(io.BytesIO(base64.b64decode(b64)))
+        txt = [' '.join((x.extract_text() or '').split()) for x in rc.pages]
+        imgs = all('/XObject' in x['/Resources'] and len(x['/Resources']['/XObject']) == 1 for x in rc.pages)
+        check(imgs and 'Factura comercial No. 1000' in txt[0] and 'Inversiones de Prueba' in txt[0], f'comprimido como imagen y con el texto buscable: {txt[0][:50]}')
+        check('Factura comercial No. 1001' in txt[1], f'texto buscable también en la página girada: {txt[1][:40]}')
+        check('MSCU7781234' in txt[2], 'conserva la capa de OCR al comprimir')
+        POS = """async (b64) => { const pj = await pdfjsLib.getDocument({ data: b64ToU8(b64) }).promise, p = await pj.getPage(1), vp = p.getViewport({ scale: 1 });
+          const it = (await p.getTextContent()).items.find(i => i.str.includes('Factura comercial')); const t = pdfjsLib.Util.transform(vp.transform, it.transform);
+          return [t[4], t[5], it.width]; }"""
+        q = await pg.evaluate(POS, b64)
+        q0 = await pg.evaluate(POS, base64.b64encode(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'fixtures', 'texto.pdf'), 'rb').read()).decode())
+        check(abs(q[0] - q0[0]) < 1 and abs(q[1] - q0[1]) < 1 and abs(q[2] / q0[2] - 1) < 0.02, f'el texto invisible queda sobre el texto de la imagen {q} ≈ {q0}')
+        await pg.evaluate("activateDoc(S.docs[0])"); await pg.wait_for_timeout(300)
         # interfaz: Convertir → Ajustar a tamaño, solo comprimir
         await pg.click('.rtab:has-text("Convertir")'); await pg.click('.rbtn:has-text("Ajustar a tamaño")'); await pg.wait_for_selector('.modal')
         await pg.fill('.modal input[type=text]', '1.5'); await pg.select_option('.modal select >> nth=0', '72'); await pg.select_option('.modal select >> nth=1', 'compress')
         await pg.screenshot(path=os.path.join(OUT, 'ajustar_tamano.png'))
-        await pg.click('.modal .btn.primary'); await pg.wait_for_function("S.docs.length === 2", timeout=120000)
+        await pg.click('.modal .btn.primary'); await pg.wait_for_function("S.docs.length === 3", timeout=120000)
         n = await pg.evaluate("Object.values(D().sources)[0].bytes.length")
         check(n <= 1.5 * MB and await pg.evaluate("D().pages.length") == 6, f'abre el resultado ajustado en una pestaña nueva ({n / 1e6:.2f} MB)')
         check(await pg.evaluate("S.settings.fitMb") == 1.5, 'recuerda el tamaño elegido')

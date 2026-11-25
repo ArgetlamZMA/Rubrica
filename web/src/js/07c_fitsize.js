@@ -35,7 +35,7 @@ async function fitSizeDialog() {
     { key: 'mb', label: 'Tamaño máximo por archivo (MB)', value: String(S.settings.fitMb || 4), placeholder: '4', row: 'cols' },
     { key: 'minDpi', label: 'Resolución mínima', type: 'select', value: String(S.settings.fitMinDpi || 96), row: 'cols', options: [['150', '150 ppp (texto muy nítido)'], ['110', '110 ppp'], ['96', '96 ppp (recomendado)'], ['72', '72 ppp (máxima compresión)']] },
     { key: 'mode', label: 'Método', type: 'select', value: S.settings.fitMode || 'both', options: [['both', 'Comprimir y, si no alcanza, dividir en partes'], ['compress', 'Solo comprimir'], ['split', 'Solo dividir en partes (sin perder calidad)']] },
-    { type: 'hint', label: 'Para portales con límite de carga (aduanas, SAR, bancos, licitaciones). Primero se intenta sin pérdida; si hace falta, las páginas se convierten en imagen bajando la resolución hasta la mínima elegida (el texto deja de ser seleccionable; puede aplicar OCR después).' }
+    { type: 'hint', label: 'Para portales con límite de carga (aduanas, SAR, bancos, licitaciones). Primero se intenta sin pérdida; si hace falta, las páginas se convierten en imagen bajando la resolución hasta la mínima elegida. El texto se conserva buscable.' }
   ], { ok: 'Ajustar', validate: v => (+String(v.mb).replace(',', '.') > 0.05 ? null : 'Escriba un tamaño en MB mayor que 0.') });
   if (!v) return;
   const mb = +String(v.mb).replace(',', '.'), max = Math.floor(mb * 1024 * 1024), minDpi = +v.minDpi;

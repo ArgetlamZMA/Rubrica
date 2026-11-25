@@ -781,7 +781,7 @@ async function compressDialog() {
   const orig = Object.values(d.sources).reduce((a, s) => a + (s.bytes?.length || 0), 0);
   const v = await formDialog('Comprimir PDF', [
     { key: 'mode', label: 'Nivel', type: 'select', value: 'medium', options: [['lossless', 'Sin pérdida — optimiza la estructura interna'], ['medium', 'Media — páginas como imagen 150 ppp'], ['strong', 'Fuerte — páginas como imagen 110 ppp'], ['max', 'Máxima — páginas como imagen 72 ppp']] },
-    { type: 'hint', label: 'Los niveles con pérdida convierten cada página en imagen: el tamaño baja mucho en documentos escaneados, pero el texto deja de ser seleccionable (puede aplicar OCR después). El resultado se abre en una pestaña nueva para que lo revise antes de guardar.' }
+    { type: 'hint', label: 'Los niveles con pérdida convierten cada página en imagen: el tamaño baja mucho en documentos escaneados. El texto se conserva como capa invisible, así que el PDF sigue siendo buscable y se puede copiar. El resultado se abre en una pestaña nueva para que lo revise antes de guardar.' }
   ], { ok: 'Comprimir' });
   if (!v) return;
   const cfg = { medium: { dpi: 150, quality: 0.72 }, strong: { dpi: 110, quality: 0.6 }, max: { dpi: 72, quality: 0.5 } }[v.mode];

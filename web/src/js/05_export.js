@@ -212,10 +212,14 @@ function addFields(pdf, fields) {
   }
 }
 /** Sustituye páginas por imágenes (redacción permanente / compresión fuerte) */
-async function rasterizePagesInLib(bytes, indices, dpi = 150, quality = 0.85, progress) {
+/**
+ * Convierte páginas en imagen (redacción permanente o compresión). keepText: índices cuyas palabras se vuelven a
+ * escribir como capa invisible sobre la imagen para que sigan buscables (nunca en páginas con redacción).
+ */
+async function rasterizePagesInLib(bytes, indices, dpi = 150, quality = 0.85, progress, keepText = null) {
   const pj = await pdfjsLib.getDocument({ data: bytes.slice(), isEvalSupported: false }).promise;
   const lib = await PL.PDFDocument.load(bytes, { updateMetadata: false });
-  let n = 0; const gone = [];
+  let n = 0, helv = null; const gone = [];
   for (const i of indices) {
     progress && progress(null, (n++ / indices.length) * 100);
     const pg = await pj.getPage(i + 1);
@@ -227,6 +231,10 @@ async function rasterizePagesInLib(bytes, indices, dpi = 150, quality = 0.85, pr
     cv.width = cv.height = 0;
     const np = lib.insertPage(i, [vp1.width, vp1.height]);
     np.drawImage(img, { x: 0, y: 0, width: vp1.width, height: vp1.height });
+    if (keepText && keepText.has(i)) {
+      helv = helv || await lib.embedFont(PL.StandardFonts.Helvetica);
+      await redrawTextLayer(pg, vp1, np, helv);
+    }
     gone.push(wipePageNode(lib, lib.getPage(i + 1)));
     lib.removePage(i + 1);
   }
@@ -234,6 +242,26 @@ async function rasterizePagesInLib(bytes, indices, dpi = 150, quality = 0.85, pr
   dropWidgets(lib, new Set(gone.flat()));
   pruneUnreachable(lib);
   return lib;
+}
+/** Escribe el texto de una página de PDF.js como capa invisible (mismo lugar y ancho) sobre la página nueva. */
+async function redrawTextLayer(pg, vp1, np, font) {
+  let tc; try { tc = await pg.getTextContent(); } catch { return 0; }
+  const H = vp1.height; let k = 0;
+  np.setFont(font); const key = np.fontKey;
+  np.pushOperators(PL.pushGraphicsState());
+  for (const it of tc.items) {
+    const str = safeText(font, it.str || '').replace(/\n/g, ' ');
+    if (!str.trim() || !(it.width > 0)) continue;
+    const [a, b, c, d, e, f] = pdfjsLib.Util.transform(vp1.transform, it.transform);
+    const sx = Math.hypot(a, b), sy = Math.hypot(c, d); if (!sx || !sy) continue;
+    // de la vista (y hacia abajo) al espacio PDF (y hacia arriba); tamaño de fuente 1 escalado por la matriz
+    const w1 = font.widthOfTextAtSize(str, 1) * sx || 1, tz = clamp(it.width / w1 * 100, 1, 1000);
+    np.pushOperators(PL.beginText(), PL.setFontAndSize(key, 1), PL.setTextRenderingMode(PL.TextRenderingMode.Invisible),
+      PL.PDFOperator.of('Tz', [PL.PDFNumber.of(tz)]), PL.setTextMatrix(a, -b, -c, d, e, H - f), PL.showText(font.encodeText(str)), PL.endText());
+    k++;
+  }
+  np.pushOperators(PL.popGraphicsState());
+  return k;
 }
 /** Vacía una página que se va a quitar (contenido, recursos, anotaciones) para que nada de ella sobreviva en el archivo. Devuelve las anotaciones que tenía. */
 function wipePageNode(lib, page) {
@@ -347,7 +375,9 @@ async function buildPdf(doc, opts = {}) {
   if (rasterIdx.length) {
     prog(opts.raster ? 'Comprimiendo páginas…' : 'Aplicando redacción permanente…', 80);
     const tmp = await pdf.save({ useObjectStreams: false, addDefaultPage: false });
-    pdf = await rasterizePagesInLib(tmp, rasterIdx, opts.raster?.dpi || 150, opts.raster?.quality || 0.85, (mm, pp) => prog(null, 80 + pp * 0.15));
+    // al comprimir, el texto (también el de OCR) sigue buscable; en páginas con redacción, nunca
+    const keep = opts.raster ? new Set(rasterIdx.filter(i => !redactIdx.includes(i))) : null;
+    pdf = await rasterizePagesInLib(tmp, rasterIdx, opts.raster?.dpi || 150, opts.raster?.quality || 0.85, (mm, pp) => prog(null, 80 + pp * 0.15), keep);
   }
   const sec = doc.security;
   if (typeof incremental !== 'undefined' && incremental) { prog('Guardando…', 97); return await pdf.save({ useObjectStreams: false, addDefaultPage: false, updateFieldAppearances: true }); }
