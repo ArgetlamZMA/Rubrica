@@ -2,7 +2,7 @@
 <!-- Configuración de artefacto de SignPath: ZIP de upload-artifact con los instaladores (x64 y ARM64) → firmarlos -->
 <artifact-configuration xmlns="http://signpath.io/artifact-configuration/v1">
   <zip-file>
-    <pe-file path="Rubrica-Setup-*.exe" max-matches="unbounded" product-name="Rúbrica">
+    <pe-file path="Rubrica-*.exe" max-matches="unbounded" product-name="Rúbrica">
       <authenticode-sign/>
     </pe-file>
   </zip-file>

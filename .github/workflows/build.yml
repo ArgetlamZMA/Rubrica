@@ -115,7 +115,9 @@ jobs:
         uses: actions/upload-artifact@v5
         with:
           name: rubrica-setup-sin-firma
-          path: dist-installer/Rubrica-Setup-*.exe
+          path: |
+            dist-installer/Rubrica-Setup-*.exe
+            dist-installer/Rubrica-Instalador-*.exe
 
       - name: Firmar instalador (SignPath, requiere aprobación manual)
         if: env.SIGNPATH == 'true'
@@ -135,7 +137,7 @@ jobs:
         if: env.SIGNPATH == 'true'
         shell: pwsh
         run: |
-          foreach ($f in Get-ChildItem firmado-setup -Filter 'Rubrica-Setup-*.exe') {
+          foreach ($f in Get-ChildItem firmado-setup -Filter 'Rubrica-*.exe') {
             Copy-Item $f.FullName "dist-installer/$($f.Name)" -Force
             $s = Get-AuthenticodeSignature "dist-installer/$($f.Name)"
             Write-Output "$($f.Name): $($s.Status) · $($s.SignerCertificate.Subject)"

@@ -45,7 +45,7 @@ internal static class Updater
             {
                 var n = a.GetProperty("name").GetString() ?? "";
                 var u = a.GetProperty("browser_download_url").GetString();
-                if (n.EndsWith(".exe", StringComparison.OrdinalIgnoreCase) && n.Contains("Setup", StringComparison.OrdinalIgnoreCase))
+                if (IsSetupAsset(n))
                 {
                     if (setupUrl == null || IsBetterSetup(n, setupName!, IsArm64)) { setupName = n; setupUrl = u; }
                 }
@@ -58,6 +58,10 @@ internal static class Updater
     }
 
     private static bool IsArm64 => System.Runtime.InteropServices.RuntimeInformation.OSArchitecture == System.Runtime.InteropServices.Architecture.Arm64;
+
+    /// <summary>Instalador de Windows publicado en la release (x64: «Rubrica-Setup-…», ARM64: «Rubrica-Instalador-…-arm64»).</summary>
+    internal static bool IsSetupAsset(string n) =>
+        n.EndsWith(".exe", StringComparison.OrdinalIgnoreCase) && (n.Contains("Setup", StringComparison.OrdinalIgnoreCase) || n.Contains("Instalador", StringComparison.OrdinalIgnoreCase));
 
     /// <summary>Entre dos instaladores, prefiere el de la arquitectura del equipo (…-arm64.exe en Windows ARM).</summary>
     internal static bool IsBetterSetup(string candidate, string current, bool arm64)

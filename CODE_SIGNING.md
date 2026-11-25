@@ -6,7 +6,7 @@ Una vez aprobada: *Free code signing provided by [SignPath.io](https://signpath.
 
 ## Qué se firma
 
-- `Rubrica.exe` y el instalador `Rubrica-Setup-x.y.z.exe` de Windows.
+- `Rubrica.exe` y los instaladores de Windows (`Rubrica-Setup-x.y.z.exe` y `Rubrica-Instalador-x.y.z-arm64.exe`).
 - Solo binarios compilados por GitHub Actions (ejecutores alojados por GitHub) a partir del código público de este repositorio, en versiones etiquetadas `vX.Y.Z`. El flujo está en [`.github/workflows/build.yml`](.github/workflows/build.yml).
 - No se firman binarios de terceros. Las bibliotecas de terceros incluidas se listan en [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
 - El APK de Android se firma con la clave propia del proyecto, no con SignPath.

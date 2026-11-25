@@ -183,12 +183,24 @@ public class VerifyChainTests
 public class UpdaterArchTests
 {
     [Theory]
-    [InlineData("Rubrica-Setup-1.3.0-arm64.exe", "Rubrica-Setup-1.3.0.exe", true, true)]
-    [InlineData("Rubrica-Setup-1.3.0-arm64.exe", "Rubrica-Setup-1.3.0.exe", false, false)]
-    [InlineData("Rubrica-Setup-1.3.0.exe", "Rubrica-Setup-1.3.0-arm64.exe", false, true)]
-    [InlineData("Rubrica-Setup-1.3.0.exe", "Rubrica-Setup-1.3.0-arm64.exe", true, false)]
+    [InlineData("Rubrica-Instalador-1.4.0-arm64.exe", "Rubrica-Setup-1.3.0.exe", true, true)]
+    [InlineData("Rubrica-Instalador-1.4.0-arm64.exe", "Rubrica-Setup-1.3.0.exe", false, false)]
+    [InlineData("Rubrica-Setup-1.3.0.exe", "Rubrica-Instalador-1.4.0-arm64.exe", false, true)]
+    [InlineData("Rubrica-Setup-1.3.0.exe", "Rubrica-Instalador-1.4.0-arm64.exe", true, false)]
     public void EligeElInstaladorDeLaArquitectura(string candidate, string current, bool arm64, bool better) =>
         Assert.Equal(better, Updater.IsBetterSetup(candidate, current, arm64));
+
+    [Theory]
+    [InlineData("Rubrica-Setup-1.4.0.exe", true)]
+    [InlineData("Rubrica-Instalador-1.4.0-arm64.exe", true)]
+    [InlineData("SHA256SUMS.txt", false)]
+    [InlineData("Rubrica-1.4.0.apk", false)]
+    public void ReconoceLosInstaladores(string nombre, bool esperado) => Assert.Equal(esperado, Updater.IsSetupAsset(nombre));
+
+    /// <summary>Los actualizadores de 1.1 y 1.2 toman el primer «*Setup*.exe»: el de ARM64 no debe parecerlo.</summary>
+    [Fact]
+    public void ElInstaladorArm64NoConfundeALasVersionesAnteriores() =>
+        Assert.DoesNotContain("Setup", "Rubrica-Instalador-1.4.0-arm64.exe", StringComparison.OrdinalIgnoreCase);
 }
 
 public class OfficeConverterTests

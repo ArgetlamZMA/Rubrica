@@ -11,7 +11,7 @@ Creado por **ZMA Inversiones** (San Pedro Sula, Honduras) como alternativa abier
 Vaya a **[Releases](../../releases)** y descargue:
 
 - Windows (Intel/AMD): `Rubrica-Setup-x.y.z.exe`
-- Windows en ARM (por ejemplo, portátiles con Snapdragon): `Rubrica-Setup-x.y.z-arm64.exe`
+- Windows en ARM (por ejemplo, portátiles con Snapdragon): `Rubrica-Instalador-x.y.z-arm64.exe`
 - Android: `Rubrica-Android-x.y.z.apk` (ver [docs/android.md](docs/android.md))
 
 El instalador no requiere permisos de administrador, instala WebView2 si falta y está en español, inglés y portugués. La aplicación avisa cuando hay una versión nueva y se actualiza sola, solo si la firma de la actualización es válida. El OCR funciona sin internet.

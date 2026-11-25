@@ -33,7 +33,8 @@ PrivilegesRequiredOverridesAllowed=dialog
 ; Windows en ARM (por ejemplo, portátiles con Snapdragon): ejecutable nativo ARM64
 ArchitecturesAllowed=arm64
 ArchitecturesInstallIn64BitMode=arm64
-OutputBaseFilename=Rubrica-Setup-{#MyAppVersion}-arm64
+; sin «Setup» en el nombre: los actualizadores de 1.1/1.2 toman el primer «*Setup*.exe» y no deben elegir este
+OutputBaseFilename=Rubrica-Instalador-{#MyAppVersion}-arm64
 #else
 ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible

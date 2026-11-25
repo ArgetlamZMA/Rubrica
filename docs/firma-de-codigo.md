@@ -33,7 +33,7 @@ El flujo de GitHub Actions ya está preparado: en cuanto existan el secreto y la
    - **Página de descarga:** <https://github.com/ArgetlamZMA/Rubrica/releases>
    - **Code signing policy:** <https://github.com/ArgetlamZMA/Rubrica/blob/main/CODE_SIGNING.md>
    - **Privacidad:** <https://github.com/ArgetlamZMA/Rubrica/blob/main/PRIVACY.md>
-   - **Qué se firma:** `Rubrica.exe` y `Rubrica-Setup-x.y.z.exe`, compilados por GitHub Actions.
+   - **Qué se firma:** `Rubrica.exe` y los instaladores `Rubrica-Setup-x.y.z.exe` / `Rubrica-Instalador-x.y.z-arm64.exe`, compilados por GitHub Actions.
 3. Espere la respuesta por correo. Pueden pedir cambios; tráigalos aquí y los hacemos.
 
 ## 3. Configurar SignPath (después de la aprobación)
