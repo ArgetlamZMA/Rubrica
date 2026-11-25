@@ -335,3 +335,20 @@ table.kv td { padding: 3px 0; word-break: break-word; }
 .fm.dossier h5{margin:14px 0 6px}
 .fm.dossier h5:first-child{margin-top:0}
 @media (max-width:600px){.df-row{grid-template-columns:1fr auto}.df-row input:nth-child(2){grid-column:1}}
+
+/* Procesar por lotes */
+.batch-steps{display:flex;flex-direction:column;gap:8px;margin-bottom:8px;max-height:300px;overflow:auto}
+.bstep{border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:var(--panel)}
+.bs-head{display:flex;align-items:center;gap:8px}
+.bs-head svg{width:16px;height:16px;color:var(--accent)}
+.bs-n{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--accent2);color:var(--accent);font-size:11px;font-weight:600}
+.bs-fields{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:6px 12px;margin-top:8px}
+.bs-fields .row{margin:0}
+.bs-fields .chk{align-self:end}
+.fm.batch h5{margin:12px 0 6px}.fm.batch h5:first-child{margin-top:0}
+.batch-report td{vertical-align:top}.err-txt{color:var(--danger)}
+.popmenu{position:fixed;z-index:3000;min-width:220px;background:var(--panel);border:1px solid var(--line);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.18);padding:4px}
+.popmenu button{display:flex;align-items:center;gap:8px;width:100%;padding:8px 10px;border:0;background:none;color:inherit;text-align:left;border-radius:6px;cursor:pointer;font:inherit}
+.popmenu button:hover,.popmenu button:focus{background:var(--panel2);outline:0}
+.popmenu svg{width:16px;height:16px}
+.pm-sep{height:1px;background:var(--line);margin:4px 0}

@@ -239,8 +239,13 @@ async function watermarkDialog() {
   ], { ok: 'Aplicar', extraButtons: [{ label: 'Quitar marca de agua', onClick: () => { d.checkpoint(); const n = removeGroup(d, 'wm'); afterStructureChange(); toast(n ? 'Marca de agua eliminada.' : 'No hay marca de agua.'); return null; } }] });
   if (!v || !v.text) return;
   let idx; try { idx = targetByRange(d, v.range); } catch (e) { toast(e.message, 'err'); return; }
+  d.checkpoint(); await applyWatermark(d, v, idx);
+  afterStructureChange(); toast('Marca de agua aplicada a ' + idx.length + ' página(s).', 'ok');
+}
+/** Marca de agua sobre las páginas idx de un documento (sin interfaz; también para procesar por lotes). */
+async function applyWatermark(d, v, idx) {
   const wf = defaultFont(); await ensureFont(wf, v.bold, false);
-  d.checkpoint(); removeGroup(d, 'wm');
+  removeGroup(d, 'wm');
   for (const i of idx) {
     const p = d.pages[i], [W, H] = dims(p);
     const tw = metricWidth(v.text, wf, v.bold, false, v.size), th = v.size * 1.2;
@@ -250,7 +255,6 @@ async function watermarkDialog() {
       : v.layout === 'top' ? [[W / 2, 20 + bh / 2]] : v.layout === 'bottom' ? [[W / 2, H - 20 - bh / 2]] : [[W / 2, H / 2]];
     for (const [cx, cy] of centers) p.ov.unshift({ id: uid(), type: 'text', group: 'wm', text: v.text, size: v.size, color: v.color, font: wf, bold: v.bold, italic: false, align: 'center', bg: '', border: '', pad: 0, opacity: (v.opacity || 25) / 100, rotate: rot, x: cx - bw / 2, y: cy - bh / 2, w: bw, h: bh });
   }
-  afterStructureChange(); toast('Marca de agua aplicada a ' + idx.length + ' página(s).', 'ok');
 }
 async function backgroundDialog() {
   const d = D();
@@ -303,14 +307,17 @@ async function pageNumbersDialog() {
   ], { extraButtons: [{ label: 'Quitar numeración', onClick: () => { d.checkpoint(); removeGroup(d, 'pn'); afterStructureChange(); return null; } }] });
   if (!v) return;
   let idx; try { idx = targetByRange(d, v.range); } catch (e) { toast(e.message, 'err'); return; }
-  const pf = defaultFont(); await ensureFont(pf, false, false);
-  d.checkpoint(); removeGroup(d, 'pn');
-  const start = v.start ?? 1, N = idx.length + start - 1;
-  idx.forEach((i, k) => {
-    const p = d.pages[i], text = tokens(v.fmt, start + k, N, d);
-    p.ov.push({ id: uid(), type: 'text', group: 'pn', text, size: v.size, color: v.color, font: pf, bold: false, italic: false, bg: '', border: '', pad: 0, ...placeText(p, text, v.pos, { size: v.size, margin: (v.margin ?? 10) * PT_PER_MM }) });
-  });
+  d.checkpoint(); await applyPageNumbers(d, v, idx);
   afterStructureChange();
+}
+async function applyPageNumbers(d, v, idx) {
+  const pf = defaultFont(); await ensureFont(pf, false, false);
+  removeGroup(d, 'pn');
+  const start = v.start ?? 1, N = idx.length + start - 1, size = v.size || 10;
+  idx.forEach((i, k) => {
+    const p = d.pages[i], text = tokens(tr(v.fmt || 'Página {n} de {N}'), start + k, N, d);
+    p.ov.push({ id: uid(), type: 'text', group: 'pn', text, size, color: v.color || '#333333', font: pf, bold: false, italic: false, bg: '', border: '', pad: 0, ...placeText(p, text, v.pos || 'bc', { size, margin: (v.margin ?? 10) * PT_PER_MM }) });
+  });
 }
 async function batesDialog() {
   const d = D();
@@ -322,13 +329,20 @@ async function batesDialog() {
   ], { extraButtons: [{ label: 'Quitar Bates', onClick: () => { d.checkpoint(); removeGroup(d, 'bates'); afterStructureChange(); return null; } }] });
   if (!v) return;
   let idx; try { idx = targetByRange(d, v.range); } catch (e) { toast(e.message, 'err'); return; }
-  d.checkpoint(); removeGroup(d, 'bates');
-  idx.forEach((i, k) => {
-    const p = d.pages[i], text = (v.prefix || '') + String((v.start ?? 1) + k).padStart(v.digits || 6, '0') + (v.suffix || '');
-    p.ov.push({ id: uid(), type: 'text', group: 'bates', text, size: v.size, color: v.color, font: 'Helvetica', bold: true, italic: false, bg: '', border: '', pad: 0, ...placeText(p, text, v.pos, { size: v.size, margin: 8 * PT_PER_MM, bold: true }) });
-  });
+  d.checkpoint(); applyBates(d, v, idx);
   afterStructureChange();
   toast(`Bates aplicado: ${(v.prefix || '')}${String(v.start ?? 1).padStart(v.digits || 6, '0')} – ${(v.prefix || '')}${String((v.start ?? 1) + idx.length - 1).padStart(v.digits || 6, '0')}`, 'ok', 5000);
+}
+
+/** Numeración Bates (sin interfaz). Devuelve el número siguiente, para continuar en otro archivo. */
+function applyBates(d, v, idx) {
+  removeGroup(d, 'bates');
+  const start = v.start ?? 1, size = v.size || 9;
+  idx.forEach((i, k) => {
+    const p = d.pages[i], text = (v.prefix || '') + String(start + k).padStart(v.digits || 6, '0') + (v.suffix || '');
+    p.ov.push({ id: uid(), type: 'text', group: 'bates', text, size, color: v.color || '#000000', font: 'Helvetica', bold: true, italic: false, bg: '', border: '', pad: 0, ...placeText(p, text, v.pos || 'br', { size, margin: 8 * PT_PER_MM, bold: true }) });
+  });
+  return start + idx.length;
 }
 
 /* ---------- Imágenes y firmas ---------- */
@@ -745,26 +759,14 @@ async function ocrDialog() {
   if (PSN) { try { allText = await ocrNative(d, idx); } catch (e) { toast('OCR: ' + (e.message || e), 'err'); return; } }
   else try {
     await withBusy('Cargando motor OCR…', async upd => {
-      await loadTesseract();
-      const worker = await Tesseract.createWorker(v.lang, 1, { ...OCR_OPTS, logger: m => { if (m.status && m.progress != null && /recogniz/i.test(m.status)) upd(null, m.progress * 100); else if (m.status) upd(({ 'loading tesseract core': 'Cargando motor…', 'loading language traineddata': 'Cargando idioma…', 'initializing api': 'Inicializando…' })[m.status] || null); } });
-      const snap = d.snap(); let words = 0;
-      for (let k = 0; k < idx.length; k++) {
-        const p = d.pages[idx[k]];
-        upd(`Reconociendo página ${idx[k] + 1} (${k + 1} de ${idx.length})…`, 0);
-        const scale = +v.quality, cv = el('canvas'); await drawPage(d, p, scale, cv, 1);
-        const res = await worker.recognize(cv, {}, { text: true, tsv: true });
-        cv.width = 0;
-        p.ov = p.ov.filter(o => o.type !== 'ocrword');
-        for (const row of String(res.data.tsv || '').split('\n')) {
-          const c = row.split('\t'); if (c[0] !== '5' || c.length < 12) continue;
-          const t = c.slice(11).join(' ').trim(); if (!t || +c[10] < 15) continue;
-          p.ov.unshift({ id: uid(), type: 'ocrword', t, x: +c[6] / scale, y: +c[7] / scale, w: +c[8] / scale, h: +c[9] / scale }); words++;
-        }
-        allText += (allText ? '\n\n' : '') + `--- Página ${idx[k] + 1} ---\n` + (res.data.text || '').trim();
-      }
-      await worker.terminate();
+      const worker = await ocrWorker(v.lang, upd);
+      const snap = d.snap();
+      try {
+        const r = await ocrPages(d, idx, { worker, scale: +v.quality, progress: upd });
+        allText = r.text;
+        if (!r.words) throw new Error('No se reconoció texto en las páginas indicadas.');
+      } finally { await worker.terminate(); }
       d.undo.push(snap); d.redo = []; d.setDirty(true);
-      if (!words) throw new Error('No se reconoció texto en las páginas indicadas.');
     });
   } catch (e) { toast(e.message, 'err', 6000); return; }
   SR.hits = []; afterStructureChange();
@@ -773,6 +775,37 @@ async function ocrDialog() {
     title: 'Texto reconocido', wide: true, body: el('div', {}, el('div', { class: 'hint', style: { marginBottom: '8px' }, html: 'La capa de texto se agregó al documento: ya puede buscar y, al <b>guardar</b>, el PDF quedará buscable y seleccionable.' }), ta),
     buttons: [{ label: 'Copiar texto', onClick: () => { navigator.clipboard.writeText(ta.value); toast('Copiado.', 'ok'); return false; } }, { label: 'Descargar .txt', onClick: () => { download(new Blob(['﻿' + ta.value], { type: 'text/plain' }), baseName(d.name) + '_ocr.txt'); return false; } }, { label: 'Cerrar', primary: true }]
   });
+}
+
+async function ocrWorker(lang, upd = () => { }) {
+  await loadTesseract();
+  return Tesseract.createWorker(lang, 1, { ...OCR_OPTS, logger: m => { if (m.status && m.progress != null && /recogniz/i.test(m.status)) upd(null, m.progress * 100); else if (m.status) upd(({ 'loading tesseract core': 'Cargando motor…', 'loading language traineddata': 'Cargando idioma…', 'initializing api': 'Inicializando…' })[m.status] || null); } });
+}
+/** Reconoce el texto de las páginas idx y lo agrega como capa invisible. Devuelve { words, text }. */
+async function ocrPages(d, idx, { worker, scale = 2.8, progress = () => { }, skipWithText = false } = {}) {
+  let words = 0, text = '';
+  for (let k = 0; k < idx.length; k++) {
+    const p = d.pages[idx[k]];
+    if (skipWithText && await pageHasText(d, p)) continue;
+    progress(`Reconociendo página ${idx[k] + 1} (${k + 1} de ${idx.length})…`, 0);
+    const cv = el('canvas'); await drawPage(d, p, scale, cv, 1);
+    const res = await worker.recognize(cv, {}, { text: true, tsv: true });
+    cv.width = 0;
+    p.ov = p.ov.filter(o => o.type !== 'ocrword');
+    for (const row of String(res.data.tsv || '').split('\n')) {
+      const c = row.split('\t'); if (c[0] !== '5' || c.length < 12) continue;
+      const t = c.slice(11).join(' ').trim(); if (!t || +c[10] < 15) continue;
+      p.ov.unshift({ id: uid(), type: 'ocrword', t, x: +c[6] / scale, y: +c[7] / scale, w: +c[8] / scale, h: +c[9] / scale }); words++;
+    }
+    text += (text ? '\n\n' : '') + `--- Página ${idx[k] + 1} ---\n` + (res.data.text || '').trim();
+  }
+  return { words, text };
+}
+/** ¿La página ya tiene texto (no hace falta OCR)? */
+async function pageHasText(d, p) {
+  if (p.ov.some(o => o.type === 'ocrword')) return true;
+  const src = d.sources[p.src]; if (!src || src.kind !== 'pdf') return false;
+  try { const tc = await (await src.pdf.getPage(p.idx + 1)).getTextContent(); return tc.items.reduce((a, i) => a + (i.str || '').trim().length, 0) > 20; } catch { return false; }
 }
 
 /* ---------- Compresión ---------- */

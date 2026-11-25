@@ -13,13 +13,19 @@ es	en	pt
 (usa {0}).	(uses {0}).	(usa {0}).
 ) para limitarlo a su organización.	) to limit it to your organization.	) para limitá-lo à sua organização.
 ) y péguelo abajo. Al iniciar sesión Google mostrará «app no verificada»: elija	) and paste it below. When signing in, Google will show "unverified app": choose	) e cole abaixo. Ao entrar, o Google mostrará "app não verificado": escolha
++ Agregar paso…	+ Add step…	+ Adicionar etapa…
 , cada firma lleva una marca de tiempo confiable emitida por esa autoridad (p. ej. la TSA del SAR): la fecha de la firma ya no depende del reloj de este equipo y la firma sigue siendo verificable después de que el certificado venza.{0}	, every signature carries a trusted timestamp issued by that authority (e.g. the SAR TSA): the signing date no longer depends on this computer's clock and the signature remains verifiable after the certificate expires.{0}	, cada assinatura leva um carimbo do tempo confiável emitido por essa autoridade (ex.: a TSA do SAR): a data da assinatura não depende mais do relógio deste computador e a assinatura continua verificável depois que o certificado vence.{0}
 , el PDF quedará buscable y seleccionable.	, the PDF will be searchable and selectable.	, o PDF ficará pesquisável e selecionável.
 , las páginas afectadas se convierten en imagen para eliminar de forma permanente el texto e imágenes que quedan debajo.	, the affected pages are converted to images to permanently remove the text and images underneath.	, as páginas afetadas são convertidas em imagem para remover permanentemente o texto e as imagens que ficam por baixo.
 , nombre de la app y su correo. En	, app name and your email. In	, nome do app e seu e-mail. Em
 110 ppp	110 dpi	110 ppp
+150 ppp	150 dpi	150 ppp
 150 ppp (texto muy nítido)	150 dpi (very sharp text)	150 ppp (texto muito nítido)
+72 ppp	72 dpi	72 ppp
 72 ppp (máxima compresión)	72 dpi (maximum compression)	72 ppp (compressão máxima)
+90° a la derecha	90° clockwise	90° à direita
+90° a la izquierda	90° counterclockwise	90° à esquerda
+96 ppp	96 dpi	96 ppp
 96 ppp (recomendado)	96 dpi (recommended)	96 ppp (recomendado)
 : sin sesión	: not signed in	: sem sessão
 A Excel	To Excel	Para Excel
@@ -32,6 +38,9 @@ ANULADO	VOID	ANULADO
 APIs y servicios	APIs & Services	APIs e serviços
 APROBADO	APPROVED	APROVADO
 Abajo	Bottom	Abaixo
+Abajo a la derecha	Bottom right	Inferior direito
+Abajo a la izquierda	Bottom left	Inferior esquerdo
+Abajo al centro	Bottom center	Inferior central
 Abierto como archivo local.	Opened as a local file.	Aberto como arquivo local.
 Abriendo	Opening	Abrindo
 Abriendo…	Opening…	Abrindo…
@@ -42,6 +51,7 @@ Abrir configuración	Open settings	Abrir configurações
 Abrir de Google Drive	Open from Google Drive	Abrir do Google Drive
 Abrir de OneDrive	Open from OneDrive	Abrir do OneDrive
 Abrir desde la nube	Open from the cloud	Abrir da nuvem
+Abrir los resultados en pestañas (hasta 10)	Open the results in tabs (up to 10)	Abrir os resultados em abas (até 10)
 Aceptar	OK	OK
 Acepto los términos definidos	I accept the defined terms	Aceito os termos definidos
 Acercar / alejar	Zoom in / out	Aumentar / diminuir zoom
@@ -58,17 +68,22 @@ Agregar comentarios	Add comments	Adicionar comentários
 Agregar dato	Add field	Adicionar dado
 Agregar fuente desde archivo…	Add font from file…	Adicionar fonte de arquivo…
 Agregar fuente…	Add font…	Adicionar fonte…
+Agregar paso	Add step	Adicionar etapa
 Agregar texto	Add text	Adicionar texto
 Agregue al menos un documento.	Add at least one document.	Adicione pelo menos um documento.
+Agregue al menos un paso.	Add at least one step.	Adicione pelo menos uma etapa.
 Agregue archivos.	Add files.	Adicione arquivos.
 Agregue dos o más archivos PDF o imágenes	Add two or more PDF files or images	Adicione dois ou mais arquivos PDF ou imagens
 Agregue imágenes (JPG, PNG…)	Add images (JPG, PNG…)	Adicione imagens (JPG, PNG…)
+Agregue los archivos a procesar (PDF, imágenes u Office en Windows)	Add the files to process (PDF, images, or Office on Windows)	Adicione os arquivos a processar (PDF, imagens ou Office no Windows)
 Agregue los documentos del expediente (PDF o imágenes)	Add the dossier documents (PDF or images)	Adicione os documentos do dossiê (PDF ou imagens)
+Agregue pasos con el menú de abajo	Add steps with the menu below	Adicione etapas com o menu abaixo
 Ajustando tamaño…	Fitting size…	Ajustando tamanho…
 Ajustar	Fit	Ajustar
 Ajustar a cada imagen	Fit each image	Ajustar a cada imagem
 Ajustar a la página	Fit page	Ajustar à página
 Ajustar a tamaño	Fit to size	Ajustar ao tamanho
+Ajustar a tamaño máximo	Fit to maximum size	Ajustar ao tamanho máximo
 Ajustar a un tamaño máximo (MB)	Fit to a maximum size (MB)	Ajustar a um tamanho máximo (MB)
 Ajustar al ancho	Fit width	Ajustar à largura
 Ajustar al tamaño de un portal	Fit to an upload portal's size limit	Ajustar ao limite de um portal
@@ -85,6 +100,8 @@ Almacén de certificados de Windows	Windows certificate store	Repositório de ce
 Alta (300 ppp)	High (300 dpi)	Alta (300 ppp)
 Antes de la página actual	Before the current page	Antes da página atual
 Apertura cancelada	Opening canceled	Abertura cancelada
+Aplanando…	Flattening…	Achatando…
+Aplanar formularios y comentarios	Flatten forms and comments	Achatar formulários e comentários
 Aplica un tono de fondo mediante fusión «multiplicar»: el texto y los gráficos siguen visibles.	Applies a background tint using "multiply" blending: text and graphics remain visible.	Aplica um tom de fundo com mesclagem "multiplicar": o texto e os gráficos continuam visíveis.
 Aplicaciones	Applications	Aplicativos
 Aplicación de página única (SPA)	Single-page application (SPA)	Aplicativo de página única (SPA)
@@ -92,6 +109,7 @@ Aplicación web	Web application	Aplicativo web
 Aplicando cambios…	Applying changes…	Aplicando alterações…
 Aplicando firma digital…	Applying digital signature…	Aplicando assinatura digital…
 Aplicando redacción permanente…	Applying permanent redaction…	Aplicando tarja permanente…
+Aplicando «{0}»…	Applying "{0}"…	Aplicando «{0}»…
 Aplicar	Apply	Aplicar
 Aplicar a	Apply to	Aplicar a
 Aplicar protección	Apply protection	Aplicar proteção
@@ -100,6 +118,7 @@ Archivo	File	Arquivo
 Archivo (teléfono, Drive, OneDrive…)	File (phone, Drive, OneDrive…)	Arquivo (telefone, Drive, OneDrive…)
 Archivo de identificación digital	Digital ID file	Arquivo de identidade digital
 Archivo:	File:	Arquivo:
+Archivos	Files	Arquivos
 Archivos .p12 / .pfx	.p12 / .pfx files	Arquivos .p12 / .pfx
 Armando expediente…	Building dossier…	Montando dossiê…
 Armando parte {0} de {1}…	Building part {0} of {1}…	Montando parte {0} de {1}…
@@ -109,10 +128,16 @@ Arrastre aquí archivos PDF, imágenes o documentos de Office para abrirlos	Drag
 Arrastre en la página para definir dónde se verá la firma digital. Esc para cancelar.	Drag on the page to set where the digital signature will appear. Esc to cancel.	Arraste na página para definir onde a assinatura digital aparecerá. Esc para cancelar.
 Arrastre para dibujar un recuadro (mínimo 40 × 18 pt).	Drag to draw a box (minimum 40 × 18 pt).	Arraste para desenhar uma caixa (mínimo 40 × 18 pt).
 Arriba	Top	Acima
+Arriba a la derecha	Top right	Superior direito
+Arriba a la izquierda	Top left	Superior esquerdo
+Arriba al centro	Top center	Superior central
 Aspecto	Appearance	Aparência
 Aspecto de la firma	Signature appearance	Aparência da assinatura
 Asunto	Subject	Assunto
 Atajos de teclado	Keyboard shortcuts	Atalhos de teclado
+Automatizaciones	Automations	Automações
+Automatización guardada	Saved automation	Automação salva
+Automatización guardada.	Automation saved.	Automação salva.
 Automático (idioma del sistema)	Automatic (system language)	Automático (idioma do sistema)
 Autor	Author	Autor
 Autoridad intermedia	Intermediate authority	Autoridade intermediária
@@ -205,6 +230,7 @@ Comprimiendo…	Compressing…	Comprimindo…
 Comprimir	Compress	Comprimir
 Comprimir PDF	Compress PDF	Comprimir PDF
 Comprimir y, si no alcanza, dividir en partes	Compress and, if that is not enough, split into parts	Comprimir e, se não bastar, dividir em partes
+Con fecha	With date	Com data
 Con un servidor	With a server	Com um servidor
 Con {0} ppp el documento pesa {1}, más que {2}. Baje la resolución mínima o use «dividir en partes».	At {0} dpi the document is {1}, more than {2}. Lower the minimum resolution or use "split into parts".	Com {0} ppp o documento tem {1}, mais que {2}. Baixe a resolução mínima ou use «dividir em partes».
 Conceder consentimiento de administrador	Grant admin consent	Conceder consentimento do administrador
@@ -229,7 +255,9 @@ Contenido	Content	Conteúdo
 Contenido: {0} documentos · {1} páginas	Contents: {0} documents · {1} pages	Conteúdo: {0} documentos · {1} páginas
 Contenido: {0} documentos · {1} páginas · Bates {2} a {3}	Contents: {0} documents · {1} pages · Bates {2} to {3}	Conteúdo: {0} documentos · {1} páginas · Bates {2} a {3}
 Continuar	Continue	Continuar
+Continuar la numeración de un archivo al siguiente	Continue numbering from one file to the next	Continuar a numeração de um arquivo para o seguinte
 Contraseña	Password	Senha
+Contraseña de permisos	Permissions password	Senha de permissões
 Contraseña de permisos (restringe impresión, copia y edición)	Permissions password (restricts printing, copying and editing)	Senha de permissões (restringe impressão, cópia e edição)
 Contraseña del certificado	Certificate password	Senha do certificado
 Contraseña incorrecta o archivo no válido.	Wrong password or invalid file.	Senha incorreta ou arquivo inválido.
@@ -327,6 +355,7 @@ Editar texto e imágenes	Edit text and images	Editar texto e imagens
 Editor PDF local: lectura, comentarios, edición, páginas, formularios, firmas, protección, conversión y OCR — con OneDrive y Google Drive.	Local PDF editor: reading, comments, editing, pages, forms, signatures, protection, conversion and OCR — with OneDrive and Google Drive.	Editor de PDF local: leitura, comentários, edição, páginas, formulários, assinaturas, proteção, conversão e OCR — com OneDrive e Google Drive.
 Ej.: 1-3, 5	E.g.: 1-3, 5	Ex.: 1-3, 5
 Ej.: 2- para omitir la portada	E.g.: 2- to skip the cover	Ex.: 2- para pular a capa
+Ej.: Expediente para el portal aduanero	E.g.: Dossier for the customs portal	Ex.: Dossiê para o portal aduaneiro
 Ejemplos:	Examples:	Exemplos:
 El QR admite cualquier texto o enlace. El código de barras admite letras sin tilde, números y símbolos básicos (por ejemplo MSCU7781234 o HN-2026-000123).	QR accepts any text or link. The barcode accepts unaccented letters, numbers and basic symbols (for example MSCU7781234 or HN-2026-000123).	O QR aceita qualquer texto ou link. O código de barras aceita letras sem acento, números e símbolos básicos (por exemplo MSCU7781234 ou HN-2026-000123).
 El almacén de Android no devolvió la firma.	The Android store did not return the signature.	O repositório do Android não retornou a assinatura.
@@ -361,8 +390,10 @@ Elegir certificado de Android…	Choose Android certificate…	Escolher certific
 Elegir imagen de firma (PNG con fondo transparente recomendado)	Choose signature image (PNG with transparent background recommended)	Escolher imagem da assinatura (PNG com fundo transparente recomendado)
 Elija la imagen del gráfico.	Choose the graphic image.	Escolha a imagem do gráfico.
 Elija o añada un certificado.	Choose or add a certificate.	Escolha ou adicione um certificado.
+Elija una automatización guardada.	Choose a saved automation.	Escolha uma automação salva.
 Elija una carpeta.	Choose a folder.	Escolha uma pasta.
 Eliminar	Delete	Excluir
+Eliminar automatización	Delete automation	Excluir automação
 Eliminar estilo	Delete style	Excluir estilo
 Eliminar la selección (o las páginas en Organizar)	Delete the selection (or pages in Organize)	Excluir a seleção (ou as páginas em Organizar)
 Eliminar las páginas extraídas del documento original	Delete the extracted pages from the original document	Excluir as páginas extraídas do documento original
@@ -471,6 +502,7 @@ Fuente predeterminada	Default font	Fonte padrão
 Fuente sin origen	Font without source	Fonte sem origem
 Fuentes	Fonts	Fontes
 Fuentes del equipo	System fonts	Fontes do computador
+Fuerte (110 ppp)	Strong (110 dpi)	Forte (110 ppp)
 Fuerte — páginas como imagen 110 ppp	Strong — pages as 110 dpi images	Forte — páginas como imagem 110 ppp
 Funciona mejor con PDFs generados digitalmente. Para documentos escaneados use primero	Works best with digitally generated PDFs. For scanned documents, first use	Funciona melhor com PDFs gerados digitalmente. Para documentos digitalizados, use primeiro
 General	General	Geral
@@ -481,6 +513,8 @@ Girar a la izquierda	Rotate left	Girar para a esquerda
 Girar derecha	Rotate right	Girar à direita
 Girar izquierda	Rotate left	Girar à esquerda
 Girar la página a la derecha / izquierda	Rotate the page right / left	Girar a página para a direita / esquerda
+Girar páginas	Rotate pages	Girar páginas
+Giro	Rotation	Rotação
 Google · ID de cliente	Google · Client ID	Google · ID do cliente
 Grosor	Thickness	Espessura
 Gráfico importado	Imported graphic	Gráfico importado
@@ -490,7 +524,9 @@ Guardado:	Saved:	Salvo:
 Guardando…	Saving…	Salvando…
 Guardar	Save	Salvar
 Guardar aquí	Save here	Salvar aqui
+Guardar automatización	Save automation	Salvar automação
 Guardar como	Save as	Salvar como
+Guardar como automatización…	Save as automation…	Salvar como automação…
 Guardar en la nube	Save to the cloud	Salvar na nuvem
 Guardar esta firma para usarla después	Save this signature to use later	Salvar esta assinatura para usar depois
 Haga clic en la página donde va la firma.	Click on the page where the signature goes.	Clique na página onde vai a assinatura.
@@ -512,6 +548,7 @@ ID de cliente de OAuth	OAuth client ID	ID do cliente OAuth
 Id. de aplicación (cliente)	Application (client) ID	ID do aplicativo (cliente)
 Identificación digital	Digital ID	Identidade digital
 Identificación digital añadida.	Digital ID added.	Identidade digital adicionada.
+Idioma	Language	Idioma
 Idioma de la interfaz	Interface language	Idioma da interface
 Idioma del documento	Document language	Idioma do documento
 Igual a la página actual	Same as the current page	Igual à página atual
@@ -581,6 +618,7 @@ Los archivos viajan directamente entre este equipo y su nube; no hay servidores 
 Los formularios de los documentos se aplanan y sus firmas digitales no se conservan al unirlos: firme el expediente completo al final. Si debe dividirse en partes, cada parte se entrega sin marcadores.	Document forms are flattened and their digital signatures are not kept when merged: sign the complete dossier at the end. If it has to be split into parts, each part comes without bookmarks.	Os formulários dos documentos são achatados e suas assinaturas digitais não são mantidas ao uni-los: assine o dossiê completo no final. Se precisar ser dividido em partes, cada parte é entregue sem marcadores.
 Los márgenes son demasiado grandes.	The margins are too large.	As margens são grandes demais.
 Los niveles con pérdida convierten cada página en imagen: el tamaño baja mucho en documentos escaneados. El texto se conserva como capa invisible, así que el PDF sigue siendo buscable y se puede copiar. El resultado se abre en una pestaña nueva para que lo revise antes de guardar.	Lossy levels turn each page into an image: scanned documents shrink a lot. The text is kept as an invisible layer, so the PDF stays searchable and copyable. The result opens in a new tab so you can review it before saving.	Os níveis com perda convertem cada página em imagem: o tamanho cai muito em documentos digitalizados. O texto é mantido como camada invisível, então o PDF continua pesquisável e copiável. O resultado abre em uma nova aba para você revisar antes de salvar.
+Los pasos se aplican en orden. «Ajustar a tamaño máximo» siempre se hace al final y la contraseña se aplica al guardar.	Steps are applied in order. "Fit to maximum size" always runs last and the password is applied when saving.	As etapas são aplicadas em ordem. «Ajustar ao tamanho máximo» sempre é feito no final e a senha é aplicada ao salvar.
 Lápiz	Pen	Lápis
 Línea	Line	Linha
 Mano	Hand	Mão
@@ -597,6 +635,7 @@ Margen (mm)	Margin (mm)	Margem (mm)
 Marque las zonas a ocultar.	Mark the areas to hide.	Marque as áreas a ocultar.
 Mayús+F3	Shift+F3	Shift+F3
 Mayús+Flechas	Shift+Arrows	Shift+Setas
+Media (150 ppp)	Medium (150 dpi)	Média (150 ppp)
 Media — páginas como imagen 150 ppp	Medium — pages as 150 dpi images	Média — páginas como imagem 150 ppp
 Mi unidad	My Drive	Meu Drive
 Microsoft · ID de aplicación (cliente)	Microsoft · Application (client) ID	Microsoft · ID do aplicativo (cliente)
@@ -614,7 +653,9 @@ Motivo	Reason	Motivo
 Motivo:	Reason:	Motivo:
 Mover el objeto 1 / 10 puntos	Move the object 1 / 10 points	Mover o objeto 1 / 10 pontos
 Márgenes a recortar, en milímetros, medidos sobre la página tal como se ve en pantalla.	Margins to crop, in millimeters, measured on the page as shown on screen.	Margens a recortar, em milímetros, medidas na página como é exibida na tela.
+Máxima (72 ppp)	Maximum (72 dpi)	Máxima (72 ppp)
 Máxima — páginas como imagen 72 ppp	Maximum — pages as 72 dpi images	Máxima — páginas como imagem 72 ppp
+Máximo por archivo (MB)	Maximum per file (MB)	Máximo por arquivo (MB)
 Método	Method	Método
 N (para «Cada N páginas»)	N (for "Every N pages")	N (para "A cada N páginas")
 NO NEGOCIABLE	NON-NEGOTIABLE	NÃO NEGOCIÁVEL
@@ -627,6 +668,7 @@ No especificado	Not specified	Não especificado
 No hay PDFs ni imágenes en esta carpeta.	There are no PDFs or images in this folder.	Não há PDFs nem imagens nesta pasta.
 No hay anotaciones todavía.	No annotations yet.	Ainda não há anotações.
 No hay marca de agua.	There is no watermark.	Não há marca-d'água.
+No hay más documentos abiertos.	There are no more open documents.	Não há mais documentos abertos.
 No hay una sesión iniciada en	You are not signed in to	Não há uma sessão iniciada em
 No repudio	Non-repudiation	Não repúdio
 No se concedió acceso a las fuentes del equipo.	Access to system fonts was not granted.	O acesso às fontes do computador não foi concedido.
@@ -651,6 +693,7 @@ No se pudo obtener la marca de tiempo de	Could not get the timestamp from	Não f
 No se pueden eliminar todas las páginas.	You cannot delete all pages.	Não é possível excluir todas as páginas.
 No se reconoció texto en las páginas indicadas.	No text was recognized on the given pages.	Nenhum texto foi reconhecido nas páginas indicadas.
 Nombre	Name	Nome
+Nombre de los archivos resultantes	Output file names	Nome dos arquivos resultantes
 Nombre de usuario	User name	Nome de usuário
 Nombre del archivo	File name	Nome do arquivo
 Nombre del autor (notas y firmas)	Author name (notes and signatures)	Nome do autor (notas e assinaturas)
@@ -684,6 +727,7 @@ Oferente	Bidder	Proponente
 Office no pudo abrir o convertir el archivo (puede estar dañado o protegido con contraseña). {0}	Office could not open or convert the file (it may be damaged or password-protected). {0}	O Office não conseguiu abrir ou converter o arquivo (pode estar danificado ou protegido por senha). {0}
 Office tardó demasiado en convertir el archivo. Ábralo en Office para revisar si muestra algún aviso.	Office took too long to convert the file. Open it in Office to check whether it shows a warning.	O Office demorou demais para converter o arquivo. Abra-o no Office para ver se ele mostra algum aviso.
 Oficio / Legal	Legal	Ofício / Legal
+Omitir páginas que ya tienen texto	Skip pages that already have text	Ignorar páginas que já têm texto
 Opacidad	Opacity	Opacidade
 Opacidad (%)	Opacity (%)	Opacidade (%)
 Opciones	Options	Opções
@@ -715,11 +759,15 @@ Para usar	To use	Para usar
 Para usar Aptos u otra fuente, copie el archivo .ttf al teléfono y use «Agregar fuente…».	To use Aptos or another font, copy the .ttf file to the phone and use "Add font…".	Para usar Aptos ou outra fonte, copie o arquivo .ttf para o telefone e use "Adicionar fonte…".
 Parte {0}: páginas {1}–{2} · {3}	Part {0}: pages {1}–{2} · {3}	Parte {0}: páginas {1}–{2} · {3}
 Pase el ratón sobre el texto del documento: los bloques editables se marcan en azul. Haga clic para modificarlos.	Hover over the document text: editable blocks are highlighted in blue. Click to modify them.	Passe o mouse sobre o texto do documento: os blocos editáveis ficam marcados em azul. Clique para modificá-los.
+Pasos	Steps	Etapas
 Permiso de escritura denegado.	Write permission denied.	Permissão de gravação negada.
 Permisos de API	API permissions	Permissões de API
 Permitir a quien abra el documento	Allow whoever opens the document to	Permitir a quem abrir o documento
+Permitir copiar	Allow copying	Permitir copiar
+Permitir imprimir	Allow printing	Permitir imprimir
 Personalizado…	Custom…	Personalizado…
 Pie de página	Footer	Rodapé
+Por lotes	Batch	Em lote
 Por rangos personalizados	By custom ranges	Por intervalos personalizados
 Por seguridad no se ejecutó nada. Puede descargar el instalador desde la {1}.	For security nothing was run. You can download the installer from the {1}.	Por segurança nada foi executado. Você pode baixar o instalador na {1}.
 Portada	Cover	Capa
@@ -739,11 +787,17 @@ Preparando páginas…	Preparing pages…	Preparando páginas…
 Preparando «{0}»…	Preparing "{0}"…	Preparando «{0}»…
 Preparando…	Preparing…	Preparando…
 Primer número	First number	Primeiro número
+Primera	First	Primeira
 Primera / última página	First / last page	Primeira / última página
 Primero elija una imagen o firma.	First choose an image or signature.	Primeiro escolha uma imagem ou assinatura.
 Probando {0} ppp…	Trying {0} dpi…	Testando {0} ppp…
 Probar	Test	Testar
+Procesando {0} de {1}: {2}…	Processing {0} of {1}: {2}…	Processando {0} de {1}: {2}…
 Procesando {0}…	Processing {0}…	Processando {0}…
+Procesando…	Processing…	Processando…
+Procesar	Process	Processar
+Procesar por lotes	Batch processing	Processar em lote
+Procesar por lotes…	Batch processing…	Processar em lote…
 Proceso No.	Procurement No.	Processo nº
 Propiedades	Properties	Propriedades
 Propiedades del campo	Field properties	Propriedades do campo
@@ -800,6 +854,7 @@ RePág	PgUp	PgUp
 RePág · AvPág	PgUp · PgDn	PgUp · PgDn
 Recientes	Recent	Recentes
 Reconocer texto	Recognize text	Reconhecer texto
+Reconocer texto (OCR)	Recognize text (OCR)	Reconhecer texto (OCR)
 Reconocer texto (OCR) al escanear, para poder buscar y copiar	Recognize text (OCR) when scanning, to be able to search and copy	Reconhecer texto (OCR) ao digitalizar, para poder pesquisar e copiar
 Reconociendo página {0} ({1} de {2})…	Recognizing page {0} ({1} of {2})…	Reconhecendo página {0} ({1} de {2})…
 Reconociendo texto, página {0}…	Recognizing text, page {0}…	Reconhecendo texto, página {0}…
@@ -843,6 +898,8 @@ Se extrajeron {0} página(s) a un documento nuevo.	{0} page(s) were extracted to
 Se generaron {0} archivos (ZIP).	{0} files were generated (ZIP).	Foram gerados {0} arquivos (ZIP).
 Se generaron {0} partes de máximo {1} (páginas a {2} ppp):	{0} parts of at most {1} were created (pages at {2} dpi):	Foram geradas {0} partes de no máximo {1} (páginas a {2} ppp):
 Se generaron {0} partes de máximo {1} sin perder calidad:	{0} parts of at most {1} were created with no quality loss:	Foram geradas {0} partes de no máximo {1} sem perder qualidade:
+Se procesaron {0} archivo(s).	{0} file(s) were processed.	{0} arquivo(s) processado(s).
+Se procesaron {0} de {1} archivos; revise los errores.	{0} of {1} files were processed; check the errors.	{0} de {1} arquivos processados; verifique os erros.
 Se quitará de la lista de Rúbrica. El archivo original y el certificado no se borran.	It will be removed from Rúbrica's list. The original file and the certificate are not deleted.	Será removido da lista do Rúbrica. O arquivo original e o certificado não são apagados.
 Seguridad eliminada. Guarde para aplicar.	Security removed. Save to apply.	Segurança removida. Salve para aplicar.
 Seguridad:	Security:	Segurança:
@@ -866,6 +923,8 @@ Solo cifrado	Encipher only	Somente cifragem
 Solo comprimir	Compress only	Somente comprimir
 Solo descifrado	Decipher only	Somente decifragem
 Solo dividir en partes (sin perder calidad)	Split into parts only (no quality loss)	Somente dividir em partes (sem perder qualidade)
+Solo las horizontales	Landscape only	Somente as horizontais
+Solo las verticales	Portrait only	Somente as verticais
 Soy el autor de este documento	I am the author of this document	Sou o autor deste documento
 Subiendo a	Uploading to	Enviando para
 Subir	Move up	Subir
@@ -970,15 +1029,20 @@ sus certificados de confianza	your trusted certificates	seus certificados confi�
 total ·	total ·	total ·
 y cree un proyecto (p. ej.	and create a project (e.g.	e crie um projeto (ex.:
 y péguelo abajo.	and paste it below.	e cole abaixo.
+{0} archivo(s)	{0} file(s)	{0} arquivo(s)
 {0} certificado(s) de confianza agregado(s).	{0} trusted certificate(s) added.	{0} certificado(s) confiável(is) adicionado(s).
 {0} coincidencias marcadas para redacción. Se aplicará al guardar.	{0} matches marked for redaction. It will be applied when saving.	{0} ocorrências marcadas para tarja. Será aplicada ao salvar.
 {0} familias de fuentes disponibles.	{0} font families available.	{0} famílias de fontes disponíveis.
 {0} familias de fuentes disponibles{1}. Si una fuente no existe, se usa Helvetica.	{0} font families available{1}. If a font does not exist, Helvetica is used.	{0} famílias de fontes disponíveis{1}. Se uma fonte não existir, é usada a Helvetica.
+{0} partes	{0} parts	{0} partes
 {0} pág.	{0} p.	{0} pág.
 {0} página(s) escaneada(s){1}. Guarde o comparta el PDF.	{0} page(s) scanned{1}. Save or share the PDF.	{0} página(s) digitalizada(s){1}. Salve ou compartilhe o PDF.
 {0} resultado(s)	{0} result(s)	{0} resultado(s)
 {0} seleccionada(s)	{0} selected	{0} selecionada(s)
+{archivo} = nombre del archivo	{archivo} = file name	{archivo} = nome do arquivo
+{archivo} = nombre original · {n} = número · {fecha} = hoy	{archivo} = original name · {n} = number · {fecha} = today	{archivo} = nome original · {n} = número · {fecha} = hoje
 «Logo» dibuja la marca de Rúbrica atenuada al fondo del recuadro. El texto se ajusta solo al tamaño del recuadro que dibuje en la página.	"Logo" draws the Rúbrica mark faded in the background of the box. The text fits automatically to the size of the box you draw on the page.	"Logotipo" desenha a marca do Rúbrica esmaecida ao fundo da caixa. O texto se ajusta sozinho ao tamanho da caixa que você desenhar na página.
+«{0}» aplicada: {1}.	"{0}" applied: {1}.	«{0}» aplicada: {1}.
 «{0}» es un documento de Office. La app de Rúbrica para Windows lo convierte a PDF; en el navegador, guárdelo como PDF desde Office y ábralo aquí.	"{0}" is an Office document. The Rúbrica app for Windows converts it to PDF; in the browser, save it as PDF from Office and open it here.	"{0}" é um documento do Office. O app Rúbrica para Windows o converte em PDF; no navegador, salve-o como PDF no Office e abra-o aqui.
 «{0}» no es un certificado válido.	"{0}" is not a valid certificate.	"{0}" não é um certificado válido.
 «{0}» no es una autoridad de certificación.	"{0}" is not a certification authority.	"{0}" não é uma autoridade certificadora.
@@ -991,6 +1055,9 @@ y péguelo abajo.	and paste it below.	e cole abaixo.
 Índice	Index	Índice
 Índice ({0} de {1})	Index ({0} of {1})	Índice ({0} de {1})
 Índice con enlaces a cada documento	Index with links to each document	Índice com links para cada documento
+Última	Last	Última
+— Automatizaciones guardadas —	— Saved automations —	— Automações salvas —
+— Sin automatizaciones guardadas —	— No saved automations —	— Nenhuma automação salva —
 → habilite	→ enable	→ habilite
 → tipo	→ type	→ tipo
 ⚙ Configuración	⚙ Settings	⚙ Configurações

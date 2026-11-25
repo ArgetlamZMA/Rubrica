@@ -9,6 +9,7 @@ const RIBBON = [
     [{ icon: 'combine', label: 'Combinar', act: () => combineDialog(false), nodoc: true }, { icon: 'folder-archive', label: 'Expediente', act: dossierDialog, nodoc: true }, { icon: 'images', label: 'Desde imágenes', act: () => combineDialog(true), nodoc: true }, { icon: 'file-plus', label: 'En blanco', act: newBlankDialog, nodoc: true }],
     [{ icon: 'undo-2', label: 'Deshacer', act: undo }, { icon: 'redo-2', label: 'Rehacer', act: redo }],
     [T('select'), T('hand')],
+    [{ icon: 'workflow', label: 'Automatizaciones', act: automationsMenu, nodoc: true }],
     [{ icon: 'info', label: 'Propiedades', act: propertiesDialog }]] },
   { id: 'comment', label: 'Comentar', groups: [
     [T('select'), T('hand')], [T('highlight'), T('underline'), T('strike')], [T('note'), T('text'), T('stamp')],
@@ -27,7 +28,8 @@ const RIBBON = [
     [{ icon: 'crop', label: 'Recortar', act: cropDialog }]] },
   { id: 'convert', label: 'Convertir', groups: [
     [{ icon: 'file-text', label: 'A Word', act: () => convertDialog('word') }, { icon: 'sheet', label: 'A Excel', act: () => convertDialog('excel') }, { icon: 'file-image', label: 'A imágenes', act: () => convertDialog('image') }, { icon: 'file-type', label: 'A texto', act: () => convertDialog('text') }],
-    [{ icon: 'scan-text', label: 'OCR', act: ocrDialog }, { icon: 'file-type-2', label: 'Desde Office', act: officeFromDisk, nodoc: true, native: true }], [{ icon: 'file-archive', label: 'Comprimir', act: compressDialog }, { icon: 'file-down', label: 'Ajustar a tamaño', act: fitSizeDialog }],
+    [{ icon: 'scan-text', label: 'OCR', act: ocrDialog }, { icon: 'file-type-2', label: 'Desde Office', act: officeFromDisk, nodoc: true, native: true }],
+    [{ icon: 'layers', label: 'Por lotes', act: () => batchDialog(), nodoc: true }, { icon: 'workflow', label: 'Automatizaciones', act: automationsMenu, nodoc: true }], [{ icon: 'file-archive', label: 'Comprimir', act: compressDialog }, { icon: 'file-down', label: 'Ajustar a tamaño', act: fitSizeDialog }],
     [{ icon: 'combine', label: 'Combinar', act: () => combineDialog(false), nodoc: true }, { icon: 'images', label: 'Desde imágenes', act: () => combineDialog(true), nodoc: true }]] },
   { id: 'form', label: 'Formulario', groups: [
     [T('field-text'), T('field-check'), T('field-drop')], [T('select')],

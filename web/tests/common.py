@@ -5,6 +5,9 @@ from playwright.async_api import async_playwright
 URL = os.environ.get('PDFS_URL', 'http://localhost:8765/')
 OUT = os.environ.get('OUT') or os.path.join(os.path.dirname(__file__), '..', 'test-output')
 os.makedirs(OUT, exist_ok=True)
+# la consola de Windows (cp1252) no puede mostrar todos los caracteres: que nunca haga fallar una prueba
+try: sys.stdout.reconfigure(errors='replace'); sys.stderr.reconfigure(errors='replace')
+except Exception: pass
 FAILS = []
 
 def check(cond, msg):
