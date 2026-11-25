@@ -352,3 +352,12 @@ table.kv td { padding: 3px 0; word-break: break-word; }
 .popmenu button:hover,.popmenu button:focus{background:var(--panel2);outline:0}
 .popmenu svg{width:16px;height:16px}
 .pm-sep{height:1px;background:var(--line);margin:4px 0}
+
+/* Comparar documentos */
+.cmp-list{max-height:52vh;overflow:auto;border:1px solid var(--line);border-radius:8px}
+.cmp-row{display:grid;grid-template-columns:96px 52px 1fr;gap:8px;align-items:baseline;width:100%;padding:7px 10px;border:0;border-bottom:1px solid var(--line);background:none;color:inherit;text-align:left;font:inherit;cursor:pointer}
+.cmp-row:hover{background:var(--panel2)}
+.cmp-kind{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.03em}
+.cmp-ins .cmp-kind{color:#2da44e}.cmp-mod .cmp-kind{color:#d97706}.cmp-del .cmp-kind,.cmp-vis .cmp-kind{color:var(--danger)}
+.cmp-pg{color:var(--muted);font-size:12px}
+.cmp-tx del{color:var(--danger);text-decoration:line-through}.cmp-tx ins{color:#1a7f37;text-decoration:none;background:rgba(45,164,78,.12);border-radius:3px;padding:0 2px}

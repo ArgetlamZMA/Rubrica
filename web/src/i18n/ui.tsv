@@ -42,6 +42,7 @@ Abajo a la derecha	Bottom right	Inferior direito
 Abajo a la izquierda	Bottom left	Inferior esquerdo
 Abajo al centro	Bottom center	Inferior central
 Abierto como archivo local.	Opened as a local file.	Aberto como arquivo local.
+Abra los dos documentos que quiere comparar.	Open the two documents you want to compare.	Abra os dois documentos que deseja comparar.
 Abriendo	Opening	Abrindo
 Abriendo…	Opening…	Abrindo…
 Abrir	Open	Abrir
@@ -52,6 +53,7 @@ Abrir de Google Drive	Open from Google Drive	Abrir do Google Drive
 Abrir de OneDrive	Open from OneDrive	Abrir do OneDrive
 Abrir desde la nube	Open from the cloud	Abrir da nuvem
 Abrir los resultados en pestañas (hasta 10)	Open the results in tabs (up to 10)	Abrir os resultados em abas (até 10)
+Abrir…	Open…	Abrir…
 Aceptar	OK	OK
 Acepto los términos definidos	I accept the defined terms	Aceito os termos definidos
 Acercar / alejar	Zoom in / out	Aumentar / diminuir zoom
@@ -63,6 +65,7 @@ Acuerdo de claves	Key agreement	Acordo de chaves
 Aduana	Customs office	Alfândega
 Aduanas: importación / exportación	Customs: import / export	Alfândega: importação / exportação
 Agente aduanero	Customs broker	Despachante aduaneiro
+Agregado	Added	Adicionado
 Agregando «{0}»…	Adding "{0}"…	Adicionando «{0}»…
 Agregar comentarios	Add comments	Adicionar comentários
 Agregar dato	Add field	Adicionar dado
@@ -78,6 +81,8 @@ Agregue imágenes (JPG, PNG…)	Add images (JPG, PNG…)	Adicione imagens (JPG, 
 Agregue los archivos a procesar (PDF, imágenes u Office en Windows)	Add the files to process (PDF, images, or Office on Windows)	Adicione os arquivos a processar (PDF, imagens ou Office no Windows)
 Agregue los documentos del expediente (PDF o imágenes)	Add the dossier documents (PDF or images)	Adicione os documentos do dossiê (PDF ou imagens)
 Agregue pasos con el menú de abajo	Add steps with the menu below	Adicione etapas com o menu abaixo
+Ahora	Now	Agora
+Ahora: «{0}»	Now: "{0}"	Agora: «{0}»
 Ajustando tamaño…	Fitting size…	Ajustando tamanho…
 Ajustar	Fit	Ajustar
 Ajustar a cada imagen	Fit each image	Ajustar a cada imagem
@@ -98,7 +103,10 @@ Alineación	Alignment	Alinhamento
 Almacén de Windows / token	Windows store / token	Repositório do Windows / token
 Almacén de certificados de Windows	Windows certificate store	Repositório de certificados do Windows
 Alta (300 ppp)	High (300 dpi)	Alta (300 ppp)
+Antes	Before	Antes
 Antes de la página actual	Before the current page	Antes da página atual
+Antes: «{0}»	Before: "{0}"	Antes: «{0}»
+Apariencia	Appearance	Aparência
 Apertura cancelada	Opening canceled	Abertura cancelada
 Aplanando…	Flattening…	Achatando…
 Aplanar formularios y comentarios	Flatten forms and comments	Achatar formulários e comentários
@@ -173,6 +181,7 @@ Cadena de certificados demasiado larga.	Certificate chain too long.	Cadeia de ce
 Cadena:	Chain:	Cadeia:
 Calidad	Quality	Qualidade
 Cambios sin guardar	Unsaved changes	Alterações não salvas
+Cambió el tamaño de la página	The page size changed	O tamanho da página mudou
 Campo	Field	Campo
 Campo de formulario	Form field	Campo de formulário
 Campo de texto	Text field	Campo de texto
@@ -219,6 +228,16 @@ Combinar archivos	Combine files	Combinar arquivos
 Comentar	Comment	Comentar
 Comentario	Comment	Comentário
 Comentarios	Comments	Comentários
+Comparación	Comparison	Comparação
+Comparación - {0}	Comparison - {0}	Comparação - {0}
+Comparando el texto…	Comparing the text…	Comparando o texto…
+Comparando la apariencia de la página {0} de {1}…	Comparing the appearance of page {0} of {1}…	Comparando a aparência da página {0} de {1}…
+Comparando…	Comparing…	Comparando…
+Comparar	Compare	Comparar
+Comparar documentos	Compare documents	Comparar documentos
+Comparar el texto (palabras agregadas, eliminadas y modificadas)	Compare the text (added, deleted and modified words)	Comparar o texto (palavras adicionadas, excluídas e modificadas)
+Comparar la apariencia (sellos, firmas, imágenes, tachados; útil en escaneos)	Compare the appearance (stamps, signatures, images, strike-throughs; useful for scans)	Comparar a aparência (carimbos, assinaturas, imagens, rasuras; útil em digitalizações)
+Comparar versiones	Compare versions	Comparar versões
 Compare la huella	Compare the fingerprint	Compare a impressão digital
 Compare las huellas SHA-256 con las publicadas por la autoridad antes de confiar.	Compare the SHA-256 fingerprints with those published by the authority before trusting.	Compare as impressões digitais SHA-256 com as publicadas pela autoridade antes de confiar.
 Compartidos conmigo	Shared with me	Compartilhados comigo
@@ -316,6 +335,7 @@ Descargando y verificando la actualización…	Downloading and verifying the upd
 Descargando…	Downloading…	Baixando…
 Descargar .txt	Download .txt	Baixar .txt
 Descargar a la carpeta de descargas	Download to the Downloads folder	Baixar para a pasta Downloads
+Descargar lista (.csv)	Download list (.csv)	Baixar lista (.csv)
 Desde	From	De
 Desde Office	From Office	Do Office
 Desde Word, Excel o PowerPoint	From Word, Excel or PowerPoint	Do Word, Excel ou PowerPoint
@@ -379,6 +399,8 @@ El modo texto recupera el contenido para editarlo; el modo diseño conserva la a
 El navegador bloqueó la ventana emergente. Permita ventanas emergentes para esta página.	The browser blocked the pop-up window. Allow pop-ups for this page.	O navegador bloqueou a janela pop-up. Permita pop-ups para esta página.
 El navegador no puede contactar el servidor de marca de tiempo. Use la app de Windows o de Android.	The browser cannot reach the timestamp server. Use the Windows or Android app.	O navegador não consegue contatar o servidor de carimbo do tempo. Use o aplicativo de Windows ou Android.
 El nombre es obligatorio	The name is required	O nome é obrigatório
+El original tiene {0} página(s) más al final.	The original has {0} more page(s) at the end.	O original tem {0} página(s) a mais no final.
+El resultado se abre como una copia de la versión revisada con los cambios marcados: verde = agregado, naranja = modificado (la nota muestra el texto anterior), rojo = eliminado o cambio de apariencia.	The result opens as a copy of the revised version with the changes marked: green = added, orange = modified (the note shows the previous text), red = deleted or appearance change.	O resultado abre como uma cópia da versão revisada com as mudanças marcadas: verde = adicionado, laranja = modificado (a nota mostra o texto anterior), vermelho = excluído ou mudança de aparência.
 El servidor de marca de tiempo rechazó la solicitud	The timestamp server rejected the request	O servidor de carimbo do tempo rejeitou a solicitação
 El servidor de marca de tiempo respondió	The timestamp server responded	O servidor de carimbo do tempo respondeu
 El servidor rechazó la solicitud de prueba.	The server rejected the test request.	O servidor rejeitou a solicitação de teste.
@@ -388,10 +410,14 @@ Elegir archivo…	Choose file…	Escolher arquivo…
 Elegir carpeta y guardar	Choose folder and save	Escolher pasta e salvar
 Elegir certificado de Android…	Choose Android certificate…	Escolher certificado do Android…
 Elegir imagen de firma (PNG con fondo transparente recomendado)	Choose signature image (PNG with transparent background recommended)	Escolher imagem da assinatura (PNG com fundo transparente recomendado)
+Elija dos documentos distintos.	Choose two different documents.	Escolha dois documentos diferentes.
 Elija la imagen del gráfico.	Choose the graphic image.	Escolha a imagem do gráfico.
 Elija o añada un certificado.	Choose or add a certificate.	Escolha ou adicione um certificado.
+Elija qué comparar.	Choose what to compare.	Escolha o que comparar.
 Elija una automatización guardada.	Choose a saved automation.	Escolha uma automação salva.
 Elija una carpeta.	Choose a folder.	Escolha uma pasta.
+Eliminado	Deleted	Excluído
+Eliminado: «{0}»	Deleted: "{0}"	Excluído: «{0}»
 Eliminar	Delete	Excluir
 Eliminar automatización	Delete automation	Excluir automação
 Eliminar estilo	Delete style	Excluir estilo
@@ -604,6 +630,7 @@ La raíz «{0}» no está en sus certificados de confianza.	The root "{0}" is no
 La versión {0} no trae el manifiesto firmado, así que Rúbrica no la instalará automáticamente.	Version {0} has no signed manifest, so Rúbrica will not install it automatically.	A versão {0} não traz o manifesto assinado, então o Rúbrica não a instalará automaticamente.
 Las contraseñas no coinciden.	The passwords do not match.	As senhas não coincidem.
 Las firmas emitidas por «{0}» dejarán de mostrarse como de confianza.	Signatures issued by "{0}" will no longer be shown as trusted.	As assinaturas emitidas por "{0}" deixarão de ser mostradas como confiáveis.
+Leyendo el texto…	Reading the text…	Lendo o texto…
 LibreOffice no pudo convertir el archivo: {0}	LibreOffice could not convert the file: {0}	O LibreOffice não conseguiu converter o arquivo: {0}
 LibreOffice tardó demasiado en convertir el archivo.	LibreOffice took too long to convert the file.	O LibreOffice demorou demais para converter o arquivo.
 Licitación / propuesta	Tender / proposal	Licitação / proposta
@@ -643,6 +670,7 @@ Microsoft · Inquilino	Microsoft · Tenant	Microsoft · Locatário
 Midiendo página {0} de {1}…	Measuring page {0} of {1}…	Medindo página {0} de {1}…
 Miniaturas	Thumbnails	Miniaturas
 Mis archivos	My files	Meus arquivos
+Modificado	Modified	Modificado
 Modificar el documento	Modify the document	Modificar o documento
 Modo	Mode	Modo
 Mosaico	Tile	Mosaico
@@ -672,6 +700,7 @@ No hay más documentos abiertos.	There are no more open documents.	Não há mais
 No hay una sesión iniciada en	You are not signed in to	Não há uma sessão iniciada em
 No repudio	Non-repudiation	Não repúdio
 No se concedió acceso a las fuentes del equipo.	Access to system fonts was not granted.	O acesso às fontes do computador não foi concedido.
+No se encontraron diferencias entre los dos documentos.	No differences were found between the two documents.	Não foram encontradas diferenças entre os dois documentos.
 No se encontró el espacio de la firma.	The signature space was not found.	O espaço da assinatura não foi encontrado.
 No se encontró el motor OCR (carpeta «ocr» de la aplicación).	The OCR engine was not found (the app's "ocr" folder).	O mecanismo de OCR não foi encontrado (pasta "ocr" do aplicativo).
 No se encontró el valor de la firma.	The signature value was not found.	O valor da assinatura não foi encontrado.
@@ -736,6 +765,8 @@ Optimizando sin pérdida…	Optimizing without loss…	Otimizando sem perda…
 Organizar	Organize	Organizar
 Orientación	Orientation	Orientação
 Origen	Source	Origem
+Original	Original	Original
+Original (versión anterior)	Original (previous version)	Original (versão anterior)
 Orígenes de JavaScript autorizados:	Authorized JavaScript origins:	Origens JavaScript autorizadas:
 Otro	Other	Outro
 Otro color	Other color	Outra cor
@@ -783,6 +814,7 @@ Prefijo	Prefix	Prefixo
 Prefijo Bates	Bates prefix	Prefixo Bates
 Preparado por	Prepared by	Preparado por
 Preparando impresión…	Preparing to print…	Preparando impressão…
+Preparando los documentos…	Preparing the documents…	Preparando os documentos…
 Preparando páginas…	Preparing pages…	Preparando páginas…
 Preparando «{0}»…	Preparing "{0}"…	Preparando «{0}»…
 Preparando…	Preparing…	Preparando…
@@ -819,6 +851,8 @@ Página actual	Current page	Página atual
 Página actual:	Current page:	Página atual:
 Página anterior / siguiente	Previous / next page	Página anterior / seguinte
 Página completa	Full page	Página inteira
+Página nueva	New page	Página nova
+Página nueva: no está en el documento original.	New page: not in the original document.	Página nova: não está no documento original.
 Página {0} ({1} de {2})…	Page {0} ({1} of {2})…	Página {0} ({1} de {2})…
 Página {0} de {1}…	Page {0} of {1}…	Página {0} de {1}…
 Página {0}…	Page {0}…	Página {0}…
@@ -884,6 +918,7 @@ Resolución mínima	Minimum resolution	Resolução mínima
 Respuesta no válida del servidor de marca de tiempo.	Invalid response from the timestamp server.	Resposta inválida do servidor de carimbo do tempo.
 Restablecer	Reset	Redefinir
 Restablecer formulario	Reset form	Redefinir formulário
+Resultado de la comparación	Comparison result	Resultado da comparação
 Resultado siguiente / anterior	Next / previous result	Resultado seguinte / anterior
 Resultados de «{0}»	Results for "{0}"	Resultados de "{0}"
 Rotación (°)	Rotation (°)	Rotação (°)
@@ -982,6 +1017,7 @@ Variables:	Variables:	Variáveis:
 Varias líneas	Multiple lines	Várias linhas
 Ver firmas	View signatures	Ver assinaturas
 Verificar certificado	Verify certificate	Verificar certificado
+Versión revisada	Revised version	Versão revisada
 Vertical	Vertical	Vertical
 Vigencia	Validity	Validade
 Vista	View	Exibir
@@ -1020,6 +1056,7 @@ nº de página ·	page no. ·	nº da página ·
 o hasta un certificado de CA instalado en Android	or up to a CA certificate installed on Android	ou até um certificado de AC instalado no Android
 o hasta una raíz del almacén de Windows	or up to a root in the Windows store	ou até uma raiz do repositório do Windows
 o use una firma manuscrita guardada…	or use a saved handwritten signature…	ou use uma assinatura manuscrita salva…
+p. {0}	p. {0}	p. {0}
 página de la versión	release page	página da versão
 página(s).	page(s).	página(s).
 raíces incluidas en Rúbrica	roots included in Rúbrica	raízes incluídas no Rúbrica
@@ -1032,13 +1069,18 @@ y péguelo abajo.	and paste it below.	e cole abaixo.
 {0} archivo(s)	{0} file(s)	{0} arquivo(s)
 {0} certificado(s) de confianza agregado(s).	{0} trusted certificate(s) added.	{0} certificado(s) confiável(is) adicionado(s).
 {0} coincidencias marcadas para redacción. Se aplicará al guardar.	{0} matches marked for redaction. It will be applied when saving.	{0} ocorrências marcadas para tarja. Será aplicada ao salvar.
+{0} eliminada(s)	{0} deleted	{0} excluída(s)
 {0} familias de fuentes disponibles.	{0} font families available.	{0} famílias de fontes disponíveis.
 {0} familias de fuentes disponibles{1}. Si una fuente no existe, se usa Helvetica.	{0} font families available{1}. If a font does not exist, Helvetica is used.	{0} famílias de fontes disponíveis{1}. Se uma fonte não existir, é usada a Helvetica.
+{0} modificada(s)	{0} modified	{0} modificada(s)
+{0} palabra(s) agregada(s)	{0} word(s) added	{0} palavra(s) adicionada(s)
 {0} partes	{0} parts	{0} partes
 {0} pág.	{0} p.	{0} pág.
+{0} página(s)	{0} page(s)	{0} página(s)
 {0} página(s) escaneada(s){1}. Guarde o comparta el PDF.	{0} page(s) scanned{1}. Save or share the PDF.	{0} página(s) digitalizada(s){1}. Salve ou compartilhe o PDF.
 {0} resultado(s)	{0} result(s)	{0} resultado(s)
 {0} seleccionada(s)	{0} selected	{0} selecionada(s)
+{0} zona(s) con cambios de apariencia	{0} area(s) with appearance changes	{0} área(s) com mudanças de aparência
 {archivo} = nombre del archivo	{archivo} = file name	{archivo} = nome do arquivo
 {archivo} = nombre original · {n} = número · {fecha} = hoy	{archivo} = original name · {n} = number · {fecha} = today	{archivo} = nome original · {n} = número · {fecha} = hoje
 «Logo» dibuja la marca de Rúbrica atenuada al fondo del recuadro. El texto se ajusta solo al tamaño del recuadro que dibuje en la página.	"Logo" draws the Rúbrica mark faded in the background of the box. The text fits automatically to the size of the box you draw on the page.	"Logotipo" desenha a marca do Rúbrica esmaecida ao fundo da caixa. O texto se ajusta sozinho ao tamanho da caixa que você desenhar na página.
@@ -1058,6 +1100,7 @@ y péguelo abajo.	and paste it below.	e cole abaixo.
 Última	Last	Última
 — Automatizaciones guardadas —	— Saved automations —	— Automações salvas —
 — Sin automatizaciones guardadas —	— No saved automations —	— Nenhuma automação salva —
+… y {0} cambios más.	… and {0} more changes.	… e mais {0} mudanças.
 → habilite	→ enable	→ habilite
 → tipo	→ type	→ tipo
 ⚙ Configuración	⚙ Settings	⚙ Configurações
