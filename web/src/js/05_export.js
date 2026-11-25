@@ -343,6 +343,15 @@ function isInPlace(doc) {
  * opts: { noEncrypt, flatten, raster:{dpi,quality}, progress(msg,pct), pages:[indices] }
  */
 async function buildPdf(doc, opts = {}) {
+  // documentos PDF/A: sin cambios se guardan tal cual; con cambios se vuelve a aplicar PDF/A (que no admite cifrado)
+  if (doc.pdfa && !opts.pages && !opts.raster && !opts.noPdfA) {
+    if (doc.undo.length === 0 && isInPlace(doc) && !opts.flatten) return doc.sources[doc.pages[0].src].bytes.slice();
+    const b = await buildPdfCore(doc, { ...opts, noEncrypt: true, flatten: true });
+    return (await toPdfA(b, doc.meta || {}, opts.progress)).bytes;
+  }
+  return buildPdfCore(doc, opts);
+}
+async function buildPdfCore(doc, opts = {}) {
   commitEditing();
   const prog = opts.progress || (() => { });
   const pages = opts.pages ? opts.pages.map(i => doc.pages[i]) : doc.pages;

@@ -13,7 +13,15 @@ let js = fs.readdirSync(jsDir).filter(f => f.endsWith('.js')).sort().map(f => `/
 const tsv = fs.readFileSync(path.join(ROOT, 'src', 'i18n', 'ui.tsv'), 'utf8').split(/\r?\n/).filter(Boolean).map(l => l.split('\t'));
 const [head, ...rows] = tsv, dict = {};
 head.slice(1).forEach((lang, i) => { dict[lang] = {}; for (const r of rows) if (r[i + 1] && r[i + 1] !== r[0]) dict[lang][r[0]] = r[i + 1]; });
-js = `const APP_VERSION = ${JSON.stringify(pkg.version)};\nconst I18N_DICT = ${JSON.stringify(dict)};\n` + js;
+js = `const APP_VERSION = ${JSON.stringify(pkg.version)};\nconst I18N_DICT = ${JSON.stringify(dict)};\n// perfil sRGB (LittleCMS) para el «output intent» de PDF/A\nconst SRGB_ICC_B64 = ${JSON.stringify(fs.readFileSync(path.join(ROOT, 'src/assets/srgb.icc')).toString('base64'))};\n` + js;
+// todos los archivos comparten un ámbito global: un nombre declarado dos veces rompería la app al abrirla.
+// Se compila el código unido para detectarlo aquí y no en el equipo del usuario.
+try { new Function(js); } catch (e) {
+  const dup = /Identifier '([^']+)' has already been declared/.exec(e.message);
+  const where = dup ? fs.readdirSync(jsDir).filter(f => new RegExp(`^(?:const|let|class|function|async function)\\s+${dup[1]}\\b`, 'm').test(rd(path.join(jsDir, f)))) : [];
+  console.error(`Error en el código de la interfaz: ${e.message}${where.length ? ' (en ' + where.join(', ') + ')' : ''}`);
+  process.exit(1);
+}
 // íconos Lucide referenciados en el código
 const iconDir = path.join(NM, 'lucide-static', 'icons');
 const names = new Set(['square']);

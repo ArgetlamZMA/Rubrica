@@ -83,6 +83,7 @@ Agregue los documentos del expediente (PDF o imágenes)	Add the dossier document
 Agregue pasos con el menú de abajo	Add steps with the menu below	Adicione etapas com o menu abaixo
 Ahora	Now	Agora
 Ahora: «{0}»	Now: "{0}"	Agora: «{0}»
+Ajustando el documento…	Adjusting the document…	Ajustando o documento…
 Ajustando tamaño…	Fitting size…	Ajustando tamanho…
 Ajustar	Fit	Ajustar
 Ajustar a cada imagen	Fit each image	Ajustar a cada imagem
@@ -294,6 +295,7 @@ Convertir a imágenes	Convert to images	Converter para imagens
 Convertir a texto (.txt)	Convert to text (.txt)	Converter para texto (.txt)
 Convertir documentos de Office a PDF	Convert Office documents to PDF	Converter documentos do Office em PDF
 Convierte páginas escaneadas en texto buscable y seleccionable (se agrega una capa de texto invisible sobre la imagen). Funciona sin internet: el motor y los idiomas vienen incluidos en Rúbrica.	Turns scanned pages into searchable, selectable text (an invisible text layer is added over the image). Works offline: the engine and languages are included in Rúbrica.	Converte páginas digitalizadas em texto pesquisável e selecionável (uma camada de texto invisível é adicionada sobre a imagem). Funciona sem internet: o mecanismo e os idiomas vêm incluídos no Rúbrica.
+Convirtiendo {0} página(s) que no pueden cumplir…	Converting {0} page(s) that cannot comply…	Convertendo {0} página(s) que não podem cumprir…
 Convirtiendo…	Converting…	Convertendo…
 Copiado.	Copied.	Copiado.
 Copiar	Copy	Copiar
@@ -303,10 +305,12 @@ Copiar, cortar y pegar el objeto seleccionado	Copy, cut and paste the selected o
 Copie el	Copy the	Copie o
 Corrector (tapar)	Correction (cover)	Corretivo (cobrir)
 Crea una copia limpia para publicar o entregar. Lo que marque se borra del archivo, no solo de la vista. Revise la copia antes de guardarla.	Creates a clean copy to publish or hand over. What you select is erased from the file, not just from view. Review the copy before saving it.	Cria uma cópia limpa para publicar ou entregar. O que você marcar é apagado do arquivo, não só da visualização. Revise a cópia antes de salvá-la.
+Creando PDF/A…	Creating PDF/A…	Criando PDF/A…
 Creando PDF…	Creating PDF…	Criando PDF…
 Crear	Create	Criar
 Crear PDF	Create PDF	Criar PDF
 Crear PDF desde imágenes	Create PDF from images	Criar PDF a partir de imagens
+Crear copia PDF/A	Create PDF/A copy	Criar cópia PDF/A
 Crear copia limpia	Create clean copy	Criar cópia limpa
 Crear credenciales	Create credentials	Criar credenciais
 Credenciales	Credentials	Credenciais
@@ -558,6 +562,8 @@ Guardar	Save	Salvar
 Guardar aquí	Save here	Salvar aqui
 Guardar automatización	Save automation	Salvar automação
 Guardar como	Save as	Salvar como
+Guardar como PDF/A	Save as PDF/A	Salvar como PDF/A
+Guardar como PDF/A (archivo a largo plazo)	Save as PDF/A (long-term archiving)	Salvar como PDF/A (arquivamento de longo prazo)
 Guardar como automatización…	Save as automation…	Salvar como automação…
 Guardar en la nube	Save to the cloud	Salvar na nuvem
 Guardar esta firma para usarla después	Save this signature to use later	Salvar esta assinatura para usar depois
@@ -787,6 +793,9 @@ PDF descargado.	PDF downloaded.	PDF baixado.
 PDF desde imágenes	PDF from images	PDF de imagens
 PDF e imágenes	PDFs and images	PDFs e imagens
 PDF o imagen de este equipo	PDF or image from this computer	PDF ou imagem deste computador
+PDF/A (ISO 19005-2, nivel B) es el formato para conservar documentos a largo plazo y el que piden muchos archivos públicos y sistemas de gestión documental. Rúbrica crea una copia que lo cumple: incrusta los metadatos y el perfil de color, y quita lo que el formato no admite (JavaScript, adjuntos, acciones). Las páginas que usan fuentes sin incrustar o color CMYK se convierten en imagen con el texto buscable.	PDF/A (ISO 19005-2, level B) is the format for long-term preservation and the one many public archives and document management systems require. Rúbrica creates a compliant copy: it embeds the metadata and color profile, and removes what the format does not allow (JavaScript, attachments, actions). Pages that use non-embedded fonts or CMYK color are converted to images with searchable text.	PDF/A (ISO 19005-2, nível B) é o formato para preservar documentos a longo prazo e o que muitos arquivos públicos e sistemas de gestão documental exigem. O Rúbrica cria uma cópia em conformidade: incorpora os metadados e o perfil de cor e remove o que o formato não admite (JavaScript, anexos, ações). As páginas que usam fontes não incorporadas ou cor CMYK são convertidas em imagem com texto pesquisável.
+PDF/A listo. {0} página(s) se convirtieron en imagen ({1}); el texto sigue buscable.	PDF/A ready. {0} page(s) were converted to images ({1}); the text is still searchable.	PDF/A pronto. {0} página(s) foram convertidas em imagem ({1}); o texto continua pesquisável.
+PDF/A listo: ninguna página tuvo que convertirse en imagen.	PDF/A ready: no page had to be converted to an image.	PDF/A pronto: nenhuma página precisou ser convertida em imagem.
 Palabras clave	Keywords	Palavras-chave
 Pantalla completa	Full screen	Tela cheia
 Pantalla completa no disponible.	Full screen not available.	Tela cheia não disponível.
@@ -825,6 +834,7 @@ Preferencias de firma…	Signature preferences…	Preferências de assinatura…
 Prefijo	Prefix	Prefixo
 Prefijo Bates	Bates prefix	Prefixo Bates
 Preparado por	Prepared by	Preparado por
+Preparando PDF/A…	Preparing PDF/A…	Preparando PDF/A…
 Preparando impresión…	Preparing to print…	Preparando impressão…
 Preparando los documentos…	Preparing the documents…	Preparando os documentos…
 Preparando páginas…	Preparing pages…	Preparando páginas…
@@ -937,6 +947,7 @@ Resultado de la comparación	Comparison result	Resultado da comparação
 Resultado siguiente / anterior	Next / previous result	Resultado seguinte / anterior
 Resultados de «{0}»	Results for "{0}"	Resultados de "{0}"
 Revisando el documento…	Reviewing the document…	Revisando o documento…
+Revisando fuentes y colores…	Checking fonts and colors…	Verificando fontes e cores…
 Rotación (°)	Rotation (°)	Rotação (°)
 Rápida (144 ppp)	Fast (144 dpi)	Rápida (144 ppp)
 Régimen	Customs regime	Regime
@@ -1052,19 +1063,24 @@ agregue de Microsoft Graph (delegados):	add from Microsoft Graph (delegated):	ad
 agregue las cuentas que usarán la app.	add the accounts that will use the app.	adicione as contas que usarão o aplicativo.
 archivos adjuntos	attachments	anexos
 buscar	search	pesquisar
+color CMYK	CMYK color	cor CMYK
 comentarios	comments	comentários
+compresión LZW	LZW compression	compressão LZW
 con la que publica la autoridad (por ejemplo, el SAR en sar.gob.hn/firmaelectronica). Cualquiera puede crear un certificado con el nombre de una institución: confíe solo en raíces de autoridades reconocidas.	with the one published by the authority (for example, the SAR at sar.gob.hn/firmaelectronica). Anyone can create a certificate with an institution's name: only trust roots from recognized authorities.	com a publicada pela autoridade (por exemplo, o SAR em sar.gob.hn/firmaelectronica). Qualquer pessoa pode criar um certificado com o nome de uma instituição: confie apenas em raízes de autoridades reconhecidas.
 con marca de tiempo	with timestamp	com carimbo do tempo
 con texto reconocido	with recognized text	com texto reconhecido
+contenido que no se pudo analizar	content that could not be analyzed	conteúdo que não pôde ser analisado
 correo o teléfono (opcional)	email or phone (optional)	e-mail ou telefone (opcional)
 cuando el certificado del firmante encadena hasta uno de estos certificados{0}. Descargue los del SAR en	when the signer's certificate chains up to one of these certificates{0}. Download the SAR ones at	quando o certificado do signatário encadeia até um destes certificados{0}. Baixe os do SAR em
 datos privados o miniaturas	private data or thumbnails	dados privados ou miniaturas
 deshacer ·	undo ·	desfazer ·
 detección de fuente	font detection	detecção de fonte
 duplicar · flechas para mover ·	duplicate · arrows to move ·	duplicar · setas para mover ·
+efectos que PDF/A no admite	effects PDF/A does not allow	efeitos que o PDF/A não admite
 el almacén de certificados de Windows	the Windows certificate store	o repositório de certificados do Windows
 eliminar ·	delete ·	excluir ·
 fuentes del sistema	system fonts	fontes do sistema
+fuentes sin incrustar	non-embedded fonts	fontes não incorporadas
 guardar ·	save ·	salvar ·
 hay que registrar esta aplicación una sola vez (gratis) y pegar el	you need to register this app once (free) and paste the	é preciso registrar este aplicativo uma única vez (grátis) e colar o
 incluida en Rúbrica	included in Rúbrica	incluída no Rúbrica

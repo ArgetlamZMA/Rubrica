@@ -29,7 +29,7 @@ const RIBBON = [
   { id: 'convert', label: 'Convertir', groups: [
     [{ icon: 'file-text', label: 'A Word', act: () => convertDialog('word') }, { icon: 'sheet', label: 'A Excel', act: () => convertDialog('excel') }, { icon: 'file-image', label: 'A imágenes', act: () => convertDialog('image') }, { icon: 'file-type', label: 'A texto', act: () => convertDialog('text') }],
     [{ icon: 'scan-text', label: 'OCR', act: ocrDialog }, { icon: 'file-type-2', label: 'Desde Office', act: officeFromDisk, nodoc: true, native: true }],
-    [{ icon: 'layers', label: 'Por lotes', act: () => batchDialog(), nodoc: true }, { icon: 'workflow', label: 'Automatizaciones', act: automationsMenu, nodoc: true }], [{ icon: 'file-archive', label: 'Comprimir', act: compressDialog }, { icon: 'file-down', label: 'Ajustar a tamaño', act: fitSizeDialog }],
+    [{ icon: 'layers', label: 'Por lotes', act: () => batchDialog(), nodoc: true }, { icon: 'workflow', label: 'Automatizaciones', act: automationsMenu, nodoc: true }], [{ icon: 'file-archive', label: 'Comprimir', act: compressDialog }, { icon: 'file-down', label: 'Ajustar a tamaño', act: fitSizeDialog }, { icon: 'archive', label: 'PDF/A', title: 'Guardar como PDF/A (archivo a largo plazo)', act: pdfaDialog }],
     [{ icon: 'combine', label: 'Combinar', act: () => combineDialog(false), nodoc: true }, { icon: 'images', label: 'Desde imágenes', act: () => combineDialog(true), nodoc: true }]] },
   { id: 'form', label: 'Formulario', groups: [
     [T('field-text'), T('field-check'), T('field-drop')], [T('select')],

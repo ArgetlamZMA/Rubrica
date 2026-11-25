@@ -51,6 +51,15 @@ jobs:
           python -m playwright install chromium
           python tests/run_all.py
 
+      - name: Guardar muestras PDF/A para validarlas con veraPDF
+        uses: actions/upload-artifact@v5
+        with:
+          name: muestras-pdfa
+          path: |
+            web/test-output/pdfa.pdf
+            web/test-output/pdfa_editado.pdf
+          retention-days: 7
+
       # ---------- Aplicación de Windows ----------
       - uses: actions/setup-dotnet@v5
         with:
@@ -265,3 +274,19 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: dist-android/*.apk
+
+  # Validación independiente de PDF/A con veraPDF (la herramienta de referencia de la PDF Association)
+  pdfa:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v5
+        with:
+          name: muestras-pdfa
+          path: muestras
+      - name: Validar con veraPDF (PDF/A-2b)
+        run: |
+          ls -la muestras
+          docker run --rm -v "$PWD/muestras:/data" verapdf/cli:latest --flavour 2b --format text /data/pdfa.pdf /data/pdfa_editado.pdf | tee resultado.txt
+          docker run --rm -v "$PWD/muestras:/data" verapdf/cli:latest --flavour 2b --format text -v /data/pdfa.pdf /data/pdfa_editado.pdf | grep -E "FAIL|clause|test" | head -60 || true
+          if grep -q "^FAIL" resultado.txt || ! grep -q "^PASS" resultado.txt; then echo "::error::Los PDF/A generados no pasan veraPDF"; exit 1; fi
