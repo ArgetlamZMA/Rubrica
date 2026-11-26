@@ -17,7 +17,8 @@ const DEFAULT_OPTS = {
   redact: {},
   'field-text': { multiline: false },
   'field-check': {},
-  'field-drop': { options: 'Opción 1\nOpción 2\nOpción 3' }
+  'field-drop': { options: 'Opción 1\nOpción 2\nOpción 3' },
+  'field-sig': {}
 };
 const S = {
   docs: [], active: null,
@@ -212,6 +213,12 @@ async function openBytes(name, bytes, extra = {}) {
     if (s0.kind === 'image') doc.dirty = true;
     addDoc(doc);
     addRecent(doc);
+    // solicitud de firma: si el documento espera firmas, se muestra quién sigue
+    if (s0.kind === 'pdf') docPendingSignatures(doc).then(p => {
+      if (!p.length || D() !== doc) return;
+      S.side = 'signatures'; S.sideOpen = true; renderSide();
+      toast(tr(`Este documento espera ${p.length} firma(s). Siguiente: ${p[0].signer || p[0].name}.`), '', 7000);
+    }).catch(() => { });
     return doc;
   });
 }

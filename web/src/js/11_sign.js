@@ -219,10 +219,18 @@ async function signPdfBytes(bytes, o) {
     const pdfa = /pdfaid:part/.test(u8ToBin(bytes));
     ap = await buildSigAppearance(pdf, o.visible.w, o.visible.h, st, data, o.visible.image || (st.image ? dataUrlToBytes(st.image) : null), o.visible.rot, { textAsImage: pdfa });
   } else ap = ctx.register(ctx.formXObject([], { BBox: [0, 0, 0, 0], Resources: {} }));
-  const widget = ctx.register(ctx.obj({ Type: 'Annot', Subtype: 'Widget', FT: 'Sig', Rect: rect, V: sigRef, T: PL.PDFHexString.fromText(fname), F: 132, P: page.ref, AP: { N: ap } }));
-  let annots = page.node.lookupMaybe(PL.PDFName.of('Annots'), PL.PDFArray);
-  if (!annots) { annots = ctx.obj([]); page.node.set(PL.PDFName.of('Annots'), annots); }
-  annots.push(widget); fields.push(widget);
+  // campo de firma preparado (solicitud de firma): se llena ese campo en lugar de crear otro
+  let existing = null;
+  if (o.visible && o.visible.field) { try { const f = pdf.getForm().getField(o.visible.field); if (f instanceof PL.PDFSignature && !f.acroField.dict.has(PL.PDFName.of('V'))) existing = f; } catch { } }
+  if (existing) {
+    const fd = existing.acroField.dict, wd = existing.acroField.getWidgets()[0].dict;
+    fd.set(PL.PDFName.of('V'), sigRef); wd.set(PL.PDFName.of('AP'), ctx.obj({ N: ap })); wd.set(PL.PDFName.of('F'), PL.PDFNumber.of(132));
+  } else {
+    const widget = ctx.register(ctx.obj({ Type: 'Annot', Subtype: 'Widget', FT: 'Sig', Rect: rect, V: sigRef, T: PL.PDFHexString.fromText(fname), F: 132, P: page.ref, AP: { N: ap } }));
+    let annots = page.node.lookupMaybe(PL.PDFName.of('Annots'), PL.PDFArray);
+    if (!annots) { annots = ctx.obj([]); page.node.set(PL.PDFName.of('Annots'), annots); }
+    annots.push(widget); fields.push(widget);
+  }
   const flags = acro.dict.lookupMaybe(PL.PDFName.of('SigFlags'), PL.PDFNumber);
   acro.dict.set(PL.PDFName.of('SigFlags'), PL.PDFNumber.of((flags ? flags.asNumber() : 0) | 3));
   const out = await pdf.save({ useObjectStreams: false });
@@ -340,7 +348,7 @@ async function verifySignature(bytes, sig) {
 }
 
 /* ---------- Interfaz ---------- */
-async function digitalSignDialog() {
+async function digitalSignDialog(target = {}) {
   const d = D(); if (!d) return;
   if (d.security && !d.security.inherited) { toast('Quite la contraseña antes de firmar (un PDF cifrado no se puede firmar aquí).', 'err', 6000); return; }
   let signer = null, ids = await loadIds(), winCerts = [], androidCert = null;
@@ -447,15 +455,24 @@ async function digitalSignDialog() {
   saveSettings();
   const opts = { signer, reason: reason.value, location: location.value, contact: contact.value, tsa: tsaById(tsaSel.value), ltv: !!tsaSel.value && ltv.checked };
   if (tsaSel.value) { S.settings.sigLtv = ltv.checked; saveSettings(); }
+  if (target.field) {
+    // firma dentro de un campo preparado: avisa si el certificado no parece de la persona indicada
+    if (target.field.signer && !signerMatches(target.field.signer, signer.info.cn) && !(await confirmDialog('Firmar en este campo', escapeHtml(tr(`Este campo es para ${target.field.signer}, pero el certificado es de ${signer.info.cn || '?'}. ¿Firmar de todas formas?`)), 'Firmar de todas formas'))) return;
+    opts.style = sigStyleById(styleSel.value === 'invisible' ? S.settings.sigStyleDefault : styleSel.value);
+    return performSign(d, opts, null, null, target.field);
+  }
   if (styleSel.value === 'invisible') return performSign(d, opts, null, null);
   opts.style = sigStyleById(styleSel.value);
   S.pendingSign = opts; setTool('sigbox');
   toast('Dibuje en la página el recuadro donde aparecerá la firma.', '', 5000);
 }
-async function performSign(d, opts, p, r) {
+async function performSign(d, opts, p, r, field = null) {
   try {
     let visible = null;
-    if (p) {
+    if (field) {
+      const [x1, y1, x2, y2] = field.rect, W = Math.abs(x2 - x1), H = Math.abs(y2 - y1), rot = field.rot || 0;
+      visible = { field: field.name, pageIndex: field.docPage ?? field.pageIndex, rect: field.rect, w: rot % 180 ? H : W, h: rot % 180 ? W : H, rot, style: opts.style || sigStyleById(S.settings.sigStyleDefault), image: opts.imageDataUrl ? dataUrlToBytes(opts.imageDataUrl) : null };
+    } else if (p) {
       const pi = d.pages.indexOf(p);
       const style = opts.style || sigStyleById(S.settings.sigStyleDefault);
       const image = opts.imageDataUrl ? dataUrlToBytes(opts.imageDataUrl) : null;
@@ -493,7 +510,15 @@ async function reloadDocFromBytes(d, bytes) {
 function forgetSigChecks() { for (const d of S.docs) for (const s of Object.values(d.sources || {})) for (const g of (s.sigs || [])) delete g._v; }
 async function renderSignatures(body) {
   const d = D(); const srcs = Object.values(d.sources).filter(s => s.kind === 'pdf' && s.sigs && s.sigs.length);
-  if (!srcs.length) { body.append(el('div', { class: 'hint', html: 'Este documento no tiene firmas digitales.<br><br>Para firmar: <b>Proteger → Firma digital</b>.' })); return; }
+  const pend = await docPendingSignatures(d).catch(() => []);
+  if (pend.length) {
+    const box = el('div', { class: 'sig-pending' }, el('div', { class: 'sp-title', html: ic('pen-line') + escapeHtml(tr(`Firmas pendientes (${pend.length})`)) }));
+    pend.forEach((f, k) => box.append(el('div', { class: 'sp-row' + (k ? '' : ' next') },
+      el('div', {}, el('b', { text: (f.order ? f.order + '. ' : '') + (f.signer || f.name) }), el('div', { class: 'muted', text: tr(`Página ${f.docPage + 1}`) + (k ? '' : ' · ' + tr('siguiente')) })),
+      el('button', { class: 'btn sm' + (k ? '' : ' primary'), html: ic('signature') + escapeHtml(tr('Firmar aquí')), onclick: () => { goToPage(f.docPage, true); signPendingField(f); } }))));
+    body.append(box);
+  }
+  if (!srcs.length) { body.append(el('div', { class: 'hint', html: pend.length ? escapeHtml(tr('Todavía nadie ha firmado este documento.')) : 'Este documento no tiene firmas digitales.<br><br>Para firmar: <b>Proteger → Firma digital</b>.' })); return; }
   const box = el('div', { class: 'slist' }); body.append(box);
   for (const s of srcs) {
     const ltvDoc = pdfHasLtv(s.bytes);

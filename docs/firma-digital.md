@@ -11,6 +11,15 @@ Rúbrica firma documentos con un certificado digital (por ejemplo, el de firma e
 5. Si es visible, dibuje en la página el recuadro donde aparecerá; el texto se ajusta solo al tamaño.
 6. Elija dónde guardar el PDF firmado (equipo, OneDrive o Google Drive).
 
+## Pedir firmas a otras personas
+
+1. Abra el documento y elija **Formulario → Campo de firma** (o **Proteger → Pedir firma**).
+2. Dibuje el recuadro donde debe firmar cada persona e indique su nombre (como aparece en su certificado) y el orden.
+3. **Proteger → Enviar para firmar**: guarde el PDF y envíelo con el mensaje propuesto (correo, WhatsApp o compartir en Android).
+4. Quien lo recibe lo abre en Rúbrica: el panel **Firmas** muestra las firmas pendientes y quién sigue. Con **Firmar aquí** firma dentro de su campo, y el siguiente recibe el archivo ya firmado.
+
+Rúbrica avisa si alguien firma antes de su turno o si el certificado no parece de la persona indicada. Los campos son estándar: también se pueden firmar con Adobe Acrobat Reader.
+
 ## Preferencias de firma
 
 **Proteger → Preferencias de firma** (o *Configuración → Preferencias de firma…*) tiene tres pestañas, como en PDFelement:

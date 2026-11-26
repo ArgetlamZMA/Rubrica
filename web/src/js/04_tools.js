@@ -1,11 +1,11 @@
 /* ============================================================
    04 · Herramientas, interacción con el ratón, panel de propiedades
    ============================================================ */
-const CREATE = new Set(['sigbox', 'highlight', 'underline', 'strike', 'note', 'text', 'ink', 'rect', 'ellipse', 'line', 'arrow', 'stamp', 'image', 'whiteout', 'redact', 'field-text', 'field-check', 'field-drop']);
+const CREATE = new Set(['sigbox', 'highlight', 'underline', 'strike', 'note', 'text', 'ink', 'rect', 'ellipse', 'line', 'arrow', 'stamp', 'image', 'whiteout', 'redact', 'field-text', 'field-check', 'field-drop', 'field-sig']);
 const TOOL_NAMES = {
   select: 'Seleccionar', hand: 'Mano', highlight: 'Resaltar', underline: 'Subrayar', strike: 'Tachar', note: 'Nota', text: 'Cuadro de texto', ink: 'Lápiz',
   rect: 'Rectángulo', ellipse: 'Elipse', line: 'Línea', arrow: 'Flecha', stamp: 'Sello', code: 'Código', eraser: 'Borrador', edittext: 'Editar texto', image: 'Imagen',
-  whiteout: 'Corrector (tapar)', redact: 'Redactar', 'field-text': 'Campo de texto', 'field-check': 'Casilla', 'field-drop': 'Lista desplegable',
+  whiteout: 'Corrector (tapar)', redact: 'Redactar', 'field-text': 'Campo de texto', 'field-check': 'Casilla', 'field-drop': 'Lista desplegable', 'field-sig': 'Campo de firma',
   textedit: 'Texto editado', field: 'Campo de formulario', sigbox: 'Recuadro de firma digital'
 };
 const STAMPS = ['APROBADO', 'RECIBIDO', 'RECIBIDO CONFORME', 'REVISADO', 'VERIFICADO', 'PAGADO', 'LIQUIDADO', 'AFORADO', 'DESPACHADO', 'ENTREGADO', 'ORIGINAL', 'COPIA', 'COPIA FIEL', 'NO NEGOCIABLE', 'CONFIDENCIAL', 'URGENTE', 'BORRADOR', 'ANULADO', 'RECHAZADO'];
@@ -252,6 +252,18 @@ async function finishCreate(p, t, opt, r, dragged, g) {
       if (opts) await performSign(D(), opts, p, r);
       return;
     }
+    case 'field-sig': {
+      if (!dragged || r.w < 60 || r.h < 24) r = { x: r.x - 90, y: r.y - 25, w: 180, h: 50 };
+      const used = d.pages.flatMap(pp => pp.ov.filter(x => x.type === 'field' && x.ftype === 'sig'));
+      const v = await formDialog('Campo de firma', [
+        { type: 'hint', label: 'Quien reciba el documento firmará dentro de este recuadro, en el orden indicado.' },
+        { key: 'signer', label: '¿Quién firma aquí?', placeholder: 'Nombre como aparece en su certificado' },
+        { key: 'order', label: 'Orden de firma', type: 'number', value: Math.max(0, ...used.map(x => x.order || 0)) + 1, min: 1 }
+      ], { ok: 'Agregar', validate: v => v.signer.trim() ? null : 'Escriba el nombre de quien firma.' });
+      if (!v) return;
+      add.push({ ...base(), type: 'field', ftype: 'sig', name: uniqueFieldName(d, 'Firma'), ...r, signer: v.signer.trim(), order: v.order || 1 });
+      break;
+    }
     case 'field-text': case 'field-drop': case 'field-check': {
       const ft = t.split('-')[1];
       if (!dragged) r = ft === 'check' ? { x: r.x - 7, y: r.y - 7, w: 14, h: 14 } : { x: r.x, y: r.y - 9, w: 150, h: 18 };
@@ -395,7 +407,8 @@ async function editFieldProps(p, o) {
     { key: 'name', label: 'Nombre del campo', value: o.name },
     ...(o.ftype === 'text' ? [{ key: 'multiline', label: 'Varias líneas', type: 'checkbox', value: o.multiline }, { key: 'value', label: 'Valor inicial', value: o.value || '' }] : []),
     ...(o.ftype === 'drop' ? [{ key: 'options', label: 'Opciones (una por línea)', type: 'textarea', value: o.options }] : []),
-    ...(o.ftype === 'check' ? [{ key: 'checked', label: 'Marcada por defecto', type: 'checkbox', value: o.checked }] : [])
+    ...(o.ftype === 'check' ? [{ key: 'checked', label: 'Marcada por defecto', type: 'checkbox', value: o.checked }] : []),
+    ...(o.ftype === 'sig' ? [{ key: 'signer', label: '¿Quién firma aquí?', value: o.signer || '' }, { key: 'order', label: 'Orden de firma', type: 'number', value: o.order || 1, min: 1 }] : [])
   ], { validate: v => !v.name.trim() ? 'El nombre es obligatorio' : null });
   if (!v) return;
   d.checkpoint(); Object.assign(o, v); o.name = v.name.trim(); renderOverlays(p); renderProps();

@@ -361,3 +361,12 @@ table.kv td { padding: 3px 0; word-break: break-word; }
 .cmp-ins .cmp-kind{color:#2da44e}.cmp-mod .cmp-kind{color:#d97706}.cmp-del .cmp-kind,.cmp-vis .cmp-kind{color:var(--danger)}
 .cmp-pg{color:var(--muted);font-size:12px}
 .cmp-tx del{color:var(--danger);text-decoration:line-through}.cmp-tx ins{color:#1a7f37;text-decoration:none;background:rgba(45,164,78,.12);border-radius:3px;padding:0 2px}
+
+/* Firmas pendientes (solicitud de firma) */
+.sig-pending{border:1px solid var(--accent);background:var(--accent2);border-radius:8px;padding:8px;margin-bottom:10px;font-size:12px}
+.sig-pending .sp-title{display:flex;align-items:center;gap:6px;font-weight:600;color:var(--accent);margin-bottom:6px}
+.sig-pending .sp-title svg{width:15px;height:15px}
+.sig-pending .sp-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 4px;border-top:1px solid rgba(0,0,0,.06)}
+.sig-pending .sp-row:first-of-type{border-top:0}
+.sig-pending .muted{color:var(--muted);font-size:11px}
+.ov.field.sig, .ov[data-ftype="sig"]{border-style:dashed}

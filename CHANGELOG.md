@@ -9,6 +9,8 @@
 - Firmar una copia PDF/A con firma visible mantiene el cumplimiento de PDF/A.
 - Android: se permite http para marca de tiempo, OCSP y CRL de cualquier autoridad (antes solo el SAR). Son respuestas firmadas y Rúbrica las verifica.
 - **Resumen de resaltados y notas** (*Comentar → Resumen*, modo estudio): exporta a Word o Markdown, o copia al portapapeles, los resaltados, subrayados, tachados y notas, con el texto marcado, su página y su autor, agrupados por página o por tipo. Incluye las marcas hechas en otros programas (Acrobat, Edge, lectores de tabletas), y los resaltados de varias líneas salen como una sola cita.
+- **Pedir firmas a otras personas** (*Formulario → Campo de firma* o *Proteger → Pedir firma*): agregue recuadros con el nombre de quien debe firmar y el orden, y envíe el documento con *Proteger → Enviar para firmar*. Al abrirlo, Rúbrica muestra las firmas pendientes y quién sigue. *Firmar aquí* firma dentro del campo preparado. Rúbrica avisa si se salta el orden o si el certificado no parece de la persona indicada. Son campos de firma estándar: también se pueden firmar en Adobe Acrobat Reader.
+- Corrección: al firmar un documento que ya tenía firmas, la actualización incremental podía declarar un tamaño menor que la anterior (defecto de pdf-lib). Algunos validadores, como pyHanko en modo estricto, rechazaban el archivo.
 - La compilación se detiene si dos archivos de la interfaz declaran el mismo nombre (antes la app no arrancaba).
 
 ## 1.4.0 — en preparación

@@ -1,7 +1,7 @@
 /* ============================================================
    09 · Cinta de opciones, pantalla de inicio, atajos y arranque
    ============================================================ */
-const T = t => ({ tool: t, icon: { select: 'mouse-pointer-2', hand: 'hand', highlight: 'highlighter', underline: 'underline', strike: 'strikethrough', note: 'message-square-plus', text: 'type', ink: 'pencil', rect: 'square', ellipse: 'circle', line: 'minus', arrow: 'move-up-right', stamp: 'stamp', eraser: 'eraser', edittext: 'text-cursor-input', whiteout: 'square-dashed', redact: 'eye-off', 'field-text': 'text-cursor', 'field-check': 'square-check', 'field-drop': 'list' }[t], label: TOOL_NAMES[t] });
+const T = t => ({ tool: t, icon: { select: 'mouse-pointer-2', hand: 'hand', highlight: 'highlighter', underline: 'underline', strike: 'strikethrough', note: 'message-square-plus', text: 'type', ink: 'pencil', rect: 'square', ellipse: 'circle', line: 'minus', arrow: 'move-up-right', stamp: 'stamp', eraser: 'eraser', edittext: 'text-cursor-input', whiteout: 'square-dashed', redact: 'eye-off', 'field-text': 'text-cursor', 'field-check': 'square-check', 'field-drop': 'list', 'field-sig': 'pen-line' }[t], label: TOOL_NAMES[t] });
 const RIBBON = [
   { id: 'home', label: 'Inicio', groups: [
     [{ icon: 'scan-line', label: 'Escanear', act: () => scanDocument(), nodoc: true, android: true }, { icon: 'folder-open', label: 'Abrir', act: openLocal, nodoc: true }, { icon: 'cloud', label: 'OneDrive', act: () => openFromCloud('onedrive'), nodoc: true, android: false }, { icon: 'cloud', label: 'Google Drive', act: () => openFromCloud('gdrive'), nodoc: true, android: false }],
@@ -33,11 +33,12 @@ const RIBBON = [
     [{ icon: 'layers', label: 'Por lotes', act: () => batchDialog(), nodoc: true }, { icon: 'workflow', label: 'Automatizaciones', act: automationsMenu, nodoc: true }], [{ icon: 'file-archive', label: 'Comprimir', act: compressDialog }, { icon: 'file-down', label: 'Ajustar a tamaño', act: fitSizeDialog }, { icon: 'archive', label: 'PDF/A', title: 'Guardar como PDF/A (archivo a largo plazo)', act: pdfaDialog }],
     [{ icon: 'combine', label: 'Combinar', act: () => combineDialog(false), nodoc: true }, { icon: 'images', label: 'Desde imágenes', act: () => combineDialog(true), nodoc: true }]] },
   { id: 'form', label: 'Formulario', groups: [
-    [T('field-text'), T('field-check'), T('field-drop')], [T('select')],
+    [T('field-text'), T('field-check'), T('field-drop'), T('field-sig')], [T('select')],
     [{ icon: 'table', label: 'Exportar datos (CSV)', act: exportFormCsv }, { icon: 'rotate-ccw', label: 'Restablecer', act: resetForm }, { icon: 'highlighter', label: 'Resaltar campos', act: toggleFieldHighlight }]] },
   { id: 'protect', label: 'Proteger', groups: [
     [{ icon: 'lock', label: 'Contraseña', act: protectDialog }, { icon: 'lock-open', label: 'Quitar seguridad', act: removeSecurity }],
     [{ icon: 'shield-check', label: 'Firma digital', act: digitalSignDialog }, { icon: 'signature', label: 'Firma manuscrita', act: signatureDialog }, { icon: 'file-badge', label: 'Ver firmas', act: () => { S.side = 'signatures'; S.sideOpen = true; renderSide(); } }, { icon: 'sliders-horizontal', label: 'Preferencias de firma', act: () => signPrefsDialog(), nodoc: true }],
+    [{ ...T('field-sig'), label: 'Pedir firma' }, { icon: 'send', label: 'Enviar para firmar', act: shareForSigningDialog }],
     [T('redact'), { icon: 'search', label: 'Buscar y redactar', act: () => { S.side = 'search'; S.sideOpen = true; renderSide(); } }, { icon: 'shield-x', label: 'Quitar información oculta', act: sanitizeDialog }]] }
 ];
 function renderRibbon() {

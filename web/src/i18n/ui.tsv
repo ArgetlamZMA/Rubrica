@@ -1,4 +1,5 @@
 es	en	pt
+(Adjunte el PDF guardado.)	(Attach the saved PDF.)	(Anexe o PDF salvo.)
 (Autoridad de Certificación Raíz y Subordinada).	(Root and Subordinate Certification Authority).	(Autoridade Certificadora Raiz e Subordinada).
 (con cambios posteriores permitidos)	(with later changes allowed)	(com alterações posteriores permitidas)
 (configure su nombre en Configuración)	(set your name in Settings)	(configure seu nome em Configurações)
@@ -49,6 +50,7 @@ Abrir	Open	Abrir
 Abrir PDF	Open PDF	Abrir PDF
 Abrir archivo	Open file	Abrir arquivo
 Abrir configuración	Open settings	Abrir configurações
+Abrir correo	Open email	Abrir e-mail
 Abrir de Google Drive	Open from Google Drive	Abrir do Google Drive
 Abrir de OneDrive	Open from OneDrive	Abrir do OneDrive
 Abrir desde la nube	Open from the cloud	Abrir da nuvem
@@ -68,6 +70,7 @@ Agente aduanero	Customs broker	Despachante aduaneiro
 Agrega al PDF la información de revocación (OCSP/CRL) de los certificados, para que la firma se pueda validar dentro de muchos años aunque los certificados hayan vencido.	Adds the certificates' revocation information (OCSP/CRL) to the PDF, so the signature can be validated many years from now even after the certificates expire.	Adiciona ao PDF as informações de revogação (OCSP/CRL) dos certificados, para que a assinatura possa ser validada daqui a muitos anos mesmo depois que os certificados vencerem.
 Agregado	Added	Adicionado
 Agregando «{0}»…	Adding "{0}"…	Adicionando «{0}»…
+Agregar	Add	Adicionar
 Agregar comentarios	Add comments	Adicionar comentários
 Agregar dato	Add field	Adicionar dado
 Agregar fuente desde archivo…	Add font from file…	Adicionar fonte de arquivo…
@@ -187,6 +190,7 @@ Calidad	Quality	Qualidade
 Cambios sin guardar	Unsaved changes	Alterações não salvas
 Cambió el tamaño de la página	The page size changed	O tamanho da página mudou
 Campo	Field	Campo
+Campo de firma	Signature field	Campo de assinatura
 Campo de formulario	Form field	Campo de formulário
 Campo de texto	Text field	Campo de texto
 Campos de formulario (se aplanan: queda el valor escrito)	Form fields (flattened: the typed value remains)	Campos de formulário (são achatados: fica o valor digitado)
@@ -303,6 +307,7 @@ Convirtiendo…	Converting…	Convertendo…
 Copiado.	Copied.	Copiado.
 Copiar	Copy	Copiar
 Copiar al portapapeles (Markdown)	Copy to clipboard (Markdown)	Copiar para a área de transferência (Markdown)
+Copiar mensaje	Copy message	Copiar mensagem
 Copiar texto	Copy text	Copiar texto
 Copiar texto e imágenes	Copy text and images	Copiar texto e imagens
 Copiar, cortar y pegar el objeto seleccionado	Copy, cut and paste the selected object	Copiar, recortar e colar o objeto selecionado
@@ -381,6 +386,7 @@ Documento firmado (PAdES con marca de tiempo y validación a largo plazo) y guar
 Documento firmado digitalmente	Digitally signed document	Documento assinado digitalmente
 Documento firmado digitalmente con marca de tiempo y guardado.	Document digitally signed with a timestamp and saved.	Documento assinado digitalmente com carimbo do tempo e salvo.
 Documento firmado digitalmente y guardado.	Document digitally signed and saved.	Documento assinado digitalmente e salvo.
+Documento para firmar: 	Document to sign: 	Documento para assinar: 
 Documento protegido	Protected document	Documento protegido
 Documento siguiente / anterior	Next / previous document	Documento seguinte / anterior
 Documentos	Documents	Documentos
@@ -470,6 +476,7 @@ Entendido	Got it	Entendi
 Entidad contratante	Contracting entity	Entidade contratante
 Entre a	Go to	Acesse
 Enviar atrás	Send to back	Enviar para trás
+Enviar para firmar	Send for signing	Enviar para assinar
 Error al convertir:	Conversion error:	Erro ao converter:
 Error al subir (	Upload error (	Erro ao enviar (
 Error:	Error:	Erro:
@@ -479,6 +486,7 @@ Escanear documento	Scan document	Digitalizar documento
 Escanear páginas	Scan pages	Digitalizar páginas
 Escaneo	Scan	Digitalização
 Escriba el contenido del código.	Enter the code content.	Digite o conteúdo do código.
+Escriba el nombre de quien firma.	Enter the signer's name.	Digite o nome de quem assina.
 Escriba la contraseña de «{0}» para comprobarlo. No se guarda: se pedirá al firmar.	Enter the password for "{0}" to check it. It is not saved: it will be asked when signing.	Digite a senha de "{0}" para verificá-lo. Ela não é salva: será pedida ao assinar.
 Escriba la contraseña del certificado.	Enter the certificate password.	Digite a senha do certificado.
 Escriba la contraseña y pulse «Verificar certificado» para ver los datos.	Enter the password and press "Verify certificate" to see the details.	Digite a senha e clique em "Verificar certificado" para ver os dados.
@@ -496,6 +504,9 @@ Esta página no tiene texto seleccionable (use OCR si es escaneada).	This page h
 Establecer por defecto	Set as default	Definir como padrão
 Este archivo se abrió desde la app de escritorio.	This file was opened from the desktop app.	Este arquivo foi aberto pelo aplicativo de desktop.
 Este archivo se abrió en Android.	This file was opened on Android.	Este arquivo foi aberto no Android.
+Este campo es para {0}, pero el certificado es de {1}. ¿Firmar de todas formas?	This field is for {0}, but the certificate belongs to {1}. Sign anyway?	Este campo é para {0}, mas o certificado é de {1}. Assinar mesmo assim?
+Este documento espera primero la firma de {0}. ¿Firmar de todas formas?	This document first expects the signature of {0}. Sign anyway?	Este documento espera primeiro a assinatura de {0}. Assinar mesmo assim?
+Este documento espera {0} firma(s). Siguiente: {1}.	This document expects {0} signature(s). Next: {1}.	Este documento espera {0} assinatura(s). Próxima: {1}.
 Este documento no tiene firmas digitales.	This document has no digital signatures.	Este documento não tem assinaturas digitais.
 Este documento no tiene marcadores.	This document has no bookmarks.	Este documento não tem marcadores.
 Este documento tiene {0} firma(s) digital(es). Revíselas en el panel «Firmas».	This document has {0} digital signature(s). Review them in the "Signatures" panel.	Este documento tem {0} assinatura(s) digital(is). Revise-as no painel "Assinaturas".
@@ -540,10 +551,14 @@ Firmado digitalmente por:	Digitally signed by:	Assinado digitalmente por:
 Firmando y solicitando la marca de tiempo a	Signing and requesting the timestamp from	Assinando e solicitando o carimbo do tempo a
 Firmando…	Signing…	Assinando…
 Firmante desconocido	Unknown signer	Signatário desconhecido
+Firmar aquí	Sign here	Assinar aqui
 Firmar como	Sign as	Assinar como
+Firmar de todas formas	Sign anyway	Assinar mesmo assim
+Firmar en este campo	Sign in this field	Assinar neste campo
 Firmar sin marca de tiempo	Sign without timestamp	Assinar sem carimbo do tempo
 Firmas	Signatures	Assinaturas
 Firmas guardadas (clic para usar):	Saved signatures (click to use):	Assinaturas salvas (clique para usar):
+Firmas pendientes ({0})	Pending signatures ({0})	Assinaturas pendentes ({0})
 Flecha	Arrow	Seta
 Flechas	Arrows	Setas
 Fondo	Background	Fundo
@@ -588,8 +603,10 @@ Guardar como	Save as	Salvar como
 Guardar como PDF/A	Save as PDF/A	Salvar como PDF/A
 Guardar como PDF/A (archivo a largo plazo)	Save as PDF/A (long-term archiving)	Salvar como PDF/A (arquivamento de longo prazo)
 Guardar como automatización…	Save as automation…	Salvar como automação…
+Guardar documento	Save document	Salvar documento
 Guardar en la nube	Save to the cloud	Salvar na nuvem
 Guardar esta firma para usarla después	Save this signature to use later	Salvar esta assinatura para usar depois
+Guarde el documento y envíelo con este mensaje. Cada persona firma en su campo; el siguiente recibe el archivo ya firmado.	Save the document and send it with this message. Each person signs in their field; the next one receives the already signed file.	Salve o documento e envie-o com esta mensagem. Cada pessoa assina no seu campo; a próxima recebe o arquivo já assinado.
 Haga clic en la página donde va la firma.	Click on the page where the signature goes.	Clique na página onde vai a assinatura.
 Haga clic en la página para colocar la imagen, o arrastre para definir su tamaño.	Click on the page to place the image, or drag to set its size.	Clique na página para colocar a imagem, ou arraste para definir o tamanho.
 Haga clic para seleccionar · Ctrl/Mayús para varias · arrastre para reordenar	Click to select · Ctrl/Shift for several · drag to reorder	Clique para selecionar · Ctrl/Shift para várias · arraste para reordenar
@@ -672,6 +689,7 @@ La versión {0} no trae el manifiesto firmado, así que Rúbrica no la instalar�
 Las contraseñas no coinciden.	The passwords do not match.	As senhas não coincidem.
 Las firmas emitidas por «{0}» dejarán de mostrarse como de confianza.	Signatures issued by "{0}" will no longer be shown as trusted.	As assinaturas emitidas por "{0}" deixarão de ser mostradas como confiáveis.
 Las páginas con capas ocultas se convirtieron en imagen sin texto, para que lo oculto no quede en el archivo. Si necesita buscar en ellas, aplique OCR a la copia.	Pages with hidden layers were converted to images without text, so the hidden content does not remain in the file. If you need to search them, run OCR on the copy.	As páginas com camadas ocultas foram convertidas em imagem sem texto, para que o conteúdo oculto não fique no arquivo. Se precisar pesquisar nelas, aplique OCR à cópia.
+Le envío el documento «{0}» para su firma digital. Ábralo con Rúbrica (o Adobe Acrobat Reader), vaya a «Firmas» y pulse «Firmar aquí» en el campo con su nombre. Orden de firma: {1}.	I'm sending you the document "{0}" for your digital signature. Open it with Rúbrica (or Adobe Acrobat Reader), go to "Signatures" and click "Sign here" on the field with your name. Signing order: {1}.	Envio o documento «{0}» para sua assinatura digital. Abra-o com o Rúbrica (ou Adobe Acrobat Reader), vá em «Assinaturas» e clique em «Assinar aqui» no campo com seu nome. Ordem de assinatura: {1}.
 Leyendo el texto…	Reading the text…	Lendo o texto…
 Leyendo la página {0} de {1}…	Reading page {0} of {1}…	Lendo a página {0} de {1}…
 LibreOffice no pudo convertir el archivo: {0}	LibreOffice could not convert the file: {0}	O LibreOffice não conseguiu converter o arquivo: {0}
@@ -710,6 +728,7 @@ Mayús+F3	Shift+F3	Shift+F3
 Mayús+Flechas	Shift+Arrows	Shift+Setas
 Media (150 ppp)	Medium (150 dpi)	Média (150 ppp)
 Media — páginas como imagen 150 ppp	Medium — pages as 150 dpi images	Média — páginas como imagem 150 ppp
+Mensaje copiado.	Message copied.	Mensagem copiada.
 Metadatos (título, autor, programa, fechas, XMP)	Metadata (title, author, program, dates, XMP)	Metadados (título, autor, programa, datas, XMP)
 Mi unidad	My Drive	Meu Drive
 Microsoft · ID de aplicación (cliente)	Microsoft · Application (client) ID	Microsoft · ID do aplicativo (cliente)
@@ -772,6 +791,7 @@ No se pudo obtener la marca de tiempo de	Could not get the timestamp from	Não f
 No se pueden eliminar todas las páginas.	You cannot delete all pages.	Não é possível excluir todas as páginas.
 No se reconoció texto en las páginas indicadas.	No text was recognized on the given pages.	Nenhum texto foi reconhecido nas páginas indicadas.
 Nombre	Name	Nome
+Nombre como aparece en su certificado	Name as it appears on their certificate	Nome como aparece no certificado
 Nombre de los archivos resultantes	Output file names	Nome dos arquivos resultantes
 Nombre de usuario	User name	Nome de usuário
 Nombre del archivo	File name	Nome do arquivo
@@ -812,6 +832,8 @@ Opacidad (%)	Opacity (%)	Opacidade (%)
 Opciones	Options	Opções
 Opciones (una por línea)	Options (one per line)	Opções (uma por linha)
 Optimizando sin pérdida…	Optimizing without loss…	Otimizando sem perda…
+Orden de firma	Signing order	Ordem de assinatura
+Orden de las firmas	Signing order	Ordem das assinaturas
 Organizar	Organize	Organizar
 Orientación	Orientation	Orientação
 Origen	Source	Origem
@@ -844,6 +866,7 @@ Para usar Aptos u otra fuente, copie el archivo .ttf al teléfono y use «Agrega
 Parte {0}: páginas {1}–{2} · {3}	Part {0}: pages {1}–{2} · {3}	Parte {0}: páginas {1}–{2} · {3}
 Pase el ratón sobre el texto del documento: los bloques editables se marcan en azul. Haga clic para modificarlos.	Hover over the document text: editable blocks are highlighted in blue. Click to modify them.	Passe o mouse sobre o texto do documento: os blocos editáveis ficam marcados em azul. Clique para modificá-los.
 Pasos	Steps	Etapas
+Pedir firma	Request signature	Pedir assinatura
 Permiso de escritura denegado.	Write permission denied.	Permissão de gravação negada.
 Permisos de API	API permissions	Permissões de API
 Permitir a quien abra el documento	Allow whoever opens the document to	Permitir a quem abrir o documento
@@ -875,6 +898,7 @@ Preparando…	Preparing…	Preparando…
 Primer número	First number	Primeiro número
 Primera	First	Primeira
 Primera / última página	First / last page	Primeira / última página
+Primero agregue campos de firma (Formulario → Campo de firma).	First add signature fields (Form → Signature field).	Primeiro adicione campos de assinatura (Formulário → Campo de assinatura).
 Primero elija una imagen o firma.	First choose an image or signature.	Primeiro escolha uma imagem ou assinatura.
 Probando {0} ppp…	Trying {0} dpi…	Testando {0} ppp…
 Probar	Test	Testar
@@ -915,6 +939,7 @@ Páginas	Pages	Páginas
 Páginas (vacío = todas)	Pages (empty = all)	Páginas (vazio = todas)
 Páginas a insertar (vacío = todas)	Pages to insert (empty = all)	Páginas a inserir (vazio = todas)
 Páginas:	Pages:	Páginas:
+Quien reciba el documento firmará dentro de este recuadro, en el orden indicado.	The recipient will sign inside this box, in the order shown.	Quem receber o documento assinará dentro deste quadro, na ordem indicada.
 Quitando capas ocultas…	Removing hidden layers…	Removendo camadas ocultas…
 Quitando información oculta…	Removing hidden information…	Removendo informações ocultas…
 Quitar	Remove	Remover
@@ -1067,6 +1092,7 @@ Tipo de expediente	Dossier type	Tipo de dossiê
 Tipo de marca	Mark type	Tipo de marca
 Todas	All	Todas
 Todas las páginas	All pages	Todas as páginas
+Todavía nadie ha firmado este documento.	Nobody has signed this document yet.	Ninguém assinou este documento ainda.
 Todos los documentos abiertos ya están en la lista.	All open documents are already in the list.	Todos os documentos abertos já estão na lista.
 Traer al frente	Bring to front	Trazer para a frente
 Título	Title	Título
@@ -1152,6 +1178,7 @@ raíces incluidas en Rúbrica	roots included in Rúbrica	raízes incluídas no R
 respondió correctamente.	responded correctly.	respondeu corretamente.
 scripts o acciones	scripts or actions	scripts ou ações
 se guarda. Los certificados del almacén de Windows (incluidos tokens USB) se usan con el PIN de Windows; la clave privada no sale del sistema.	saved. Certificates in the Windows store (including USB tokens) are used with the Windows PIN; the private key never leaves the system.	salva. Os certificados do repositório do Windows (incluindo tokens USB) são usados com o PIN do Windows; a chave privada não sai do sistema.
+siguiente	next	próxima
 sus certificados de confianza	your trusted certificates	seus certificados confiáveis
 total ·	total ·	total ·
 y cree un proyecto (p. ej.	and create a project (e.g.	e crie um projeto (ex.:
@@ -1186,6 +1213,7 @@ y péguelo abajo.	and paste it below.	e cole abaixo.
 ¿Eliminar {0} páginas?	Delete {0} pages?	Excluir {0} páginas?
 ¿Eliminar «{0}»?	Delete "{0}"?	Excluir "{0}"?
 ¿Firmar sin marca de tiempo (con la hora de este equipo)?	Sign without a timestamp (with this computer's time)?	Assinar sem carimbo do tempo (com a hora deste computador)?
+¿Quién firma aquí?	Who signs here?	Quem assina aqui?
 Índice	Index	Índice
 Índice ({0} de {1})	Index ({0} of {1})	Índice ({0} de {1})
 Índice con enlaces a cada documento	Index with links to each document	Índice com links para cada documento

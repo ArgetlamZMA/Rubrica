@@ -332,7 +332,7 @@ function ovEl(o, s, d) {
       } else e.textContent = o.text;
       break;
     }
-    case 'field': e.innerHTML = ic(o.ftype === 'check' ? 'square-check' : o.ftype === 'drop' ? 'list' : 'text-cursor-input') + '&nbsp;' + escapeHtml(o.name); e.querySelector('svg').style.cssText = 'position:static;width:12px;height:12px;flex:none'; break;
+    case 'field': e.innerHTML = o.ftype === 'sig' ? ic('pen-line') + '&nbsp;' + escapeHtml(tr('Firma') + ' ' + (o.order || '') + ': ' + (o.signer || '')) : ic(o.ftype === 'check' ? 'square-check' : o.ftype === 'drop' ? 'list' : 'text-cursor-input') + '&nbsp;' + escapeHtml(o.name); e.querySelector('svg').style.cssText = 'position:static;width:12px;height:12px;flex:none'; break;
     default: e.innerHTML = ovSvg(o);
   }
   if (o.type === 'redact') e.classList.add('pending');

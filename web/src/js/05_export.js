@@ -56,6 +56,19 @@ function wrapText(text, fam, b, i, size, maxW) {
   return out;
 }
 
+/* pdf-lib (@cantoo) en una actualización incremental descontaba 1 del /Size cuando el último objeto no cambiaba
+   (regla pensada para guardados completos), y escribía un /Size menor que el de la sección anterior: pyHanko lo
+   rechaza y otros lectores podrían ignorar objetos. Con sección anterior, el tamaño es siempre el mayor número + 1. */
+(() => {
+  const W = PL.PDFWriter && PL.PDFWriter.prototype; if (!W || W.__rubricaSize) return;
+  const orig = W.createTrailerDict;
+  W.createTrailerDict = function (prev) {
+    const d = orig.call(this, prev);
+    if (prev) d.set(PL.PDFName.of('Size'), PL.PDFNumber.of(this.context.largestObjectNumber + 1));
+    return d;
+  };
+  W.__rubricaSize = true;
+})();
 async function loadLib(src, incremental) {
   const o = { updateMetadata: false, throwOnInvalidObject: false, forIncrementalUpdate: !!incremental };
   try { return await PL.PDFDocument.load(src.bytes, o); }
@@ -197,7 +210,7 @@ function addNoteAnnots(pdf, notes) {
     pg.node.addAnnot(pdf.context.register(dict));
   }
 }
-function addFields(pdf, fields) {
+async function addFields(pdf, fields) {
   if (!fields.length) return;
   const form = pdf.getForm();
   const used = new Set(form.getFields().map(f => f.getName()));
@@ -205,6 +218,7 @@ function addFields(pdf, fields) {
     let name = o.name || 'Campo'; let k = 2; while (used.has(name)) name = (o.name || 'Campo') + '_' + k++; used.add(name);
     const opt = { x: rect[0], y: rect[1], width: rect[2] - rect[0], height: rect[3] - rect[1], borderWidth: 1, borderColor: PL.rgb(0.55, 0.6, 0.68), backgroundColor: PL.rgb(1, 1, 1), rotate: PL.degrees(rot) };
     try {
+      if (o.ftype === 'sig') { await addEmptySigField(pdf, pg, { name, signer: o.signer, order: o.order, rect, rot }); continue; }
       if (o.ftype === 'check') { const f = form.createCheckBox(name); f.addToPage(pg, opt); if (o.checked) f.check(); }
       else if (o.ftype === 'drop') { const f = form.createDropdown(name); const ops = String(o.options || '').split('\n').map(s => formSafe(s.trim())).filter(Boolean); if (ops.length) f.addOptions(ops); f.addToPage(pg, opt); }
       else { const f = form.createTextField(name); if (o.multiline) f.enableMultiline(); if (o.value) f.setText(formSafe(o.value)); f.addToPage(pg, opt); }
@@ -407,7 +421,7 @@ async function buildPdfCore(doc, opts = {}) {
     if (p.ov.length) await drawOverlays(pdf, pg, p, ctx, doc);
   }
   addNoteAnnots(pdf, ctx.notes);
-  addFields(pdf, ctx.fields);
+  await addFields(pdf, ctx.fields);
   const m = doc.meta || {};
   if (m.title) pdf.setTitle(m.title); if (m.author) pdf.setAuthor(m.author); if (m.subject) pdf.setSubject(m.subject);
   if (m.keywords) pdf.setKeywords(String(m.keywords).split(/[,;]\s*/));
