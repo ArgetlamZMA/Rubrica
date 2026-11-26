@@ -55,6 +55,18 @@ async def main():
         path2 = os.path.join(OUT, 'pdfa_editado.pdf'); open(path2, 'wb').write(base64.b64decode(b2))
         probs2 = check_pdfa2b(path2)
         check(not probs2 and 'Agregado después' in ' '.join((PdfReader(path2).pages[0].extract_text() or '').split()), f'al editar y guardar sigue siendo PDF/A {probs2[:4]}')
+        # firmar la copia PDF/A con firma visible: sigue cumpliendo (el texto de la apariencia va como imagen)
+        await pg.evaluate("activateDoc(S.docs[1])")
+        sb = await pg.evaluate("""async () => { const d = D(), p = d.pages[0], r = { x: 330, y: 620, w: 220, h: 70 };
+          const p12 = new Uint8Array(await (await fetch('/__t/modern.p12')).arrayBuffer());
+          const out = await signPdfBytes(await buildPdf(d, {}), { signer: p12Signer(p12, 'Clave123'), reason: 'Aprobado', location: 'San Pedro Sula',
+            visible: { pageIndex: 0, rect: dispRectToUser(p, r), w: r.w, h: r.h, rot: 0, style: sigStyleById(S.settings.sigStyleDefault) } });
+          return u8ToB64(out); }""")
+        path3 = os.path.join(OUT, 'pdfa_firmado.pdf'); open(path3, 'wb').write(base64.b64decode(sb))
+        probs3 = check_pdfa2b(path3)
+        rs = PdfReader(path3); w = [a.get_object() for a in (rs.pages[0].get('/Annots') or []) if a.get_object().get('/FT') == '/Sig']
+        res = w[0]['/AP']['/N']['/Resources'] if w else {}
+        check(not probs3 and w and '/Font' not in res and '/Tx' in res.get('/XObject', {}), f'firmado con firma visible sigue siendo PDF/A {probs3[:4]}')
         # el original sin convertir no cumple (la comprobación detecta los problemas)
         b0 = await pg.evaluate("async () => u8ToB64(await buildPdf(S.docs[0], { noEncrypt: true }))")
         p0 = os.path.join(OUT, 'no_pdfa.pdf'); open(p0, 'wb').write(base64.b64decode(b0))

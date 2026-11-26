@@ -545,6 +545,39 @@ public class RubricaPlugin extends Plugin {
         }).start();
     }
 
+    /** Descarga para la validación a largo plazo de firmas (OCSP, CRL, certificados de emisores). */
+    @PluginMethod
+    public void httpRequest(PluginCall call) {
+        String url = call.getString("url"), method = call.getString("method", "GET"), type = call.getString("contentType", "application/octet-stream"), data = call.getString("data", "");
+        if (url == null || !(url.startsWith("http://") || url.startsWith("https://")) || !("GET".equals(method) || "POST".equals(method))) { call.reject("Dirección no válida"); return; }
+        new Thread(() -> {
+            HttpURLConnection c = null;
+            try {
+                c = (HttpURLConnection) new URL(url).openConnection();
+                c.setConnectTimeout(20000); c.setReadTimeout(30000); c.setInstanceFollowRedirects(true);
+                c.setRequestMethod(method);
+                if ("POST".equals(method)) {
+                    byte[] q = Base64.decode(data, Base64.DEFAULT);
+                    if (q.length > 65536) throw new Exception("Solicitud demasiado grande");
+                    c.setDoOutput(true); c.setRequestProperty("Content-Type", type);
+                    try (OutputStream os = c.getOutputStream()) { os.write(q); }
+                }
+                int code = c.getResponseCode();
+                if (code < 200 || code >= 300) throw new Exception(new URL(url).getHost() + " respondió " + code + ".");
+                byte[] body;
+                try (InputStream is = c.getInputStream()) { body = readAll(is); }
+                if (body.length > 20 * 1024 * 1024) throw new Exception("La respuesta es demasiado grande.");
+                JSObject r = new JSObject();
+                r.put("data", Base64.encodeToString(body, Base64.NO_WRAP));
+                call.resolve(r);
+            } catch (Exception e) {
+                call.reject(e.getMessage() != null ? e.getMessage() : "No se pudo descargar", e);
+            } finally {
+                if (c != null) c.disconnect();
+            }
+        }).start();
+    }
+
     // ---------- Utilidades ----------
 
     private void persist(Uri uri) {

@@ -27,8 +27,12 @@ const usageText = u => (u || []).length ? [...new Set(u.map(x => KEY_USAGE_ES[St
 /* ---------- Firmantes ---------- */
 function p12Signer(bytes, password) {
   let p12;
+  // se guarda el DER original de cada certificado: volver a codificarlo con forge podría alterar bytes y romper la firma del emisor
+  const ders = new Map(), orig = forge.pki.certificateFromAsn1;
+  forge.pki.certificateFromAsn1 = function (obj, hash) { const c = orig.call(this, obj, hash); try { ders.set(c, binToU8(forge.asn1.toDer(obj).getBytes())); } catch { } return c; };
   try { p12 = forge.pkcs12.pkcs12FromAsn1(forge.asn1.fromDer(u8ToBin(bytes), { parseAllBytes: false }), false, password); }
   catch (e) { throw new Error(/mac|password|Invalid/i.test(e.message) ? 'Contraseña incorrecta o archivo no válido.' : 'No se pudo leer el certificado: ' + e.message); }
+  finally { forge.pki.certificateFromAsn1 = orig; }
   const oids = forge.pki.oids;
   const keys = [...(p12.getBags({ bagType: oids.pkcs8ShroudedKeyBag })[oids.pkcs8ShroudedKeyBag] || []), ...(p12.getBags({ bagType: oids.keyBag })[oids.keyBag] || [])].map(b => b.key).filter(Boolean);
   const certs = (p12.getBags({ bagType: oids.certBag })[oids.certBag] || []).map(b => b.cert).filter(Boolean);
@@ -37,23 +41,28 @@ function p12Signer(bytes, password) {
   const key = keys[0];
   const cert = certs.find(c => c.publicKey && c.publicKey.n && c.publicKey.n.equals(key.n)) || certs[0];
   const chain = certs.filter(c => c !== cert);
+  const der = c => ders.get(c) || binToU8(forge.asn1.toDer(forge.pki.certificateToAsn1(c)).getBytes());
+  const certDers = [cert, ...chain].map(der);
   return {
-    kind: 'p12', info: certInfo(cert),
-    async sign(data) {
-      const p7 = forge.pkcs7.createSignedData();
-      p7.content = forge.util.createBuffer(u8ToBin(data));
-      p7.addCertificate(cert); chain.forEach(c => p7.addCertificate(c));
-      p7.addSigner({
-        key, certificate: cert, digestAlgorithm: oids.sha256,
-        authenticatedAttributes: [{ type: oids.contentType, value: oids.data }, { type: oids.messageDigest }, { type: oids.signingTime, value: new Date() }]
-      });
-      p7.sign({ detached: true });
-      return binToU8(forge.asn1.toDer(p7.toAsn1()).getBytes());
+    kind: 'p12', info: certInfo(cert), chain: certDers,
+    sign(data, opt = {}) {
+      return buildDetachedCms(data, certDers, 'RSA', async tbs => { const md = forge.md.sha256.create(); md.update(u8ToBin(tbs)); return binToU8(key.sign(md)); }, opt);
     }
   };
 }
 function nativeStoreSigner(c) {
-  return { kind: 'store', info: { cn: c.name, issuer: c.issuer, dn: c.subject || '', usage: c.keyUsage || [], notAfter: new Date(c.notAfter), notBefore: new Date(c.notBefore), serialNumber: c.serialNumber || '' }, async sign(data) { return natBytes('sign?thumbprint=' + encodeURIComponent(c.thumbprint), { method: 'POST', headers: { 'Content-Type': 'application/octet-stream' }, body: data }); } };
+  const info = { cn: c.name, issuer: c.issuer, dn: c.subject || '', usage: c.keyUsage || [], notAfter: new Date(c.notAfter), notBefore: new Date(c.notBefore), serialNumber: c.serialNumber || '' };
+  return {
+    kind: 'store', info,
+    async sign(data, opt = {}) {
+      // la clave no sale del almacén de Windows: solo firma los atributos (como en Android) y el CMS PAdES se arma aquí
+      if (c.der) return buildDetachedCms(data, [b64ToU8(c.der)], null, async tbs => {
+        const r = await natJson('sign-raw?thumbprint=' + encodeURIComponent(c.thumbprint), { method: 'POST', headers: { 'Content-Type': 'application/octet-stream' }, body: tbs });
+        return { signature: b64ToU8(r.signature), chain: (r.chain || []).map(b64ToU8), keyType: r.keyType };
+      }, opt);
+      return natBytes('sign?thumbprint=' + encodeURIComponent(c.thumbprint), { method: 'POST', headers: { 'Content-Type': 'application/octet-stream' }, body: data });
+    }
+  };
 }
 
 /* ---------- Certificado instalado en Android (KeyChain) ----------
@@ -81,25 +90,38 @@ function certIssuerSerial(der) {
 }
 const cmpU8 = (a, b) => { for (let i = 0; i < Math.min(a.length, b.length); i++) if (a[i] !== b[i]) return a[i] - b[i]; return a.length - b.length; };
 /**
- * CMS/PKCS#7 desacoplado con SHA-256 a partir de una firma externa.
- * chain: certificados DER (el del firmante primero). keyType: 'RSA' | 'EC'.
- * signRaw(bytes) firma los atributos firmados y devuelve la firma (PKCS#1 v1.5 o ECDSA DER).
+ * CMS desacoplado con SHA-256 a partir de una firma externa (la clave nunca pasa por aquí).
+ * chain: certificados DER (el del firmante primero). keyType: 'RSA' | 'EC' (o null si lo informa signRaw).
+ * signRaw(bytes) firma los atributos firmados y devuelve la firma (PKCS#1 v1.5 o ECDSA DER),
+ * o { signature, chain, keyType } si el almacén conoce la cadena completa.
+ * opt.pades: perfil PAdES (ETSI.CAdES.detached): atributo signing-certificate-v2 y sin signing-time
+ * (la hora de la firma va en /M o en la marca de tiempo).
  */
-async function buildDetachedCms(data, chain, keyType, signRaw, when = new Date()) {
-  const O = forge.pki.oids, ec = keyType === 'EC';
+async function buildDetachedCms(data, chain, keyType, signRaw, opt = {}) {
+  const O = forge.pki.oids, when = opt.when || new Date();
   const sha = tlv(0x30, derOid(O.sha256), DER_NULL);
   const digest = new Uint8Array(await crypto.subtle.digest('SHA-256', data));
   const attr = (oid, val) => tlv(0x30, derOid(oid), tlv(0x31, val));
-  const attrs = [attr(O.contentType, derOid(O.data)),
-    attr(O.signingTime, tlv(0x17, binToU8(forge.asn1.dateToUtcTime(when)))),
-    attr(O.messageDigest, tlv(0x04, digest))].sort(cmpU8); // SET OF en DER: ordenado
-  const sig = await signRaw(tlv(0x31, ...attrs));
-  if (!sig || !sig.length) throw new Error('El almacén de Android no devolvió la firma.');
+  const attrs = [attr(O.contentType, derOid(O.data)), attr(O.messageDigest, tlv(0x04, digest))];
+  if (opt.pades) attrs.push(attr('1.2.840.113549.1.9.16.2.47', await signingCertificateV2(chain[0])));
+  else attrs.push(attr(O.signingTime, tlv(0x17, binToU8(forge.asn1.dateToUtcTime(when)))));
+  attrs.sort(cmpU8); // SET OF en DER: ordenado
+  let sig = await signRaw(tlv(0x31, ...attrs));
+  if (sig && !(sig instanceof Uint8Array)) { if (sig.chain && sig.chain.length) chain = sig.chain; keyType = sig.keyType || keyType; sig = sig.signature; }
+  if (!sig || !sig.length) throw new Error('El almacén de certificados no devolvió la firma.');
+  const ec = keyType === 'EC';
   const sigAlg = ec ? tlv(0x30, derOid('1.2.840.10045.4.3.2')) : tlv(0x30, derOid(O.rsaEncryption), DER_NULL);
   const { issuer, serial } = certIssuerSerial(chain[0]);
   const signerInfo = tlv(0x30, tlv(0x02, new Uint8Array([1])), tlv(0x30, issuer, serial), sha, tlv(0xa0, ...attrs), sigAlg, tlv(0x04, sig));
   const signedData = tlv(0x30, tlv(0x02, new Uint8Array([1])), tlv(0x31, sha), tlv(0x30, derOid(O.data)), tlv(0xa0, ...chain), tlv(0x31, signerInfo));
   return tlv(0x30, derOid(O.signedData), tlv(0xa0, signedData));
+}
+/** SigningCertificateV2 (RFC 5035) con SHA-256 del certificado del firmante y su emisor/número de serie. */
+async function signingCertificateV2(certDer) {
+  const hash = new Uint8Array(await crypto.subtle.digest('SHA-256', certDer));
+  const { issuer, serial } = certIssuerSerial(certDer);
+  const essCertIdV2 = tlv(0x30, tlv(0x04, hash), tlv(0x30, tlv(0x30, tlv(0xa4, issuer)), serial));
+  return tlv(0x30, tlv(0x30, essCertIdV2));
 }
 function androidCertInfo(c, chain) {
   try { return certInfo(forge.pki.certificateFromAsn1(forge.asn1.fromDer(u8ToBin(chain[0])))); }
@@ -113,7 +135,7 @@ function androidStoreSigner(c) {
   if (!chain.length) throw new Error('El certificado elegido no trae su cadena.');
   return {
     kind: 'android', alias: c.alias, info: androidCertInfo(c, chain),
-    sign: data => buildDetachedCms(data, chain, c.keyType, async tbs => b64ToU8((await PSN.signWithCertificate({ alias: c.alias, data: u8ToB64(tbs) })).signature || ''))
+    sign: (data, opt = {}) => buildDetachedCms(data, chain, c.keyType, async tbs => b64ToU8((await PSN.signWithCertificate({ alias: c.alias, data: u8ToB64(tbs) })).signature || ''), opt)
   };
 }
 
@@ -123,9 +145,10 @@ function pdfDateStr(d) {
   return `${d.getFullYear()}.${p(d.getMonth() + 1)}.${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())} ${off >= 0 ? '+' : '-'}${p(Math.floor(Math.abs(off) / 60))}'${p(Math.abs(off) % 60)}'`;
 }
 /** Apariencia del recuadro de firma a partir de un estilo (ver 11b_sigprefs.js). */
-async function buildSigAppearance(pdf, w, h, st, data, imgBytes, rot) {
+async function buildSigAppearance(pdf, w, h, st, data, imgBytes, rot, { textAsImage = false } = {}) {
   const ctx = pdf.context;
-  const f1 = await pdf.embedFont(PL.StandardFonts.Helvetica), f2 = await pdf.embedFont(PL.StandardFonts.HelveticaBold);
+  const fdoc = textAsImage ? await PL.PDFDocument.create() : pdf; // con texto como imagen, las fuentes solo miden
+  const f1 = await fdoc.embedFont(PL.StandardFonts.Helvetica), f2 = await fdoc.embedFont(PL.StandardFonts.HelveticaBold);
   const res = { Font: { F1: f1.ref, F2: f2.ref } }, xo = {}, ops = [];
   const font = b => b ? f2 : f1;
   const clean = v => v ? safeText(f1, String(v)) : '';
@@ -139,9 +162,24 @@ async function buildSigAppearance(pdf, w, h, st, data, imgBytes, rot) {
     res.ExtGState = { GSL: ctx.obj({ Type: 'ExtGState', ca: 0.13, CA: 0.13 }) };
     ops.push(PL.pushGraphicsState(), PL.setGraphicsState('GSL'), PL.concatTransformationMatrix(L.logo.w, 0, 0, L.logo.h, L.logo.x, L.logo.y), PL.drawObject('Lg'), PL.popGraphicsState());
   }
+  // PDF/A: las fuentes estándar no van incrustadas, así que el texto de la apariencia se dibuja como imagen
+  let txtCanvas = null; const K = 4;
+  if (textAsImage && L.items.some(it => it.kind !== 'img')) { txtCanvas = el('canvas'); txtCanvas.width = Math.max(1, Math.ceil(w * K)); txtCanvas.height = Math.max(1, Math.ceil(h * K)); }
   for (const it of L.items) {
     if (it.kind === 'img') { xo.Im1 = img.ref; ops.push(PL.pushGraphicsState(), PL.concatTransformationMatrix(it.w, 0, 0, it.h, it.x, it.y), PL.drawObject('Im1'), PL.popGraphicsState()); }
+    else if (txtCanvas) {
+      const g = txtCanvas.getContext('2d'); g.fillStyle = '#000'; g.textBaseline = 'alphabetic';
+      g.font = `${it.bold ? 'bold ' : ''}${it.size * K}px Helvetica, Arial, sans-serif`;
+      // mismo ancho que el diseño calculado con Helvetica
+      const want = measure(it.t, it.bold, it.size) * K, got = g.measureText(it.t).width || want;
+      g.save(); g.translate(it.x * K, (h - it.y) * K); g.scale(want / got, 1); g.fillText(it.t, 0, 0); g.restore();
+    }
     else ops.push(PL.setFillingRgbColor(0, 0, 0), PL.beginText(), PL.setFontAndSize(it.bold ? 'F2' : 'F1', it.size), PL.moveText(it.x, it.y), PL.showText(font(it.bold).encodeText(it.t)), PL.endText());
+  }
+  if (txtCanvas) {
+    const tim = await pdf.embedPng(await canvasToBytes(txtCanvas, 'image/png')); xo.Tx = tim.ref;
+    ops.push(PL.pushGraphicsState(), PL.concatTransformationMatrix(w, 0, 0, h, 0, 0), PL.drawObject('Tx'), PL.popGraphicsState());
+    delete res.Font;
   }
   if (Object.keys(xo).length) res.XObject = xo;
   const th = (rot || 0) * Math.PI / 180;
@@ -160,7 +198,7 @@ async function signPdfBytes(bytes, o) {
   const byteRange = PL.PDFArray.withContext(ctx);
   byteRange.push(PL.PDFNumber.of(0)); for (let k = 0; k < 3; k++) byteRange.push(PL.PDFName.of('**********'));
   const sigDict = ctx.obj({
-    Type: 'Sig', Filter: 'Adobe.PPKLite', SubFilter: 'adbe.pkcs7.detached', ByteRange: byteRange,
+    Type: 'Sig', Filter: 'Adobe.PPKLite', SubFilter: o.pades === false ? 'adbe.pkcs7.detached' : 'ETSI.CAdES.detached', ByteRange: byteRange,
     Contents: PL.PDFHexString.of('0'.repeat(sigHex)), M: PL.PDFString.fromDate(now),
     Name: PL.PDFHexString.fromText(o.signer.info.cn || ''), Reason: PL.PDFHexString.fromText(o.reason || ''),
     Location: PL.PDFHexString.fromText(o.location || ''), ContactInfo: PL.PDFHexString.fromText(o.contact || ''),
@@ -178,7 +216,8 @@ async function signPdfBytes(bytes, o) {
     rect = o.visible.rect;
     const st = o.visible.style || sigStyleById(S.settings.sigStyleDefault);
     const data = { cn: o.signer.info.cn || '', dn: o.signer.info.dn || '', reason: o.reason, location: o.location, date: now };
-    ap = await buildSigAppearance(pdf, o.visible.w, o.visible.h, st, data, o.visible.image || (st.image ? dataUrlToBytes(st.image) : null), o.visible.rot);
+    const pdfa = /pdfaid:part/.test(u8ToBin(bytes));
+    ap = await buildSigAppearance(pdf, o.visible.w, o.visible.h, st, data, o.visible.image || (st.image ? dataUrlToBytes(st.image) : null), o.visible.rot, { textAsImage: pdfa });
   } else ap = ctx.register(ctx.formXObject([], { BBox: [0, 0, 0, 0], Resources: {} }));
   const widget = ctx.register(ctx.obj({ Type: 'Annot', Subtype: 'Widget', FT: 'Sig', Rect: rect, V: sigRef, T: PL.PDFHexString.fromText(fname), F: 132, P: page.ref, AP: { N: ap } }));
   let annots = page.node.lookupMaybe(PL.PDFName.of('Annots'), PL.PDFArray);
@@ -202,12 +241,15 @@ async function signPdfBytes(bytes, o) {
   const res = out.slice();
   res.set(binToU8(brTxt), last.index);
   const data = new Uint8Array(br[1] + br[3]); data.set(res.subarray(0, br[1]), 0); data.set(res.subarray(br[2]), br[1]);
-  let cms = await o.signer.sign(data);
+  let cms = await o.signer.sign(data, { pades: o.pades !== false, when: now });
   if (o.tsa) cms = await addTimestampToCms(cms, o.tsa);
   let hex = ''; for (const b of cms) hex += b.toString(16).padStart(2, '0');
   if (hex.length > sigHex) throw new Error('La firma no cabe en el espacio reservado.');
   res.set(binToU8(hex.padEnd(sigHex, '0')), cStart + 1);
-  return res;
+  if (!o.ltv) return res;
+  // validación a largo plazo: OCSP/CRL de toda la cadena (firmante y marca de tiempo) en el DSS
+  try { return await addLtvToPdf(res, { progress: o.progress }); }
+  catch (e) { if (e.revoked) throw e; console.warn('LTV:', e); res.ltvError = e.message || String(e); return res; }
 }
 
 /* ---------- Verificación ---------- */
@@ -222,9 +264,21 @@ function scanSignatures(bytes) {
     let de = s.indexOf('endobj', br[2]); if (de < 0 || de - br[2] > 4000) de = br[2] + 4000;
     const near = s.slice(ds, br[1]) + ' ' + s.slice(br[2], de);
     const str = k => { const mm = near.match(new RegExp('/' + k + '\\s*(\\((?:\\\\.|[^\\\\)])*\\)|<[0-9A-Fa-f\\s]*>)')); return mm ? pdfStrDecode(mm[1]) : ''; };
-    out.push({ br, hex: s.slice(br[1] + 1, br[2] - 1).replace(/\s/g, ''), reason: str('Reason'), location: str('Location'), name: str('Name'), m: str('M') });
+    const sf = (near.match(/\/SubFilter\s*\/([A-Za-z0-9.]+)/) || [])[1] || '';
+    out.push({ br, hex: s.slice(br[1] + 1, br[2] - 1).replace(/\s/g, ''), reason: str('Reason'), location: str('Location'), name: str('Name'), m: str('M'), subFilter: sf });
   }
   return out;
+}
+/** ¿Lo agregado después de esta firma es solo información de validación (DSS)? */
+function dssOnlyAfter(bytes, sig) {
+  const tail = u8ToBin(bytes.subarray(sig.br[2] + sig.br[3]));
+  return /\/DSS\b/.test(tail) && !/\/Type\s*\/Page\b|\/Type\s*\/Annot\b|\/Subtype\s*\/Widget\b|\/Type\s*\/XObject\b/.test(tail);
+}
+function parsePdfDate(s) {
+  const m = /D:(\d{4})(\d{2})?(\d{2})?(\d{2})?(\d{2})?(\d{2})?([Zz+-])?(\d{2})?'?(\d{2})?/.exec(s || ''); if (!m) return null;
+  const [, y, mo = '01', d = '01', h = '00', mi = '00', se = '00', z, oh = '00', om = '00'] = m;
+  const t = Date.UTC(+y, +mo - 1, +d, +h, +mi, +se), off = (z === '+' ? 1 : z === '-' ? -1 : 0) * (+oh * 60 + +om);
+  return new Date(t - off * 60000);
 }
 function pdfStrDecode(t) {
   if (t[0] === '<') { const h = t.slice(1, -1).replace(/\s/g, ''); let b = ''; for (let i = 0; i < h.length; i += 2) b += String.fromCharCode(parseInt(h.substr(i, 2), 16)); return decodePdfText(b); }
@@ -258,6 +312,7 @@ async function verifySignature(bytes, sig) {
       if (oid === '1.2.840.113549.1.9.5') { try { const t = at.value[1].value[0]; r.signingTime = t.type === A.Type.UTCTIME ? A.utcTimeToDate(t.value) : A.generalizedTimeToDate(t.value); } catch { } }
     }
     r.integrity = attrs ? md === digest : null;
+    if (!r.signingTime && sig.m) r.signingTime = parsePdfDate(sig.m);
     // certificado del firmante
     let cert = null; const certs = [];
     for (const c of (certsNode ? certsNode.value : [])) { try { certs.push(forge.pki.certificateFromAsn1(c)); } catch { } }
@@ -360,6 +415,11 @@ async function digitalSignDialog() {
   const tsaSel = el('select', { 'aria-label': 'Marca de tiempo' }); tsaSel.append(el('option', { value: '', text: 'Sin marca de tiempo (hora de este equipo)' }));
   tsaServers().forEach(t => tsaSel.append(el('option', { value: t.id, text: t.name + ' · ' + t.url })));
   tsaSel.value = TSA_BRIDGE() && tsaById(S.settings.tsaDefault) ? S.settings.tsaDefault : '';
+  // validación a largo plazo: necesita la marca de tiempo (fija la fecha) y descargar OCSP/CRL de las autoridades
+  const ltv = el('input', { type: 'checkbox' }); ltv.checked = S.settings.sigLtv ?? true;
+  const ltvRow = el('label', { class: 'chk', title: 'Agrega al PDF la información de revocación (OCSP/CRL) de los certificados, para que la firma se pueda validar dentro de muchos años aunque los certificados hayan vencido.' }, ltv, el('span', { text: 'Validación a largo plazo (LTV): incluir el estado de los certificados' }));
+  const syncLtv = () => { ltvRow.style.display = tsaSel.value ? '' : 'none'; };
+  tsaSel.addEventListener('change', syncLtv);
   const prefsBtn = el('button', { class: 'btn sm', html: ic('sliders-horizontal') + 'Preferencias de firma…', onclick: async () => {
     await signPrefsDialog(); ids = await loadIds(); fillWho(); fillStyles(); styleChanged();
     const tv = tsaSel.value; tsaSel.length = 1; tsaServers().forEach(t => tsaSel.append(el('option', { value: t.id, text: t.name + ' · ' + t.url }))); tsaSel.value = tsaById(tv) ? tv : '';
@@ -368,10 +428,11 @@ async function digitalSignDialog() {
     el('div', { class: 'row' }, el('label', { text: 'Firmar como' }), who), pwRow, info,
     el('div', { class: 'cols' }, el('div', { class: 'row' }, el('label', { text: 'Motivo' }), reason), el('div', { class: 'row' }, el('label', { text: 'Ubicación' }), location)),
     el('div', { class: 'cols' }, el('div', { class: 'row' }, el('label', { text: 'Contacto' }), contact), el('div', { class: 'row' }, el('label', { text: 'Marca de tiempo' }), tsaSel)),
+    ltvRow,
     el('div', { class: 'row' }, el('label', { text: 'Aspecto' }), styleSel), cv,
     el('div', { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px', marginTop: '8px' } },
       el('div', { class: 'hint', html: 'Al firmar se aplican primero todos los cambios del documento y luego se le pedirá dónde guardar el PDF firmado.' }), prefsBtn));
-  fillWho();
+  fillWho(); syncLtv();
   if (NATIVE) natJson('certs').then(cs => { winCerts = cs || []; fillWho(); }).catch(() => { });
   if (PSN && S.settings.androidCertAlias) PSN.getCertificate({ alias: S.settings.androidCertAlias }).then(c => { if (c && c.alias) { androidCert = c; fillWho(); } }).catch(() => { /* permiso retirado o certificado eliminado: se elige de nuevo */ });
   const ok = await openModal({ title: 'Firma digital', body, wide: true, buttons: [{ label: 'Cancelar', value: null }, { label: 'Continuar', primary: true, onClick: () => {
@@ -384,7 +445,8 @@ async function digitalSignDialog() {
   S.settings.sigLocation = location.value; S.settings.sigContact = contact.value;
   if (!S.settings.sigIdDefault) S.settings.sigIdDefault = cur();
   saveSettings();
-  const opts = { signer, reason: reason.value, location: location.value, contact: contact.value, tsa: tsaById(tsaSel.value) };
+  const opts = { signer, reason: reason.value, location: location.value, contact: contact.value, tsa: tsaById(tsaSel.value), ltv: !!tsaSel.value && ltv.checked };
+  if (tsaSel.value) { S.settings.sigLtv = ltv.checked; saveSettings(); }
   if (styleSel.value === 'invisible') return performSign(d, opts, null, null);
   opts.style = sigStyleById(styleSel.value);
   S.pendingSign = opts; setTool('sigbox');
@@ -416,7 +478,8 @@ async function performSign(d, opts, p, r) {
     if (!saved) { toast('Firma cancelada: el documento no se guardó.', 'err'); return; }
     await reloadDocFromBytes(d, bytes);
     S.side = 'signatures'; S.sideOpen = true; renderSide();
-    toast('Documento firmado digitalmente' + (opts.tsa ? ' con marca de tiempo' : '') + ' y guardado.', 'ok', 5000);
+    if (bytes.ltvError) alertDialog('Firma sin validación a largo plazo', escapeHtml(tr('El documento quedó firmado y guardado, pero no se pudo incluir la información para validarlo a largo plazo:')) + '<br><br><b>' + escapeHtml(bytes.ltvError) + '</b><br><br>' + escapeHtml(tr('La firma es válida; solo podría ser más difícil comprobarla cuando el certificado venza. Revise la conexión a internet y vuelva a firmar si necesita LTV.')));
+    else toast(tr(bytes.ltv ? 'Documento firmado (PAdES con marca de tiempo y validación a largo plazo) y guardado.' : opts.tsa ? 'Documento firmado digitalmente con marca de tiempo y guardado.' : 'Documento firmado digitalmente y guardado.'), 'ok', 6000);
   } catch (e) { console.error(e); toast('No se pudo firmar: ' + e.message, 'err', 8000); }
 }
 async function reloadDocFromBytes(d, bytes) {
@@ -433,12 +496,16 @@ async function renderSignatures(body) {
   if (!srcs.length) { body.append(el('div', { class: 'hint', html: 'Este documento no tiene firmas digitales.<br><br>Para firmar: <b>Proteger → Firma digital</b>.' })); return; }
   const box = el('div', { class: 'slist' }); body.append(box);
   for (const s of srcs) {
+    const ltvDoc = pdfHasLtv(s.bytes);
     s.sigs.forEach((sig, k) => {
       const row = el('div', { style: { padding: '8px', border: '1px solid var(--line)', borderRadius: '8px', marginBottom: '8px', fontSize: '12px' } }, el('div', { class: 'spinner', style: { width: '16px', height: '16px', borderWidth: '2px' } }));
       box.append(row);
       (sig._v ? Promise.resolve(sig._v) : verifySignature(s.bytes, sig).then(v => (sig._v = v))).then(v => {
         const good = v.integrity && v.sigValid !== false, trusted = good && v.trust && v.trust.status === 'trusted';
-        const later = v.coversAll ? '' : ' (con cambios posteriores permitidos)';
+        // tras la última firma solo puede venir el DSS (LTV): no es un cambio del contenido
+        const later = v.coversAll || (ltvDoc && k === s.sigs.length - 1 && dssOnlyAfter(s.bytes, sig)) ? '' : ' (con cambios posteriores permitidos)';
+        const fmt = /ETSI\.CAdES/i.test(v.subFilter) ? 'PAdES' : /pkcs7/i.test(v.subFilter) ? 'PKCS#7' : v.subFilter;
+        const ltvLine = `${fmt ? '<br>Formato: ' + escapeHtml(fmt) : ''}${ltvDoc ? ' · <span style="color:var(--ok)">validación a largo plazo (LTV) incluida</span>' : ''}`;
         const st = !good ? ['circle-x', 'var(--danger)', 'Firma NO válida: el contenido firmado fue alterado']
           : trusted ? ['badge-check', 'var(--ok)', 'Firma válida · emisor de confianza' + later]
             : ['shield-alert', 'var(--warn)', 'Firma íntegra · emisor no verificado' + later];
@@ -448,7 +515,7 @@ async function renderSignatures(body) {
           ? `<br><span style="color:var(--ok)">Confianza: ${escapeHtml(v.trust.anchor || '')} (${escapeHtml(v.trust.source || '')})</span>${chain && chain.length > 1 ? '<br><span class="muted">Cadena: ' + chain.map(escapeHtml).join(' → ') + '</span>' : ''}`
           : `<br><span style="color:var(--warn)">${escapeHtml((v.trust && v.trust.reason) || 'No se pudo comprobar el emisor.')}</span><br><span class="muted">El documento no cambió desde que se firmó, pero Rúbrica no puede confirmar quién emitió el certificado.</span>`;
         row.append(el('div', { style: { display: 'flex', gap: '6px', alignItems: 'center', fontWeight: 600, color: st[1] } }, icEl(st[0]), st[2]),
-          el('div', { style: { marginTop: '6px' }, html: `<b>${escapeHtml(v.cert?.cn || v.name || 'Firmante desconocido')}</b>${v.cert?.serialNumber ? ' · ' + escapeHtml(v.cert.serialNumber) : ''}<br>Emisor: ${escapeHtml(v.cert?.issuer || '—')}<br>Fecha: ${v.signingTime ? v.signingTime.toLocaleString(LOC()) : escapeHtml(v.m || '—')}${v.timestamp ? (v.timestamp.time ? `<br>Marca de tiempo: <b>${v.timestamp.time.toLocaleString(LOC())}</b>${v.timestamp.tsa ? ' · ' + escapeHtml(v.timestamp.tsa) : ''}${v.timestamp.covers === false ? ' <span style="color:var(--danger)">(no corresponde a esta firma)</span>' : ''}` : '<br><span style="color:var(--danger)">Marca de tiempo ilegible</span>') : ''}${v.reason ? '<br>Motivo: ' + escapeHtml(v.reason) : ''}${v.location ? '<br>Ubicación: ' + escapeHtml(v.location) : ''}${v.certValidAtTime === false ? '<br><span style="color:var(--danger)">Certificado fuera de vigencia al firmar</span>' : ''}${trustLine}<br><span class="muted">Firma ${k + 1} de ${s.sigs.length}.</span>${v.error ? '<br><span class="muted">' + escapeHtml(v.error) + '</span>' : ''}` }));
+          el('div', { style: { marginTop: '6px' }, html: `<b>${escapeHtml(v.cert?.cn || v.name || 'Firmante desconocido')}</b>${v.cert?.serialNumber ? ' · ' + escapeHtml(v.cert.serialNumber) : ''}<br>Emisor: ${escapeHtml(v.cert?.issuer || '—')}<br>Fecha: ${v.signingTime ? v.signingTime.toLocaleString(LOC()) : escapeHtml(v.m || '—')}${v.timestamp ? (v.timestamp.time ? `<br>Marca de tiempo: <b>${v.timestamp.time.toLocaleString(LOC())}</b>${v.timestamp.tsa ? ' · ' + escapeHtml(v.timestamp.tsa) : ''}${v.timestamp.covers === false ? ' <span style="color:var(--danger)">(no corresponde a esta firma)</span>' : ''}` : '<br><span style="color:var(--danger)">Marca de tiempo ilegible</span>') : ''}${v.reason ? '<br>Motivo: ' + escapeHtml(v.reason) : ''}${v.location ? '<br>Ubicación: ' + escapeHtml(v.location) : ''}${v.certValidAtTime === false ? '<br><span style="color:var(--danger)">Certificado fuera de vigencia al firmar</span>' : ''}${trustLine}${ltvLine}<br><span class="muted">Firma ${k + 1} de ${s.sigs.length}.</span>${v.error ? '<br><span class="muted">' + escapeHtml(v.error) + '</span>' : ''}` }));
         if (good && !trusted && v.trust && v.trust.top) row.append(el('div', { style: { display: 'flex', gap: '6px', marginTop: '8px', flexWrap: 'wrap' } },
           el('button', { class: 'btn sm', html: ic('shield-check') + 'Confiar en este emisor…', onclick: async () => { if (await trustIssuerDialog(v.trust.top)) { forgetSigChecks(); renderSide(); } } }),
           el('button', { class: 'btn sm', html: ic('sliders-horizontal') + 'Certificados de confianza', onclick: async () => { await signPrefsDialog('trust'); forgetSigChecks(); renderSide(); } })));

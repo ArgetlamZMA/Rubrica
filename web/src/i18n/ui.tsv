@@ -65,6 +65,7 @@ Acuerdo de claves	Key agreement	Acordo de chaves
 Aduana	Customs office	Alfândega
 Aduanas: importación / exportación	Customs: import / export	Alfândega: importação / exportação
 Agente aduanero	Customs broker	Despachante aduaneiro
+Agrega al PDF la información de revocación (OCSP/CRL) de los certificados, para que la firma se pueda validar dentro de muchos años aunque los certificados hayan vencido.	Adds the certificates' revocation information (OCSP/CRL) to the PDF, so the signature can be validated many years from now even after the certificates expire.	Adiciona ao PDF as informações de revogação (OCSP/CRL) dos certificados, para que a assinatura possa ser validada daqui a muitos anos mesmo depois que os certificados vencerem.
 Agregado	Added	Adicionado
 Agregando «{0}»…	Adding "{0}"…	Adicionando «{0}»…
 Agregar comentarios	Add comments	Adicionar comentários
@@ -254,6 +255,7 @@ Comprimiendo…	Compressing…	Comprimindo…
 Comprimir	Compress	Comprimir
 Comprimir PDF	Compress PDF	Comprimir PDF
 Comprimir y, si no alcanza, dividir en partes	Compress and, if that is not enough, split into parts	Comprimir e, se não bastar, dividir em partes
+Comprobando la revocación de {0}…	Checking revocation of {0}…	Verificando a revogação de {0}…
 Con fecha	With date	Com data
 Con un servidor	With a server	Com um servidor
 Con {0} ppp el documento pesa {1}, más que {2}. Baje la resolución mínima o use «dividir en partes».	At {0} dpi the document is {1}, more than {2}. Lower the minimum resolution or use "split into parts".	Com {0} ppp o documento tem {1}, mais que {2}. Baixe a resolução mínima ou use «dividir em partes».
@@ -359,6 +361,7 @@ Dibujar	Draw	Desenhar
 Dibuje en la página el recuadro donde aparecerá la firma.	Draw on the page the box where the signature will appear.	Desenhe na página a caixa onde a assinatura aparecerá.
 Dibuje la firma primero.	Draw the signature first.	Desenhe a assinatura primeiro.
 Dirección del texto	Text direction	Direção do texto
+Dirección no válida: solo se permiten http y https.	Invalid address: only http and https are allowed.	Endereço inválido: somente http e https são permitidos.
 Diseñando la portada…	Designing the cover…	Desenhando a capa…
 Diseño exacto (cada página como imagen)	Exact layout (each page as an image)	Layout exato (cada página como imagem)
 Distinguir mayúsculas	Match case	Diferenciar maiúsculas
@@ -370,7 +373,10 @@ Documento	Document	Documento
 Documento PDF	PDF document	Documento PDF
 Documento de transporte (BL / guía)	Transport document (B/L / AWB)	Documento de transporte (BL / AWB)
 Documento en blanco	Blank document	Documento em branco
+Documento firmado (PAdES con marca de tiempo y validación a largo plazo) y guardado.	Document signed (PAdES with timestamp and long-term validation) and saved.	Documento assinado (PAdES com carimbo do tempo e validação de longo prazo) e salvo.
 Documento firmado digitalmente	Digitally signed document	Documento assinado digitalmente
+Documento firmado digitalmente con marca de tiempo y guardado.	Document digitally signed with a timestamp and saved.	Documento assinado digitalmente com carimbo do tempo e salvo.
+Documento firmado digitalmente y guardado.	Document digitally signed and saved.	Documento assinado digitalmente e salvo.
 Documento protegido	Protected document	Documento protegido
 Documento siguiente / anterior	Next / previous document	Documento seguinte / anterior
 Documentos	Documents	Documentos
@@ -389,30 +395,39 @@ Ej.: Expediente para el portal aduanero	E.g.: Dossier for the customs portal	Ex.
 Ejemplos:	Examples:	Exemplos:
 El QR admite cualquier texto o enlace. El código de barras admite letras sin tilde, números y símbolos básicos (por ejemplo MSCU7781234 o HN-2026-000123).	QR accepts any text or link. The barcode accepts unaccented letters, numbers and basic symbols (for example MSCU7781234 or HN-2026-000123).	O QR aceita qualquer texto ou link. O código de barras aceita letras sem acento, números e símbolos básicos (por exemplo MSCU7781234 ou HN-2026-000123).
 El almacén de Android no devolvió la firma.	The Android store did not return the signature.	O repositório do Android não retornou a assinatura.
+El almacén de certificados no devolvió la firma.	The certificate store did not return the signature.	O repositório de certificados não devolveu a assinatura.
 El archivo no contiene certificados.	The file contains no certificates.	O arquivo não contém certificados.
 El archivo no contiene una clave privada compatible (se requiere RSA). Si su certificado es de otro tipo, use el almacén de Windows en la app de escritorio.	The file does not contain a compatible private key (RSA required). If your certificate is of another type, use the Windows store in the desktop app.	O arquivo não contém uma chave privada compatível (requer RSA). Se seu certificado for de outro tipo, use o repositório do Windows no aplicativo de desktop.
 El archivo ya no está disponible. Ábralo de nuevo con «Abrir».	The file is no longer available. Open it again with "Open".	O arquivo não está mais disponível. Abra-o novamente com "Abrir".
 El certificado del firmante no se pudo leer aquí (p. ej. clave EC).	The signer's certificate could not be read here (e.g. EC key).	O certificado do signatário não pôde ser lido aqui (ex.: chave EC).
 El certificado elegido no trae su cadena.	The chosen certificate does not include its chain.	O certificado escolhido não traz sua cadeia.
 El certificado está vencido.	The certificate has expired.	O certificado está vencido.
+El certificado no tiene una clave privada utilizable para firmar.	The certificate has no private key usable for signing.	O certificado não tem uma chave privada utilizável para assinar.
+El certificado «{0}» está revocado: la firma no es válida.	The certificate "{0}" is revoked: the signature is not valid.	O certificado «{0}» está revogado: a assinatura não é válida.
 El certificado «{0}» no estaba vigente en la fecha de la firma.	The certificate "{0}" was not valid on the signing date.	O certificado "{0}" não estava válido na data da assinatura.
 El código de barras solo admite letras sin tilde, números y símbolos básicos (no «{0}»).	The barcode only accepts unaccented letters, numbers and basic symbols (not "{0}").	O código de barras só aceita letras sem acento, números e símbolos básicos (não "{0}").
 El documento no cambió desde que se firmó, pero Rúbrica no puede confirmar quién emitió el certificado.	The document has not changed since it was signed, but Rúbrica cannot confirm who issued the certificate.	O documento não mudou desde que foi assinado, mas o Rúbrica não pode confirmar quem emitiu o certificado.
 El documento no tiene campos de formulario.	The document has no form fields.	O documento não tem campos de formulário.
 El documento no tiene contraseña.	The document has no password.	O documento não tem senha.
+El documento no tiene firmas.	The document has no signatures.	O documento não tem assinaturas.
 El documento no tiene páginas.	The document has no pages.	O documento não tem páginas.
 El documento no tiene un formulario existente.	The document has no existing form.	O documento não tem um formulário existente.
+El documento quedó firmado y guardado, pero no se pudo incluir la información para validarlo a largo plazo:	The document was signed and saved, but the long-term validation information could not be included:	O documento foi assinado e salvo, mas não foi possível incluir as informações para validá-lo a longo prazo:
 El escáner está disponible en la app de Android. Aquí puede usar «PDF desde imágenes».	The scanner is available in the Android app. Here you can use "PDF from images".	O scanner está disponível no aplicativo Android. Aqui você pode usar "PDF de imagens".
 El expediente no cabe en {0} aun comprimido: se descargó en {1} partes.	The dossier does not fit in {0} even when compressed: it was downloaded in {1} parts.	O dossiê não cabe em {0} mesmo comprimido: foi baixado em {1} partes.
 El logotipo pesa más de 600 KB; use una imagen más pequeña.	The logo is larger than 600 KB; use a smaller image.	O logotipo tem mais de 600 KB; use uma imagem menor.
 El modo texto recupera el contenido para editarlo; el modo diseño conserva la apariencia exacta pero no es editable.	Text mode recovers the content for editing; layout mode keeps the exact appearance but is not editable.	O modo texto recupera o conteúdo para edição; o modo layout mantém a aparência exata, mas não é editável.
 El navegador bloqueó la ventana emergente. Permita ventanas emergentes para esta página.	The browser blocked the pop-up window. Allow pop-ups for this page.	O navegador bloqueou a janela pop-up. Permita pop-ups para esta página.
 El navegador no puede contactar el servidor de marca de tiempo. Use la app de Windows o de Android.	The browser cannot reach the timestamp server. Use the Windows or Android app.	O navegador não consegue contatar o servidor de carimbo do tempo. Use o aplicativo de Windows ou Android.
+El navegador no puede contactar {0}. Use la app de Windows o de Android para la validación a largo plazo.	The browser cannot contact {0}. Use the Windows or Android app for long-term validation.	O navegador não consegue contatar {0}. Use o app para Windows ou Android para a validação de longo prazo.
 El nombre es obligatorio	The name is required	O nome é obrigatório
 El original tiene {0} página(s) más al final.	The original has {0} more page(s) at the end.	O original tem {0} página(s) a mais no final.
 El resultado se abre como una copia de la versión revisada con los cambios marcados: verde = agregado, naranja = modificado (la nota muestra el texto anterior), rojo = eliminado o cambio de apariencia.	The result opens as a copy of the revised version with the changes marked: green = added, orange = modified (the note shows the previous text), red = deleted or appearance change.	O resultado abre como uma cópia da versão revisada com as mudanças marcadas: verde = adicionado, laranja = modificado (a nota mostra o texto anterior), vermelho = excluído ou mudança de aparência.
+El servidor OCSP no conoce el certificado.	The OCSP server does not know the certificate.	O servidor OCSP não conhece o certificado.
+El servidor OCSP respondió con el estado {0}.	The OCSP server responded with status {0}.	O servidor OCSP respondeu com o status {0}.
 El servidor de marca de tiempo rechazó la solicitud	The timestamp server rejected the request	O servidor de carimbo do tempo rejeitou a solicitação
 El servidor de marca de tiempo respondió	The timestamp server responded	O servidor de carimbo do tempo respondeu
+El servidor no respondió a tiempo.	The server did not respond in time.	O servidor não respondeu a tempo.
 El servidor rechazó la solicitud de prueba.	The server rejected the test request.	O servidor rejeitou a solicitação de teste.
 El texto original queda tapado con el color de fondo detectado y se escribe el texto nuevo encima. Doble clic para seguir editando.	The original text is covered with the detected background color and the new text is written on top. Double-click to keep editing.	O texto original é coberto com a cor de fundo detectada e o novo texto é escrito por cima. Clique duas vezes para continuar editando.
 Elegir archivos	Choose files	Escolher arquivos
@@ -512,6 +527,7 @@ Firma de certificados	Certificate signing	Assinatura de certificados
 Firma digital	Digital signature	Assinatura digital
 Firma manuscrita	Handwritten signature	Assinatura manuscrita
 Firma manuscrita #	Handwritten signature #	Assinatura manuscrita #
+Firma sin validación a largo plazo	Signature without long-term validation	Assinatura sem validação de longo prazo
 Firma válida · emisor de confianza	Valid signature · trusted issuer	Assinatura válida · emissor confiável
 Firma {9} de {10}.	Signature {9} of {10}.	Assinatura {9} de {10}.
 Firma íntegra · emisor no verificado	Intact signature · issuer not verified	Assinatura íntegra · emissor não verificado
@@ -528,6 +544,7 @@ Flechas	Arrows	Setas
 Fondo	Background	Fundo
 Formato	Format	Formato
 Formato no soportado:	Unsupported format:	Formato não suportado:
+Formato: {0}	Format: {0}	Formato: {0}
 Formulario	Form	Formulário
 Formulario:	Form:	Formulário:
 Fotos o escaneos a un PDF	Photos or scans to a PDF	Fotos ou digitalizações em um PDF
@@ -557,6 +574,7 @@ Gráfico importado	Imported graphic	Gráfico importado
 Guardado en	Saved to	Salvo em
 Guardado en este equipo:	Saved on this computer:	Salvo neste computador:
 Guardado:	Saved:	Salvo:
+Guardando la información de validación…	Saving validation information…	Salvando as informações de validação…
 Guardando…	Saving…	Salvando…
 Guardar	Save	Salvar
 Guardar aquí	Save here	Salvar aqui
@@ -632,7 +650,9 @@ La capa de texto se agregó al documento: ya puede buscar y, al	The text layer w
 La contraseña de los archivos	The password of the files	A senha dos arquivos
 La contraseña no se guarda: se pide en cada firma.	The password is not saved: it is asked for each signature.	A senha não é salva: é pedida em cada assinatura.
 La conversión no produjo un PDF.	The conversion did not produce a PDF.	A conversão não gerou um PDF.
+La firma es válida; solo podría ser más difícil comprobarla cuando el certificado venza. Revise la conexión a internet y vuelva a firmar si necesita LTV.	The signature is valid; it may just be harder to verify once the certificate expires. Check your internet connection and sign again if you need LTV.	A assinatura é válida; só poderá ser mais difícil verificá-la quando o certificado vencer. Verifique a conexão com a internet e assine novamente se precisar de LTV.
 La firma no cabe en el espacio reservado.	The signature does not fit in the reserved space.	A assinatura não cabe no espaço reservado.
+La firma no incluye certificados.	The signature does not include certificates.	A assinatura não inclui certificados.
 La firma no incluye el certificado del emisor «{0}» y no está en sus certificados de confianza.	The signature does not include the issuer certificate "{0}" and it is not among your trusted certificates.	A assinatura não inclui o certificado do emissor "{0}" e ele não está entre seus certificados confiáveis.
 La lista está vacía.	The list is empty.	A lista está vazia.
 La marca de tiempo recibida no corresponde a esta firma.	The received timestamp does not match this signature.	O carimbo do tempo recebido não corresponde a esta assinatura.
@@ -640,6 +660,8 @@ La marca de tiempo recibida no corresponde a esta solicitud.	The received timest
 La página de este marcador ya no está en el documento.	This bookmark's page is no longer in the document.	A página deste marcador não está mais no documento.
 La página {0} pesa {1}, más que el límite de {2}. Comprímala más o reduzca su resolución.	Page {0} is {1}, more than the {2} limit. Compress it further or lower its resolution.	A página {0} tem {1}, mais que o limite de {2}. Comprima-a mais ou reduza sua resolução.
 La raíz «{0}» no está en sus certificados de confianza.	The root "{0}" is not among your trusted certificates.	A raiz "{0}" não está entre seus certificados confiáveis.
+La respuesta OCSP no incluye el certificado consultado.	The OCSP response does not include the requested certificate.	A resposta OCSP não inclui o certificado consultado.
+La respuesta es demasiado grande.	The response is too large.	A resposta é grande demais.
 La versión {0} no trae el manifiesto firmado, así que Rúbrica no la instalará automáticamente.	Version {0} has no signed manifest, so Rúbrica will not install it automatically.	A versão {0} não traz o manifesto assinado, então o Rúbrica não a instalará automaticamente.
 Las contraseñas no coinciden.	The passwords do not match.	As senhas não coincidem.
 Las firmas emitidas por «{0}» dejarán de mostrarse como de confianza.	Signatures issued by "{0}" will no longer be shown as trusted.	As assinaturas emitidas por "{0}" deixarão de ser mostradas como confiáveis.
@@ -649,6 +671,7 @@ LibreOffice no pudo convertir el archivo: {0}	LibreOffice could not convert the 
 LibreOffice tardó demasiado en convertir el archivo.	LibreOffice took too long to convert the file.	O LibreOffice demorou demais para converter o arquivo.
 Licitación / propuesta	Tender / proposal	Licitação / proposta
 Lista	List	Lista
+Lista de revocación no válida.	Invalid revocation list.	Lista de revogação inválida.
 Lista desplegable	Dropdown list	Lista suspensa
 Listo: {0} (límite {1}) · páginas a {2} ppp.	Done: {0} (limit {1}) · pages at {2} dpi.	Pronto: {0} (limite {1}) · páginas a {2} ppp.
 Listo: {0} (límite {1}) · sin pérdida.	Done: {0} (limit {1}) · no loss.	Pronto: {0} (limite {1}) · sem perda.
@@ -736,6 +759,7 @@ No se pudo leer	Could not read	Não foi possível ler
 No se pudo leer el PDF:	Could not read the PDF:	Não foi possível ler o PDF:
 No se pudo leer el certificado:	Could not read the certificate:	Não foi possível ler o certificado:
 No se pudo leer la imagen	Could not read the image	Não foi possível ler a imagem
+No se pudo obtener la información de revocación de «{0}»	Could not obtain revocation information for "{0}"	Não foi possível obter as informações de revogação de «{0}»
 No se pudo obtener la marca de tiempo de	Could not get the timestamp from	Não foi possível obter o carimbo do tempo de
 No se pueden eliminar todas las páginas.	You cannot delete all pages.	Não é possível excluir todas as páginas.
 No se reconoció texto en las páginas indicadas.	No text was recognized on the given pages.	Nenhum texto foi reconhecido nas páginas indicadas.
@@ -1039,6 +1063,7 @@ Uso previsto	Intended use	Uso previsto
 Usuarios de prueba	Test users	Usuários de teste
 VERIFICADO	VERIFIED	VERIFICADO
 Vacío = todas	Empty = all	Vazio = todas
+Validación a largo plazo (LTV): incluir el estado de los certificados	Long-term validation (LTV): include the certificates' status	Validação de longo prazo (LTV): incluir o status dos certificados
 Valor	Value	Valor
 Valor inicial	Initial value	Valor inicial
 Variables:	Variables:	Variáveis:
@@ -1118,6 +1143,7 @@ y péguelo abajo.	and paste it below.	e cole abaixo.
 {0} pág.	{0} p.	{0} pág.
 {0} página(s)	{0} page(s)	{0} página(s)
 {0} página(s) escaneada(s){1}. Guarde o comparta el PDF.	{0} page(s) scanned{1}. Save or share the PDF.	{0} página(s) digitalizada(s){1}. Salve ou compartilhe o PDF.
+{0} respondió {1}.	{0} responded {1}.	{0} respondeu {1}.
 {0} resultado(s)	{0} result(s)	{0} resultado(s)
 {0} seleccionada(s)	{0} selected	{0} selecionada(s)
 {0} zona(s) con cambios de apariencia	{0} area(s) with appearance changes	{0} área(s) com mudanças de aparência

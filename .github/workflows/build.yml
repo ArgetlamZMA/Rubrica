@@ -58,6 +58,7 @@ jobs:
           path: |
             web/test-output/pdfa.pdf
             web/test-output/pdfa_editado.pdf
+            web/test-output/pdfa_firmado.pdf
           retention-days: 7
 
       # ---------- Aplicación de Windows ----------
@@ -287,6 +288,6 @@ jobs:
       - name: Validar con veraPDF (PDF/A-2b)
         run: |
           ls -la muestras
-          docker run --rm -v "$PWD/muestras:/data" verapdf/cli:latest --flavour 2b --format text /data/pdfa.pdf /data/pdfa_editado.pdf | tee resultado.txt
-          docker run --rm -v "$PWD/muestras:/data" verapdf/cli:latest --flavour 2b --format text -v /data/pdfa.pdf /data/pdfa_editado.pdf | grep -E "FAIL|clause|test" | head -60 || true
+          docker run --rm -v "$PWD/muestras:/data" verapdf/cli:latest --flavour 2b --format text /data/pdfa.pdf /data/pdfa_editado.pdf /data/pdfa_firmado.pdf | tee resultado.txt
+          docker run --rm -v "$PWD/muestras:/data" verapdf/cli:latest --flavour 2b --format text -v /data/pdfa.pdf /data/pdfa_editado.pdf /data/pdfa_firmado.pdf | grep -E "FAIL|clause|test" | head -60 || true
           if grep -q "^FAIL" resultado.txt || ! grep -q "^PASS" resultado.txt; then echo "::error::Los PDF/A generados no pasan veraPDF"; exit 1; fi

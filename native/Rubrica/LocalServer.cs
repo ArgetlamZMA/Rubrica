@@ -118,7 +118,7 @@ internal sealed class LocalServer : IDisposable
         IOException when ex.HResult == unchecked((int)0x80070020) => "El archivo está abierto en otro programa. Ciérrelo e intente de nuevo.",
         UnauthorizedAccessException => "Windows no permite escribir en esa ubicación.",
         CryptographicException => "Error del certificado: " + ex.Message,
-        TaskCanceledException => "El servidor de marca de tiempo no respondió a tiempo.",
+        TaskCanceledException => "El servidor no respondió a tiempo.",
         HttpRequestException when ex.InnerException != null => "No se pudo contactar el servidor de marca de tiempo: " + ex.InnerException.Message,
         _ => ex.Message,
     };
@@ -247,6 +247,25 @@ internal sealed class LocalServer : IDisposable
                 var data = await ReadBodyAsync(req);
                 var cms = await Task.Run(() => CertStore.Sign(data, tp));
                 await WriteBytesAsync(res, cms, "application/pkcs7-signature");
+                break;
+            }
+
+            case "sign-raw":
+            {
+                var tp = q["thumbprint"];
+                if (string.IsNullOrWhiteSpace(tp) || req.HttpMethod != "POST") { res.StatusCode = 400; return; }
+                var data = await ReadBodyAsync(req);
+                await WriteJsonAsync(res, await Task.Run(() => CertStore.SignRaw(data, tp)));
+                break;
+            }
+
+            case "fetch":
+            {
+                var url = Uri.UnescapeDataString(req.Headers["X-Url"] ?? "");
+                var method = (req.Headers["X-Method"] ?? "GET").ToUpperInvariant();
+                var body = method == "POST" ? await ReadBodyAsync(req) : Array.Empty<byte>();
+                var reply = await NetFetch.FetchAsync(url, method, req.Headers["X-Content-Type"], body);
+                await WriteBytesAsync(res, reply, "application/octet-stream");
                 break;
             }
 

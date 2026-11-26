@@ -4,6 +4,10 @@
 - **Redacción que conserva el texto**: la página redactada sigue siendo buscable y se puede copiar, excepto lo que está bajo los recuadros. Cualquier palabra que toque un recuadro se elimina del archivo.
 - **Quitar información oculta** (*Proteger*): crea una copia limpia sin metadatos ni XMP, adjuntos, JavaScript y acciones automáticas, enlaces que ejecutan programas, capas ocultas, miniaturas ni datos privados de otras aplicaciones; opcionalmente sin comentarios, formularios ni marcadores. Muestra un informe de lo que quitó.
 - **Guardar como PDF/A-2b** (*Convertir → PDF/A*), el formato de archivo a largo plazo: metadatos XMP, perfil de color sRGB e identificador; quita JavaScript, adjuntos y acciones. Solo las páginas que no pueden cumplir (fuentes sin incrustar, color CMYK, LZW) se convierten en imagen, con el texto buscable. Una copia PDF/A sigue siéndolo al editarla y guardarla. Los archivos generados se validan con veraPDF en cada compilación.
+- **Firma PAdES con validación a largo plazo (LTV)**. Las firmas pasan a ser PAdES (`ETSI.CAdES.detached`, con *signing-certificate-v2*). Con marca de tiempo, Rúbrica agrega por omisión al PDF las respuestas OCSP y las listas CRL de toda la cadena (firmante y TSA) y las autoridades intermedias que falten. La firma se puede validar años después sin conexión (comprobado con pyHanko sin red y con revocación obligatoria). Si un certificado está revocado, la firma se detiene. El panel de firmas muestra el formato y si incluye LTV.
+- En Windows, la firma con el almacén o un token USB ahora solo firma el resumen; la clave nunca sale del almacén (igual que en Android). Se agregan claves EC.
+- Firmar una copia PDF/A con firma visible mantiene el cumplimiento de PDF/A.
+- Android: se permite http para marca de tiempo, OCSP y CRL de cualquier autoridad (antes solo el SAR). Son respuestas firmadas y Rúbrica las verifica.
 - La compilación se detiene si dos archivos de la interfaz declaran el mismo nombre (antes la app no arrancaba).
 
 ## 1.4.0 — en preparación

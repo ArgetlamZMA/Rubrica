@@ -28,6 +28,7 @@ internal static class CertStore
                 notBefore = c.NotBefore.ToUniversalTime().ToString("o"),
                 notAfter = c.NotAfter.ToUniversalTime().ToString("o"),
                 keyUsage = KeyUsage(c),
+                der = Convert.ToBase64String(c.RawData),
             })
             .ToArray();
     }
@@ -53,6 +54,42 @@ internal static class CertStore
         signer.SignedAttributes.Add(new Pkcs9SigningTime(DateTime.UtcNow));
         cms.ComputeSignature(signer, silent: false);
         return cms.Encode();
+    }
+
+    /// <summary>
+    /// Firma solo los atributos firmados (SHA-256) con la clave del almacén, sin exportarla: el CMS (PAdES) se arma en la interfaz,
+    /// igual que en Android. Devuelve la firma, la cadena (DER en Base64, el firmante primero) y el tipo de clave.
+    /// </summary>
+    public static object SignRaw(byte[] data, string thumbprint)
+    {
+        using var store = new X509Store(StoreName.My, StoreLocation.CurrentUser);
+        store.Open(OpenFlags.ReadOnly | OpenFlags.OpenExistingOnly);
+        var found = store.Certificates.Find(X509FindType.FindByThumbprint, thumbprint, false);
+        if (found.Count == 0) throw new CryptographicException("No se encontró el certificado seleccionado.");
+        var (sig, chain, kind) = SignRawWith(found[0], data);
+        return new { signature = Convert.ToBase64String(sig), chain = chain.Select(Convert.ToBase64String).ToArray(), keyType = kind };
+    }
+
+    internal static (byte[] Signature, byte[][] Chain, string KeyType) SignRawWith(X509Certificate2 cert, byte[] data)
+    {
+        if (data.Length == 0 || data.Length > 64 * 1024) throw new ArgumentException("Datos a firmar no válidos.");
+        byte[] sig; string kind;
+        using (var rsa = cert.GetRSAPrivateKey())
+        {
+            if (rsa != null) { sig = rsa.SignData(data, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1); kind = "RSA"; }
+            else
+            {
+                using var ec = cert.GetECDsaPrivateKey() ?? throw new CryptographicException("El certificado no tiene una clave privada utilizable para firmar.");
+                sig = ec.SignData(data, HashAlgorithmName.SHA256, DSASignatureFormat.Rfc3279DerSequence); kind = "EC";
+            }
+        }
+        using var chain = new X509Chain();
+        chain.ChainPolicy.RevocationMode = X509RevocationMode.NoCheck;
+        chain.ChainPolicy.VerificationFlags = X509VerificationFlags.AllFlags;
+        chain.Build(cert);
+        var certs = chain.ChainElements.Select(e => e.Certificate.RawData).ToList();
+        if (certs.Count == 0 || !certs[0].AsSpan().SequenceEqual(cert.RawData)) certs.Insert(0, cert.RawData);
+        return (sig, certs.ToArray(), kind);
     }
 
     /// <summary>Usos de la clave (p. ej. DigitalSignature, NonRepudiation); vacío si el certificado no los restringe.</summary>
