@@ -333,6 +333,7 @@ function ovEl(o, s, d) {
       break;
     }
     case 'field': e.innerHTML = o.ftype === 'sig' ? ic('pen-line') + '&nbsp;' + escapeHtml(tr('Firma') + ' ' + (o.order || '') + ': ' + (o.signer || '')) : ic(o.ftype === 'check' ? 'square-check' : o.ftype === 'drop' ? 'list' : 'text-cursor-input') + '&nbsp;' + escapeHtml(o.name); e.querySelector('svg').style.cssText = 'position:static;width:12px;height:12px;flex:none'; break;
+    case 'zone': Object.assign(e.style, { borderColor: o.color, color: o.color, background: o.color + '14' }); e.append(el('span', { text: o.name + (o.kind && o.kind !== 'text' ? ' · ' + tr(({ number: 'número', date: 'fecha', code: 'código' })[o.kind]) : '') })); break;
     default: e.innerHTML = ovSvg(o);
   }
   if (o.type === 'redact') e.classList.add('pending');

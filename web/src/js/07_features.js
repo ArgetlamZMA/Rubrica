@@ -536,7 +536,7 @@ function renderCommentsList(body) {
   const d = D(); const l = el('div', { class: 'slist' }); let any = false;
   const icon = { highlight: 'highlighter', underline: 'underline', strike: 'strikethrough', note: 'message-square', text: 'type', ink: 'pencil', rect: 'square', ellipse: 'circle', line: 'minus', arrow: 'move-up-right', stamp: 'stamp', image: 'image', whiteout: 'square-dashed', redact: 'eye-off', textedit: 'text-cursor-input', field: 'text-cursor' };
   d.pages.forEach((p, i) => {
-    const items = p.ov.filter(o => o.type !== 'ocrword' && !o.group); if (!items.length) return;
+    const items = p.ov.filter(o => o.type !== 'ocrword' && o.type !== 'zone' && !o.group); if (!items.length) return;
     any = true; l.append(el('div', { class: 'grp', text: 'Página ' + (i + 1) }));
     for (const o of items) {
       const txt = o.type === 'note' ? (o.author ? o.author + ': ' : '') + (o.text || '') : o.text || o.label || o.name || TOOL_NAMES[o.type];

@@ -370,3 +370,8 @@ table.kv td { padding: 3px 0; word-break: break-word; }
 .sig-pending .sp-row:first-of-type{border-top:0}
 .sig-pending .muted{color:var(--muted);font-size:11px}
 .ov.field.sig, .ov[data-ftype="sig"]{border-style:dashed}
+
+/* Zonas de datos (extracción a Excel) */
+.ov.zone{border:1.5px dashed;font-size:11px;font-weight:600;overflow:visible}
+.ov.zone span{position:absolute;left:0;top:-1px;transform:translateY(-100%);background:var(--panel);padding:0 4px;border-radius:3px 3px 0 0;white-space:nowrap}
+.extract-preview th{position:sticky;top:0;background:var(--panel2)}

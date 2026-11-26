@@ -18,7 +18,8 @@ const DEFAULT_OPTS = {
   'field-text': { multiline: false },
   'field-check': {},
   'field-drop': { options: 'Opción 1\nOpción 2\nOpción 3' },
-  'field-sig': {}
+  'field-sig': {},
+  zone: {}
 };
 const S = {
   docs: [], active: null,

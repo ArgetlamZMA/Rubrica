@@ -1,11 +1,11 @@
 /* ============================================================
    04 · Herramientas, interacción con el ratón, panel de propiedades
    ============================================================ */
-const CREATE = new Set(['sigbox', 'highlight', 'underline', 'strike', 'note', 'text', 'ink', 'rect', 'ellipse', 'line', 'arrow', 'stamp', 'image', 'whiteout', 'redact', 'field-text', 'field-check', 'field-drop', 'field-sig']);
+const CREATE = new Set(['sigbox', 'highlight', 'underline', 'strike', 'note', 'text', 'ink', 'rect', 'ellipse', 'line', 'arrow', 'stamp', 'image', 'whiteout', 'redact', 'field-text', 'field-check', 'field-drop', 'field-sig', 'zone']);
 const TOOL_NAMES = {
   select: 'Seleccionar', hand: 'Mano', highlight: 'Resaltar', underline: 'Subrayar', strike: 'Tachar', note: 'Nota', text: 'Cuadro de texto', ink: 'Lápiz',
   rect: 'Rectángulo', ellipse: 'Elipse', line: 'Línea', arrow: 'Flecha', stamp: 'Sello', code: 'Código', eraser: 'Borrador', edittext: 'Editar texto', image: 'Imagen',
-  whiteout: 'Corrector (tapar)', redact: 'Redactar', 'field-text': 'Campo de texto', 'field-check': 'Casilla', 'field-drop': 'Lista desplegable', 'field-sig': 'Campo de firma',
+  whiteout: 'Corrector (tapar)', redact: 'Redactar', 'field-text': 'Campo de texto', 'field-check': 'Casilla', 'field-drop': 'Lista desplegable', 'field-sig': 'Campo de firma', zone: 'Zona de datos',
   textedit: 'Texto editado', field: 'Campo de formulario', sigbox: 'Recuadro de firma digital'
 };
 const STAMPS = ['APROBADO', 'RECIBIDO', 'RECIBIDO CONFORME', 'REVISADO', 'VERIFICADO', 'PAGADO', 'LIQUIDADO', 'AFORADO', 'DESPACHADO', 'ENTREGADO', 'ORIGINAL', 'COPIA', 'COPIA FIEL', 'NO NEGOCIABLE', 'CONFIDENCIAL', 'URGENTE', 'BORRADOR', 'ANULADO', 'RECHAZADO'];
@@ -108,6 +108,7 @@ function onViewerDbl(e) {
   if (o.type === 'text' || o.type === 'textedit') { startEditing(p, o); }
   else if (o.type === 'note') editNote(p, o);
   else if (o.type === 'field') editFieldProps(p, o);
+  else if (o.type === 'zone') editZone(p, o);
 }
 function startPan(e) {
   const v = viewerEl(), sx = e.clientX, sy = e.clientY, st = v.scrollTop, sl = v.scrollLeft;
@@ -251,6 +252,17 @@ async function finishCreate(p, t, opt, r, dragged, g) {
       const opts = S.pendingSign; S.pendingSign = null; setTool('select');
       if (opts) await performSign(D(), opts, p, r);
       return;
+    }
+    case 'zone': {
+      if (!dragged || r.w < 8 || r.h < 6) { toast(tr('Arrastre para marcar la zona donde está el dato.'), 'err'); return; }
+      const n = d.pages.reduce((a, pp) => a + pp.ov.filter(x => x.type === 'zone').length, 0);
+      const v = await formDialog('Zona de datos', [
+        { key: 'name', label: 'Nombre del dato (columna en Excel)', placeholder: 'Ej.: Número de factura, Contenedor, Peso bruto, Valor FOB' },
+        { key: 'kind', label: 'Tipo', type: 'select', value: 'text', options: ZONE_TYPES }
+      ], { ok: 'Agregar', validate: v => v.name.trim() ? null : 'Escriba el nombre del dato.' });
+      if (!v) return;
+      add.push({ ...base(), type: 'zone', name: v.name.trim(), kind: v.kind, color: ZONE_COLORS[n % ZONE_COLORS.length], ...r });
+      break;
     }
     case 'field-sig': {
       if (!dragged || r.w < 60 || r.h < 24) r = { x: r.x - 90, y: r.y - 25, w: 180, h: 50 };
@@ -513,6 +525,7 @@ function renderProps() {
     const ta = el('textarea'); ta.value = o.text || ''; ta.onchange = () => { set('text', ta.value); refreshSideIfComments(); };
     pp.append(el('div', { class: 'row' }, el('label', { text: 'Comentario' + (o.author ? ' — ' + o.author : '') }), ta));
   }
+  if (o && o.type === 'zone') pp.append(el('div', { class: 'hint', html: escapeHtml(tr('Zona')) + ` <b>${escapeHtml(o.name)}</b>. ` + escapeHtml(tr('Se usa para extraer datos a Excel; no se guarda en el PDF.')) }), el('button', { class: 'btn sm', text: 'Nombre y tipo…', style: { marginTop: '8px' }, onclick: () => editZone(d.page(S.sel.pid), o) }));
   if (o && o.type === 'field') {
     pp.append(el('div', { class: 'hint', html: `Campo <b>${escapeHtml(o.name)}</b>. Doble clic para cambiar nombre y opciones. Se convierte en un campo rellenable al guardar.` }));
     pp.append(el('button', { class: 'btn sm', text: 'Propiedades…', style: { marginTop: '8px' }, onclick: () => editFieldProps(d.page(S.sel.pid), o) }));
