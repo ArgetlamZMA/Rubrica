@@ -16,7 +16,9 @@ Object.defineProperty(window, 'speechSynthesis', { value: fake, configurable: tr
 """
 
 async def axe(pg, label, bad):
-    if not await pg.evaluate("typeof axe !== 'undefined'"): await pg.add_script_tag(content=AXE)
+    if not await pg.evaluate("typeof axe !== 'undefined'"):
+        # la política CSP de la app no deja insertar scripts: se carga axe por el protocolo de DevTools
+        cdp = await pg.context.new_cdp_session(pg); await cdp.send('Runtime.evaluate', {'expression': AXE}); await cdp.detach()
     v = await pg.evaluate("async () => (await axe.run(document, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'] } })).violations.map(v => v.id + ' ' + v.nodes.slice(0, 2).map(n => n.target.join(' ')).join(' | '))")
     if v: bad.append(f'{label}: {v}')
 

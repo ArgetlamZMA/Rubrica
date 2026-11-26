@@ -1289,3 +1289,7 @@ Esta página no tiene texto. Si es un escaneo, aplique OCR para poder leerla.	Th
 Tamaño de la interfaz (menús, paneles y ventanas)	Interface size (menus, panels and windows)	Tamanho da interface (menus, painéis e janelas)
 Cinta de opciones	Ribbon	Faixa de opções
 Zoom	Zoom	Zoom
+(guardada; escriba para cambiarla)	(saved; type to change it)	(salva; digite para alterá-la)
+La TSA del SAR no requiere usuario. Si su servidor lo pide, la contraseña se guarda cifrada en este equipo (Windows: ligada a su cuenta; Android: en el almacén de claves del teléfono).	The SAR TSA does not require a user name. If your server asks for one, the password is stored encrypted on this device (Windows: tied to your account; Android: in the phone's key store).	A TSA do SAR não exige usuário. Se o seu servidor pedir, a senha é guardada criptografada neste dispositivo (Windows: vinculada à sua conta; Android: no armazenamento de chaves do telefone).
+La contraseña guardada no se puede leer aquí (se guardó en otro equipo o programa). Escríbala de nuevo en Preferencias de firma.	The saved password cannot be read here (it was saved on another device or program). Enter it again in Signature preferences.	A senha salva não pode ser lida aqui (foi salva em outro dispositivo ou programa). Digite-a novamente em Preferências de assinatura.
+Este navegador no puede guardar contraseñas cifradas.	This browser cannot store encrypted passwords.	Este navegador não pode guardar senhas criptografadas.

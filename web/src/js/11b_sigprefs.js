@@ -23,7 +23,7 @@ function tsaQuery(imprint, nonce) {
     tlv(0x02, nonce), tlv(0x01, new Uint8Array([0xff])));
 }
 async function tsaSend(server, query) {
-  const auth = server.user ? btoa(unescape(encodeURIComponent(server.user + ':' + (server.pass || '')))) : '';
+  const auth = server.user ? btoa(unescape(encodeURIComponent(server.user + ':' + await tsaPassword(server)))) : '';
   if (NATIVE) return natBytes('tsa', { method: 'POST', headers: { 'Content-Type': 'application/timestamp-query', 'X-Tsa-Url': server.url, ...(auth ? { 'X-Tsa-Auth': auth } : {}) }, body: query });
   if (PSN) return b64ToU8((await PSN.tsaRequest({ url: server.url, data: u8ToB64(query), auth })).data || '');
   let r;
@@ -369,11 +369,17 @@ async function signPrefsDialog(tab = 'ids') {
         { key: 'url', label: 'URL', value: t?.url || '', placeholder: 'http://servidor/tsa' },
         { key: 'auth', label: 'Este servidor requiere que me conecte', type: 'checkbox', value: !!t?.user },
         { key: 'user', label: 'Nombre de usuario', value: t?.user || '' },
-        { key: 'pass', label: 'Contraseña', type: 'password', value: t?.pass || '' },
-        { type: 'hint', label: 'La TSA del SAR no requiere usuario. Si su servidor lo pide, la contraseña se guarda en este equipo.' }], {
+        { key: 'pass', label: 'Contraseña', type: 'password', value: '', placeholder: t?.passEnc || t?.pass ? tr('(guardada; escriba para cambiarla)') : '' },
+        { type: 'hint', label: 'La TSA del SAR no requiere usuario. Si su servidor lo pide, la contraseña se guarda cifrada en este equipo (Windows: ligada a su cuenta; Android: en el almacén de claves del teléfono).' }], {
         validate: v => !v.name.trim() ? 'Escriba un nombre.' : !/^https?:\/\/\S+$/i.test(v.url.trim()) ? 'La URL debe empezar con http:// o https://' : null });
       if (!v) return null;
-      return { id: t?.id || 't' + Date.now().toString(36), name: v.name.trim(), url: v.url.trim(), user: v.auth ? v.user.trim() : '', pass: v.auth ? v.pass : '' };
+      // la contraseña guardada no se descifra para mostrarla: si el campo queda vacío, se conserva
+      let passEnc = '';
+      if (v.auth) {
+        try { passEnc = v.pass ? await secretSeal(v.pass) : (t?.passEnc || (t?.pass ? await secretSeal(t.pass) : '')); }
+        catch (e) { toast(e.message || String(e), 'err', 7000); return null; }
+      }
+      return { id: t?.id || 't' + Date.now().toString(36), name: v.name.trim(), url: v.url.trim(), user: v.auth ? v.user.trim() : '', passEnc };
     };
     const save = l => { S.settings.tsaServers = l; saveSettings(); };
     const render = () => {

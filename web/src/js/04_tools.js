@@ -145,7 +145,7 @@ function startDrag(e, pe, pid, oid, mode) {
   };
   const up = () => {
     window.removeEventListener('pointermove', mv); window.removeEventListener('pointerup', up);
-    if (moved) { d.undo.push(snap); d.redo = []; d.setDirty(true); renderOverlays(p); renderProps(); }
+    if (moved) { d.pushUndo(snap); d.redo = []; d.setDirty(true); renderOverlays(p); renderProps(); }
   };
   window.addEventListener('pointermove', mv); window.addEventListener('pointerup', up);
 }
@@ -328,11 +328,11 @@ function commitEditing() {
   const e = R.els.get(p.id)?.ol.querySelector(`[data-oid="${id}"]`);
   let txt = e ? (o.type === 'textedit' ? e.textContent.replace(/\n/g, ' ') : e.innerText).replace(/ /g, ' ').replace(/\n$/, '') : o.text;
   const changed = txt !== o.text;
-  if (!txt.trim() && o.type === 'text') { p.ov = p.ov.filter(x => x !== o); S.sel = null; if (S.editSnap && o.text) { d.undo.push(S.editSnap); d.redo = []; d.setDirty(true); } }
+  if (!txt.trim() && o.type === 'text') { p.ov = p.ov.filter(x => x !== o); S.sel = null; if (S.editSnap && o.text) { d.pushUndo(S.editSnap); d.redo = []; d.setDirty(true); } }
   else {
     o.text = txt;
     fitTextBox(o);
-    if (changed || o.type === 'textedit') { if (S.editSnap) d.undo.push(S.editSnap); d.redo = []; d.setDirty(true); }
+    if (changed || o.type === 'textedit') { if (S.editSnap) d.pushUndo(S.editSnap); d.redo = []; d.setDirty(true); }
   }
   S.editSnap = null;
   renderOverlays(p); renderProps(); refreshSideIfComments();

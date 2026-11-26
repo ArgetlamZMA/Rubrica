@@ -1,5 +1,5 @@
 """Utilidades compartidas por las pruebas de la interfaz."""
-import base64, os, sys
+import asyncio, base64, os, sys
 from playwright.async_api import async_playwright
 
 URL = os.environ.get('PDFS_URL', 'http://localhost:8765/')
@@ -36,6 +36,17 @@ async def launch(p):
     errs = []
     pg.on('pageerror', lambda e: errs.append('PAGEERROR ' + str(e)))
     pg.on('console', lambda m: errs.append(m.text) if m.type == 'error' and 'favicon' not in m.text else None)
+    # La app declara una política CSP sin 'unsafe-eval'; page.wait_for_function de Playwright compila la condición
+    # dentro de la página y la política lo bloquea. Se sustituye por una espera que consulta desde fuera, para que
+    # todas las pruebas corran con la política activa (y cualquier infracción de la app aparezca como error).
+    async def wait_for_function(expression, arg=None, timeout=30000, polling=None):
+        loop = asyncio.get_running_loop(); end = loop.time() + (timeout or 30000) / 1000
+        while True:
+            v = await pg.evaluate(expression, arg)
+            if v: return v
+            if loop.time() > end: raise TimeoutError(f'wait_for_function: {expression[:80]}')
+            await asyncio.sleep(0.1)
+    pg.wait_for_function = wait_for_function
     return b, ctx, pg, errs
 
 async def open_fixture(pg, name, as_name=None):

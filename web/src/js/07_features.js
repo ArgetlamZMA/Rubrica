@@ -766,7 +766,7 @@ async function ocrDialog() {
         allText = r.text;
         if (!r.words) throw new Error('No se reconoció texto en las páginas indicadas.');
       } finally { await worker.terminate(); }
-      d.undo.push(snap); d.redo = []; d.setDirty(true);
+      d.pushUndo(snap); d.redo = []; d.setDirty(true);
     });
   } catch (e) { toast(e.message, 'err', 6000); return; }
   SR.hits = []; afterStructureChange();

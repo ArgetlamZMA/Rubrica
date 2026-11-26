@@ -253,6 +253,7 @@ function initPwa() {
   applyLang(S.settings.lang || 'auto');
   applyUiScale();
   startA11y();
+  migrateSecrets();
   initChrome(); initViewerEvents(); initKeys(); initDnD();
   try { await initMobile(); } catch (e) { console.warn('móvil', e); }
   renderTabs(); renderRibbon(); renderViewer(); renderSide(); renderProps(); updateCloudStatus(); setTool('select');

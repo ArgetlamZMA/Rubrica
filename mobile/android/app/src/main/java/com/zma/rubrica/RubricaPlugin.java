@@ -18,6 +18,8 @@ import android.print.PrintDocumentInfo;
 import android.print.PrintManager;
 import android.provider.OpenableColumns;
 import android.security.KeyChain;
+import android.security.keystore.KeyGenParameterSpec;
+import android.security.keystore.KeyProperties;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
 import android.util.Base64;
@@ -45,6 +47,11 @@ import com.google.mlkit.vision.text.TextRecognition;
 import com.google.mlkit.vision.text.TextRecognizer;
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
 
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.GCMParameterSpec;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -59,6 +66,7 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.PKIXCertPathValidatorResult;
 import java.security.cert.PKIXParameters;
 import java.security.cert.X509Certificate;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -123,6 +131,48 @@ public class RubricaPlugin extends Plugin {
                 notifyListeners("filesReceived", ev, true);
             }
         }).start();
+    }
+
+    /* ---------- Contraseñas de la configuración (p. ej. servidor de marca de tiempo) ----------
+       Se cifran con una clave AES-256-GCM que vive en el Android Keystore y nunca sale de él:
+       el valor guardado en la configuración de la página no sirve fuera de este teléfono. */
+    private static final String SECRET_ALIAS = "rubrica_secrets_v1";
+
+    private SecretKey secretKey() throws Exception {
+        KeyStore ks = KeyStore.getInstance("AndroidKeyStore");
+        ks.load(null);
+        if (ks.containsAlias(SECRET_ALIAS)) return ((KeyStore.SecretKeyEntry) ks.getEntry(SECRET_ALIAS, null)).getSecretKey();
+        KeyGenerator kg = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore");
+        kg.init(new KeyGenParameterSpec.Builder(SECRET_ALIAS, KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT)
+            .setBlockModes(KeyProperties.BLOCK_MODE_GCM).setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE).setKeySize(256).build());
+        return kg.generateKey();
+    }
+
+    @PluginMethod
+    public void secretProtect(PluginCall call) {
+        String text = call.getString("text");
+        if (text == null) { call.reject("Faltan datos"); return; }
+        try {
+            Cipher c = Cipher.getInstance("AES/GCM/NoPadding");
+            c.init(Cipher.ENCRYPT_MODE, secretKey());
+            byte[] iv = c.getIV(), ct = c.doFinal(text.getBytes(StandardCharsets.UTF_8));
+            byte[] out = new byte[iv.length + ct.length];
+            System.arraycopy(iv, 0, out, 0, iv.length); System.arraycopy(ct, 0, out, iv.length, ct.length);
+            JSObject r = new JSObject(); r.put("v", Base64.encodeToString(out, Base64.NO_WRAP)); call.resolve(r);
+        } catch (Exception e) { call.reject("No se pudo proteger la contraseña: " + e.getMessage()); }
+    }
+
+    @PluginMethod
+    public void secretUnprotect(PluginCall call) {
+        String v = call.getString("v");
+        if (v == null) { call.reject("Faltan datos"); return; }
+        try {
+            byte[] in = Base64.decode(v, Base64.NO_WRAP);
+            if (in.length < 13) throw new IllegalArgumentException("corto");
+            Cipher c = Cipher.getInstance("AES/GCM/NoPadding");
+            c.init(Cipher.DECRYPT_MODE, secretKey(), new GCMParameterSpec(128, in, 0, 12));
+            JSObject r = new JSObject(); r.put("text", new String(c.doFinal(in, 12, in.length - 12), StandardCharsets.UTF_8)); call.resolve(r);
+        } catch (Exception e) { call.reject("La contraseña guardada no se puede leer en este teléfono. Escríbala de nuevo en Preferencias de firma."); }
     }
 
     @PluginMethod

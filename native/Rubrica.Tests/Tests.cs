@@ -298,3 +298,24 @@ public class NetFetchTests
         Assert.Throws<ArgumentException>(() => NetFetch.Validate("http://ocsp.sar.gob.hn/", "POST", 70000));
     }
 }
+
+public class SecretsTests
+{
+    [Fact]
+    public void ProtectRoundTripAndNoPlaintext()
+    {
+        var v = Secrets.Protect("clave-TSA-ñ-123");
+        Assert.DoesNotContain("clave", System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(v)));
+        Assert.Equal("clave-TSA-ñ-123", Secrets.Unprotect(v));
+        Assert.NotEqual(v, Secrets.Protect("clave-TSA-ñ-123")); // cada cifrado es distinto
+    }
+
+    [Fact]
+    public void TamperedValueGivesClearMessage()
+    {
+        var b = Convert.FromBase64String(Secrets.Protect("x")); b[^1] ^= 0xff;
+        var e = Assert.Throws<InvalidOperationException>(() => Secrets.Unprotect(Convert.ToBase64String(b)));
+        Assert.Contains("Preferencias de firma", e.Message);
+        Assert.Throws<InvalidOperationException>(() => Secrets.Unprotect("no es base64"));
+    }
+}

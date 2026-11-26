@@ -269,6 +269,22 @@ internal sealed class LocalServer : IDisposable
                 break;
             }
 
+            case "secret-protect":
+            {
+                var body = await ReadJsonAsync<SecretRequest>(req);
+                if (body?.Text == null || req.HttpMethod != "POST") { res.StatusCode = 400; return; }
+                await WriteJsonAsync(res, new { v = Secrets.Protect(body.Text) });
+                break;
+            }
+
+            case "secret-unprotect":
+            {
+                var body = await ReadJsonAsync<SecretRequest>(req);
+                if (body?.V == null || req.HttpMethod != "POST") { res.StatusCode = 400; return; }
+                await WriteJsonAsync(res, new { text = Secrets.Unprotect(body.V) });
+                break;
+            }
+
             case "verify-chain":
             {
                 var body = await ReadJsonAsync<VerifyChainRequest>(req);
@@ -364,4 +380,5 @@ internal sealed class LocalServer : IDisposable
 
     private sealed record UpdateRequest(string? Url);
     private sealed record VerifyChainRequest(string[]? Certs, string? LeafSerial, string? Time);
+    private sealed record SecretRequest(string? Text, string? V);
 }

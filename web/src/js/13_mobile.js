@@ -80,7 +80,7 @@ async function scanDocument(appendTo) {
         }
         added.push(pg);
       }
-      if (appendTo) { doc.undo.push(snap); doc.redo = []; doc.pages.splice(doc.cur + 1, 0, ...added); doc.setDirty(true); afterStructureChange(); }
+      if (appendTo) { doc.pushUndo(snap); doc.redo = []; doc.pages.splice(doc.cur + 1, 0, ...added); doc.setDirty(true); afterStructureChange(); }
       else { doc.pages = added; doc.dirty = true; addDoc(doc); }
     });
     toast(`${pages.length} página(s) escaneada(s)${ocr ? ' con texto reconocido' : ''}. Guarde o comparta el PDF.`, 'ok', 5000);
@@ -109,7 +109,7 @@ async function ocrNative(d, idx) {
       for (const w of res.words || []) if (w.t && w.t.trim()) p.ov.unshift({ id: uid(), type: 'ocrword', t: w.t, x: w.x * W / res.width, y: w.y * H / res.height, w: w.w * W / res.width, h: w.h * H / res.height });
       text += (text ? '\n\n' : '') + `--- Página ${idx[k] + 1} ---\n` + (res.text || '');
     }
-    d.undo.push(snap); d.redo = []; d.setDirty(true);
+    d.pushUndo(snap); d.redo = []; d.setDirty(true);
   });
   return text;
 }

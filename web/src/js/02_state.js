@@ -34,6 +34,14 @@ const S = {
 const saveToolOpts = () => store.set('toolOpts', S.toolOpts);
 const saveSettings = () => store.set('settings', S.settings);
 
+const UNDO_MAX_STEPS = 100, UNDO_MAX_BYTES = 64 * 1024 * 1024;
+/** Rechaza lo que JSON no conserva tal cual (para usar entonces structuredClone). */
+function snapReplacer(k, v) {
+  if (typeof v === 'number' && !Number.isFinite(v)) throw 0;
+  if (v === undefined && Array.isArray(this)) throw 0;
+  if (v && typeof v === 'object' && !Array.isArray(v) && Object.getPrototypeOf(v) !== Object.prototype) throw 0;
+  return v;
+}
 class Doc {
   constructor(name) {
     this.id = uid(); this.name = name || 'Sin título.pdf';
@@ -44,12 +52,32 @@ class Doc {
     this.zoom = 'fitw'; this.scale = 1; this.cur = 0; this.scrollTop = 0;
     this.orgSel = new Set(); this.view = 'pages';
   }
-  snap() { return structuredClone({ pages: this.pages, formValues: this.formValues, meta: this.meta, security: this.security }); }
-  checkpoint() {
-    this.undo.push(this.snap()); if (this.undo.length > 60) this.undo.shift();
-    this.redo = []; this.setDirty(true);
+  /** Instantánea para deshacer. Cada página se guarda como texto JSON; si no cambió desde la instantánea
+      anterior se reutiliza la misma cadena, de modo que todas las instantáneas la comparten en memoria
+      (un documento grande con OCR ya no se copia entero en cada paso). */
+  snap() {
+    const cache = this._snapCache || (this._snapCache = new Map());
+    let fresh = 0;
+    const pages = this.pages.map(p => {
+      let j; try { j = JSON.stringify(p, snapReplacer); } catch { fresh += 4096; return structuredClone(p); } // valores no JSON: copia completa
+      const prev = cache.get(p.id);
+      if (prev === j) return prev;
+      cache.set(p.id, j); fresh += j.length * 2;
+      return j;
+    });
+    return { pages, formValues: structuredClone(this.formValues), meta: structuredClone(this.meta), security: structuredClone(this.security), bytes: fresh };
   }
-  restore(s) { Object.assign(this, structuredClone(s)); }
+  /** Agrega una instantánea al historial, con límite de pasos y de memoria (lo más antiguo se descarta). */
+  pushUndo(s) {
+    this.undo.push(s);
+    let total = this.undo.reduce((a, x) => a + (x.bytes || 0), 0);
+    while (this.undo.length > 1 && (this.undo.length > UNDO_MAX_STEPS || total > UNDO_MAX_BYTES)) total -= this.undo.shift().bytes || 0;
+  }
+  checkpoint() { this.pushUndo(this.snap()); this.redo = []; this.setDirty(true); }
+  restore(s) {
+    Object.assign(this, structuredClone({ formValues: s.formValues, meta: s.meta, security: s.security }));
+    this.pages = s.pages.map(x => typeof x === 'string' ? JSON.parse(x) : structuredClone(x));
+  }
   setDirty(v) { this.dirty = v; renderTabs(); }
   page(pid) { return this.pages.find(p => p.id === pid); }
   pageIndex(pid) { return this.pages.findIndex(p => p.id === pid); }

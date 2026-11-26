@@ -256,7 +256,7 @@ function renderFormLayer(p) {
 }
 function setFormValue(srcId, name, value, inp) {
   const d = D();
-  if (inp && inp._snap) { d.undo.push(inp._snap); d.redo = []; inp._snap = null; d.setDirty(true); }
+  if (inp && inp._snap) { d.pushUndo(inp._snap); d.redo = []; inp._snap = null; d.setDirty(true); }
   else if (!inp) d.checkpoint();
   d.formValues[srcId][name] = value;
   // sincronizar widgets con el mismo nombre
