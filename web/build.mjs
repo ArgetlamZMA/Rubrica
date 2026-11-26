@@ -1,6 +1,6 @@
 // Genera dist/index.html (un solo archivo, funciona sin conexión) + archivos estáticos.
 // Uso: npm ci && node build.mjs
-import fs from 'node:fs'; import path from 'node:path'; import { fileURLToPath } from 'node:url';
+import fs from 'node:fs'; import path from 'node:path'; import { fileURLToPath } from 'node:url'; import crypto from 'node:crypto';
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
 const SRC = path.join(ROOT, 'src'), OUT = path.join(ROOT, 'dist'), NM = path.join(ROOT, 'node_modules');
 const rd = p => fs.readFileSync(p, 'utf8');
@@ -13,7 +13,15 @@ let js = fs.readdirSync(jsDir).filter(f => f.endsWith('.js')).sort().map(f => `/
 const tsv = fs.readFileSync(path.join(ROOT, 'src', 'i18n', 'ui.tsv'), 'utf8').split(/\r?\n/).filter(Boolean).map(l => l.split('\t'));
 const [head, ...rows] = tsv, dict = {};
 head.slice(1).forEach((lang, i) => { dict[lang] = {}; for (const r of rows) if (r[i + 1] && r[i + 1] !== r[0]) dict[lang][r[0]] = r[i + 1]; });
-js = `const APP_VERSION = ${JSON.stringify(pkg.version)};\nconst I18N_DICT = ${JSON.stringify(dict)};\n` + js;
+js = `const APP_VERSION = ${JSON.stringify(pkg.version)};\nconst I18N_DICT = ${JSON.stringify(dict)};\n// perfil sRGB (LittleCMS) para el «output intent» de PDF/A\nconst SRGB_ICC_B64 = ${JSON.stringify(fs.readFileSync(path.join(ROOT, 'src/assets/srgb.icc')).toString('base64'))};\n` + js;
+// todos los archivos comparten un ámbito global: un nombre declarado dos veces rompería la app al abrirla.
+// Se compila el código unido para detectarlo aquí y no en el equipo del usuario.
+try { new Function(js); } catch (e) {
+  const dup = /Identifier '([^']+)' has already been declared/.exec(e.message);
+  const where = dup ? fs.readdirSync(jsDir).filter(f => new RegExp(`^(?:const|let|class|function|async function)\\s+${dup[1]}\\b`, 'm').test(rd(path.join(jsDir, f)))) : [];
+  console.error(`Error en el código de la interfaz: ${e.message}${where.length ? ' (en ' + where.join(', ') + ')' : ''}`);
+  process.exit(1);
+}
 // íconos Lucide referenciados en el código
 const iconDir = path.join(NM, 'lucide-static', 'icons');
 const names = new Set(['square']);
@@ -34,6 +42,30 @@ const parts = {
 };
 let html = rd(path.join(SRC, 'template.html'));
 for (const [k, v] of Object.entries(parts)) { if (!html.includes(k)) throw new Error('Falta marcador ' + k); html = html.split(k).join(v); }
+// el navegador normaliza los fines de línea antes de calcular el hash de cada script
+html = html.replace(/\r\n?/g, '\n');
+// Política de seguridad de contenido: solo se ejecutan los scripts de esta compilación (por su hash SHA-256)
+// y los archivos propios (OCR). Un texto o comentario de un PDF que llegara a insertarse como HTML no puede
+// ejecutar código, cargar complementos ni enviar formularios. Las conexiones quedan abiertas a https/http
+// porque el usuario elige su servidor de marca de tiempo, OCSP/CRL y nube.
+const hashes = [...html.matchAll(/<script(?![^>]*type="text\/plain")[^>]*>([\s\S]*?)<\/script>/g)]
+  .filter(m => m[1].trim()).map(m => `'sha256-${crypto.createHash('sha256').update(m[1], 'utf8').digest('base64')}'`);
+const CSP = [
+  "default-src 'self'",
+  `script-src 'self' ${hashes.join(' ')} 'wasm-unsafe-eval'`,
+  "worker-src 'self' blob:",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob: https:",
+  "font-src 'self' data: blob:",
+  "media-src 'self' data: blob:",
+  "connect-src 'self' https: http: data: blob:",
+  "frame-src 'self' blob:",
+  "object-src blob:",
+  "base-uri 'none'",
+  "form-action 'none'",
+].join('; ');
+if (!html.includes('<meta charset="utf-8">')) throw new Error('Falta <meta charset> en la plantilla');
+html = html.replace('<meta charset="utf-8">', `<meta charset="utf-8">\n<meta http-equiv="Content-Security-Policy" content="${CSP}">`);
 fs.writeFileSync(path.join(OUT, 'index.html'), html);
 for (const f of fs.readdirSync(path.join(ROOT, 'static'))) fs.copyFileSync(path.join(ROOT, 'static', f), path.join(OUT, f));
 // OCR sin internet: motor Tesseract (WebAssembly, solo LSTM) y modelos compactos de español e inglés
@@ -43,4 +75,4 @@ const OCR = path.join(OUT, 'ocr'), ocrFiles = [
   ['@tesseract.js-data/spa/4.0.0_best_int/spa.traineddata.gz', 'lang/spa.traineddata.gz'], ['@tesseract.js-data/eng/4.0.0_best_int/eng.traineddata.gz', 'lang/eng.traineddata.gz'],
   ['@tesseract.js-data/por/4.0.0_best_int/por.traineddata.gz', 'lang/por.traineddata.gz'], ['@tesseract.js-data/fra/4.0.0_best_int/fra.traineddata.gz', 'lang/fra.traineddata.gz']];
 for (const [src, dst] of ocrFiles) { fs.mkdirSync(path.dirname(path.join(OCR, dst)), { recursive: true }); fs.copyFileSync(path.join(NM, src), path.join(OCR, dst)); }
-console.log(`dist/index.html ${(Buffer.byteLength(html) / 1024).toFixed(0)} KB · ${Object.keys(icons).length} íconos · v${pkg.version}`);
+console.log(`dist/index.html ${(Buffer.byteLength(html) / 1024).toFixed(0)} KB · ${Object.keys(icons).length} íconos · ${hashes.length} scripts con CSP · v${pkg.version}`);

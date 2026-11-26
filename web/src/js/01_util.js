@@ -144,10 +144,12 @@ function loadImage(src) { return new Promise((res, rej) => { const i = new Image
 function openModal({ title, body, buttons = [], wide = false, onClose, closable = true }) {
   let resolve; const result = new Promise(r => resolve = r);
   const bg = el('div', { class: 'modal-bg' });
-  const box = el('div', { class: 'modal' + (wide ? ' wide' : '') });
-  const close = v => { bg.remove(); document.removeEventListener('keydown', onKey, true); onClose && onClose(v); resolve(v); };
-  const head = el('div', { class: 'modal-h' }, el('span', { text: title }),
-    closable ? el('button', { class: 'icon-btn', html: ic('x'), onclick: () => close(null) }) : null);
+  const tid = 'mt-' + uid();
+  const box = el('div', { class: 'modal' + (wide ? ' wide' : ''), role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': tid });
+  const opener = document.activeElement; // el foco vuelve aquí al cerrar
+  const close = v => { bg.remove(); document.removeEventListener('keydown', onKey, true); onClose && onClose(v); resolve(v); if (opener && opener.isConnected && opener.focus) try { opener.focus(); } catch { } };
+  const head = el('div', { class: 'modal-h' }, el('span', { text: title, id: tid }),
+    closable ? el('button', { class: 'icon-btn', html: ic('x'), title: 'Cerrar', 'aria-label': 'Cerrar', onclick: () => close(null) }) : null);
   const foot = el('div', { class: 'modal-f' });
   for (const b of buttons) {
     foot.append(el('button', {
@@ -156,7 +158,12 @@ function openModal({ title, body, buttons = [], wide = false, onClose, closable 
     }));
   }
   const onKey = e => {
+    if (!bg.isConnected || bg !== $('#modal-root').lastElementChild) return; // solo la ventana de arriba
     if (e.key === 'Escape' && closable) { e.stopPropagation(); close(null); }
+    if (e.key === 'Tab') { // el foco no sale de la ventana (WCAG 2.4.3)
+      const f = [...box.querySelectorAll('button,input,select,textarea,a[href],[tabindex]:not([tabindex="-1"])')].filter(x => !x.disabled && x.offsetParent !== null);
+      if (f.length) { const a = f[0], z = f.at(-1); if (e.shiftKey && document.activeElement === a) { e.preventDefault(); z.focus(); } else if (!e.shiftKey && document.activeElement === z) { e.preventDefault(); a.focus(); } else if (!box.contains(document.activeElement)) { e.preventDefault(); a.focus(); } }
+    }
     if (e.key === 'Enter' && !e.shiftKey && e.target.tagName !== 'TEXTAREA' && e.target.tagName !== 'BUTTON') {
       const p = foot.querySelector('.btn.primary'); if (p) { e.preventDefault(); e.stopPropagation(); p.click(); }
     }
@@ -232,3 +239,35 @@ function askPassword(title, msg) {
 
 /* Marca: ícono de ZMA Inversiones (submarca «A»). Propiedad de ZMA Inversiones — ver branding/LEEME.md */
 const BRAND_ICON = '<svg viewBox="0 0 138.99 182.11" fill="currentColor" aria-hidden="true"><path d="M138.81,178.44L72.03,1.75c-.4-1.05-1.41-1.75-2.53-1.75h-.02c-1.13,0-2.14.71-2.53,1.78-10.53,28.83-22.15,59.07-33.38,88.31C22.33,119.34,10.7,149.6.16,178.47c-.36.97-.13,2.07.6,2.82.73.74,1.81,1.01,2.8.68l33.24-11.06c.75-.25,1.36-.82,1.66-1.56l21.18-52.68,7.02,22.94-10.25,33.51c-.25.83-.1,1.72.42,2.41.51.69,1.32,1.09,2.18,1.09h.02l20.95-.11c.85,0,1.66-.42,2.17-1.11.51-.69.66-1.58.41-2.4l-10.22-33.4,6.94-22.66,21.07,52.4c.29.74.9,1.31,1.66,1.56l33.42,11.07c.28.09.57.13.85.13.73,0,1.43-.29,1.95-.84.73-.75.95-1.85.58-2.83ZM33.91,166.15l-26.72,8.89c10-27.22,20.9-55.55,31.45-83.01,2.48-6.48,4.99-13,7.5-19.54l7.41,24.22s.02.06.02.08l3.56,11.62-23.22,57.75ZM76.3,171.11l-13.62.07,6.83-22.3,6.79,22.23ZM69.5,130.33l-6.07-19.82s-.02-.06-.02-.08l-.55-1.78,6.53-16.25,6.64,16.53-6.54,21.4ZM78.58,100.68l-6.66-16.55c-.41-1.03-1.41-1.7-2.52-1.7s-2.1.67-2.52,1.7l-6.54,16.27-1.57-5.13s-.02-.05-.02-.07l-9.46-30.94c6.89-18.02,13.75-36.11,20.25-53.77l20.25,53.56-11.21,36.64ZM104.9,166.15l-23.1-57.46,11.12-36.35,38.82,102.7-26.84-8.89Z"/></svg>';
+
+/* ---------------- Accesibilidad ---------------- */
+/** Asocia la etiqueta de cada fila de formulario con su control y da nombre a los botones que solo tienen ícono. */
+function a11yFix(root) {
+  if (!root || !root.querySelectorAll) return;
+  const rows = root.matches && root.matches('.row') ? [root, ...root.querySelectorAll('.row')] : root.querySelectorAll('.row');
+  for (const r of rows) {
+    const lab = [...r.children].find(c => c.tagName === 'LABEL' && !c.htmlFor && !c.querySelector('input,select,textarea'));
+    if (!lab) continue;
+    const ctl = r.querySelector('input:not([type=checkbox]):not([type=radio]):not([type=hidden]),select,textarea');
+    if (!ctl || ctl.getAttribute('aria-label') || ctl.getAttribute('aria-labelledby')) continue;
+    if (!ctl.id) ctl.id = 'f-' + uid();
+    lab.htmlFor = ctl.id;
+  }
+  for (const b of root.querySelectorAll('button:not([aria-label])')) if (!b.textContent.trim() && b.title) b.setAttribute('aria-label', b.title);
+}
+function startA11y() {
+  a11yFix(document.body);
+  let pending = new Set(), queued = false;
+  new MutationObserver(ms => {
+    for (const m of ms) for (const n of m.addedNodes) if (n.nodeType === 1) pending.add(n);
+    if (pending.size && !queued) { queued = true; queueMicrotask(() => { const list = [...pending]; pending = new Set(); queued = false; list.forEach(a11yFix); }); }
+  }).observe(document.body, { childList: true, subtree: true });
+}
+
+/** Tamaño de la interfaz: agranda menús, paneles y ventanas sin tocar la vista del documento (que tiene su propio zoom). */
+function applyUiScale() {
+  const z = clamp(+S.settings.uiScale || 1, 0.8, 2);
+  document.documentElement.style.setProperty('--ui-zoom', String(z));
+  document.documentElement.classList.toggle('ui-zoomed', z !== 1);
+  if (typeof renderViewer === 'function' && D()) setTimeout(() => renderViewer(true), 50);
+}

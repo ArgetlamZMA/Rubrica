@@ -256,7 +256,7 @@ function renderFormLayer(p) {
 }
 function setFormValue(srcId, name, value, inp) {
   const d = D();
-  if (inp && inp._snap) { d.undo.push(inp._snap); d.redo = []; inp._snap = null; d.setDirty(true); }
+  if (inp && inp._snap) { d.pushUndo(inp._snap); d.redo = []; inp._snap = null; d.setDirty(true); }
   else if (!inp) d.checkpoint();
   d.formValues[srcId][name] = value;
   // sincronizar widgets con el mismo nombre
@@ -310,7 +310,7 @@ function ovEl(o, s, d) {
     case 'whiteout': e.style.background = o.color || '#fff'; break;
     case 'redact': break;
     case 'note': e.style.background = o.color || '#ffd400'; e.innerHTML = ic('message-square'); e.title = (o.author ? o.author + ': ' : '') + (o.text || ''); break;
-    case 'image': { const a = d.assets[o.asset]; e.append(el('img', { src: a ? a.url : '', draggable: 'false' })); break; }
+    case 'image': { const a = d.assets[o.asset]; e.append(el('img', { src: a ? a.url : '', alt: '', draggable: 'false' })); break; }
     case 'code': e.innerHTML = codeSvg(o); break;
     case 'stamp': {
       const bw = Math.max(1.5, o.h * 0.06);
@@ -332,7 +332,8 @@ function ovEl(o, s, d) {
       } else e.textContent = o.text;
       break;
     }
-    case 'field': e.innerHTML = ic(o.ftype === 'check' ? 'square-check' : o.ftype === 'drop' ? 'list' : 'text-cursor-input') + '&nbsp;' + escapeHtml(o.name); e.querySelector('svg').style.cssText = 'position:static;width:12px;height:12px;flex:none'; break;
+    case 'field': e.innerHTML = o.ftype === 'sig' ? ic('pen-line') + '&nbsp;' + escapeHtml(tr('Firma') + ' ' + (o.order || '') + ': ' + (o.signer || '')) : ic(o.ftype === 'check' ? 'square-check' : o.ftype === 'drop' ? 'list' : 'text-cursor-input') + '&nbsp;' + escapeHtml(o.name); e.querySelector('svg').style.cssText = 'position:static;width:12px;height:12px;flex:none'; break;
+    case 'zone': Object.assign(e.style, { borderColor: o.color, color: o.color, background: o.color + '14' }); e.append(el('span', { text: o.name + (o.kind && o.kind !== 'text' ? ' · ' + tr(({ number: 'número', date: 'fecha', code: 'código' })[o.kind]) : '') })); break;
     default: e.innerHTML = ovSvg(o);
   }
   if (o.type === 'redact') e.classList.add('pending');
@@ -419,7 +420,7 @@ function thumbImg(d, p, box, maxW, maxH) {
   const [w, h] = dims(p); const k = Math.min(maxW / w, maxH / h);
   const ph = el('div', { style: { width: w * k + 'px', height: h * k + 'px', background: '#fff' } });
   box.append(ph);
-  const load = () => getThumb(d, p).then(u => { const i = el('img', { src: u, style: { width: w * k + 'px', height: h * k + 'px', display: 'block' }, draggable: 'false' }); ph.replaceWith(i); }).catch(() => { });
+  const load = () => getThumb(d, p).then(u => { const i = el('img', { src: u, alt: tr(`Página ${d.pages.indexOf(p) + 1}`), style: { width: w * k + 'px', height: h * k + 'px', display: 'block' }, draggable: 'false' }); ph.replaceWith(i); }).catch(() => { });
   if (!R.thumbIO) R.thumbIO = new IntersectionObserver(es => { for (const e of es) if (e.isIntersecting) { R.thumbIO.unobserve(e.target); e.target._load && e.target._load(); } }, { rootMargin: '300px' });
   ph._load = load; R.thumbIO.observe(ph);
 }

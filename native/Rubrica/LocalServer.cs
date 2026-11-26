@@ -118,7 +118,7 @@ internal sealed class LocalServer : IDisposable
         IOException when ex.HResult == unchecked((int)0x80070020) => "El archivo está abierto en otro programa. Ciérrelo e intente de nuevo.",
         UnauthorizedAccessException => "Windows no permite escribir en esa ubicación.",
         CryptographicException => "Error del certificado: " + ex.Message,
-        TaskCanceledException => "El servidor de marca de tiempo no respondió a tiempo.",
+        TaskCanceledException => "El servidor no respondió a tiempo.",
         HttpRequestException when ex.InnerException != null => "No se pudo contactar el servidor de marca de tiempo: " + ex.InnerException.Message,
         _ => ex.Message,
     };
@@ -250,6 +250,41 @@ internal sealed class LocalServer : IDisposable
                 break;
             }
 
+            case "sign-raw":
+            {
+                var tp = q["thumbprint"];
+                if (string.IsNullOrWhiteSpace(tp) || req.HttpMethod != "POST") { res.StatusCode = 400; return; }
+                var data = await ReadBodyAsync(req);
+                await WriteJsonAsync(res, await Task.Run(() => CertStore.SignRaw(data, tp)));
+                break;
+            }
+
+            case "fetch":
+            {
+                var url = Uri.UnescapeDataString(req.Headers["X-Url"] ?? "");
+                var method = (req.Headers["X-Method"] ?? "GET").ToUpperInvariant();
+                var body = method == "POST" ? await ReadBodyAsync(req) : Array.Empty<byte>();
+                var reply = await NetFetch.FetchAsync(url, method, req.Headers["X-Content-Type"], body);
+                await WriteBytesAsync(res, reply, "application/octet-stream");
+                break;
+            }
+
+            case "secret-protect":
+            {
+                var body = await ReadJsonAsync<SecretRequest>(req);
+                if (body?.Text == null || req.HttpMethod != "POST") { res.StatusCode = 400; return; }
+                await WriteJsonAsync(res, new { v = Secrets.Protect(body.Text) });
+                break;
+            }
+
+            case "secret-unprotect":
+            {
+                var body = await ReadJsonAsync<SecretRequest>(req);
+                if (body?.V == null || req.HttpMethod != "POST") { res.StatusCode = 400; return; }
+                await WriteJsonAsync(res, new { text = Secrets.Unprotect(body.V) });
+                break;
+            }
+
             case "verify-chain":
             {
                 var body = await ReadJsonAsync<VerifyChainRequest>(req);
@@ -345,4 +380,5 @@ internal sealed class LocalServer : IDisposable
 
     private sealed record UpdateRequest(string? Url);
     private sealed record VerifyChainRequest(string[]? Certs, string? LeafSerial, string? Time);
+    private sealed record SecretRequest(string? Text, string? V);
 }

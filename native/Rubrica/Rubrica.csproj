@@ -10,7 +10,7 @@
     <RootNamespace>Rubrica</RootNamespace>
     <ApplicationIcon>app.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <Version>1.4.0</Version>
+    <Version>1.5.0</Version>
     <!-- versión de producto idéntica en cada compilación (requisito de SignPath): sin el hash del commit -->
     <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
     <Product>Rúbrica</Product>
@@ -25,6 +25,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2903.40" />
     <PackageReference Include="System.Security.Cryptography.Pkcs" Version="8.0.1" />
+    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="8.0.0" />
   </ItemGroup>
 
   <!-- Interfaz web compilada (web/dist). Ejecute "npm ci && npm run build" en /web antes de compilar. -->

@@ -50,6 +50,8 @@ dependencies {
     implementation "androidx.coordinatorlayout:coordinatorlayout:$androidxCoordinatorLayoutVersion"
     implementation "androidx.core:core-splashscreen:$coreSplashScreenVersion"
     implementation project(':capacitor-android')
+    // para comprobar que el WebView admite la inyección del puente compatible con la política CSP
+    implementation "androidx.webkit:webkit:$androidxWebkitVersion"
     // Escáner de documentos y OCR de Google (ML Kit, en el dispositivo)
     implementation "com.google.android.gms:play-services-mlkit-document-scanner:16.0.0-beta1"
     implementation "com.google.android.gms:play-services-mlkit-text-recognition:19.0.1"

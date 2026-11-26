@@ -22,8 +22,8 @@
       <button class="icon-btn" id="btn-settings" title="Configuración"></button>
     </div>
   </header>
-  <nav id="ribbon-tabs"></nav>
-  <div id="ribbon"></div>
+  <nav id="ribbon-tabs" role="tablist" aria-label="Cinta de opciones"></nav>
+  <div id="ribbon" role="toolbar"></div>
   <main id="main">
     <aside id="sidebar">
       <div id="side-icons"></div>
@@ -40,20 +40,20 @@
     <div class="sb-left"><button class="btn sm" id="sb-style" style="display:none">Estilo</button><span id="sb-msg"></span></div>
     <div class="sb-center">
       <button class="icon-btn sm" id="sb-prev" title="Página anterior"></button>
-      <input id="sb-page" type="text" value="0"> <span id="sb-total">/ 0</span>
+      <input id="sb-page" type="text" value="0" aria-label="Página actual" inputmode="numeric"> <span id="sb-total">/ 0</span>
       <button class="icon-btn sm" id="sb-next" title="Página siguiente"></button>
     </div>
     <div class="sb-right">
       <button class="icon-btn sm" id="sb-fitw" title="Ajustar al ancho"></button>
       <button class="icon-btn sm" id="sb-fitp" title="Página completa"></button>
       <button class="icon-btn sm" id="sb-zout" title="Alejar"></button>
-      <select id="sb-zoom"></select>
+      <select id="sb-zoom" aria-label="Zoom"></select>
       <button class="icon-btn sm" id="sb-zin" title="Acercar"></button>
     </div>
   </footer>
 </div>
 <div id="modal-root"></div>
-<div id="toasts"></div>
+<div id="toasts" role="status" aria-live="polite"></div>
 <div id="busy"><div class="busy-box"><div class="spinner"></div><div id="busy-msg">Procesando…</div><div class="busy-bar"><div id="busy-fill"></div></div></div></div>
 <input type="file" id="file-input" hidden>
 <script type="text/plain" id="pdfjs-worker-src">/*__PDFJS_WORKER__*/</script>

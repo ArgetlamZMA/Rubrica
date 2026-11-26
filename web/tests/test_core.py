@@ -59,6 +59,15 @@ async def main():
         needle, live = b'4661637475726120', {r.pages[k].raw_get('/Contents')[0].idnum for k in (1, 2)}
         orphans = [n for g, d in r.xref.items() for n in d if n not in live and hasattr(r.get_object(n), 'get_data') and needle in r.get_object(n).get_data()]
         check(not orphans, f'redacción no deja el contenido original escondido en el archivo {orphans}')
+        # recuadro sobre un solo monto: desaparece de todo el archivo, el resto de la página sigue buscable
+        await open_fixture(pg, 'texto.pdf', 'red2.pdf')
+        await pg.evaluate("D().pages[0].ov.push({id:uid(),type:'redact',x:219,y:180,w:47,h:16})")
+        r = PdfReader(save_b64('core5b.pdf', await pg.evaluate(EXPORT)))
+        t0 = ' '.join((r.pages[0].extract_text() or '').split())
+        check('1,250.00' not in t0 and 'Tanque isotermico' in t0 and '2,500.00' in t0 and 'Factura comercial No. 1000' in t0, f'redacción conserva buscable el texto fuera del recuadro: {t0[:90]}')
+        live2 = {r.pages[k].raw_get('/Contents')[0].idnum for k in (1, 2)}  # las páginas 2 y 3 tienen la misma tabla, sin tapar
+        anywhere = [n for g, d in r.xref.items() for n in d if n not in live2 and hasattr(r.get_object(n), 'get_data') and (b'312C3235302E3030' in r.get_object(n).get_data().upper() or b'1,250.00' in r.get_object(n).get_data())]
+        check(not anywhere, f'el monto tapado no está en ningún objeto del archivo {anywhere}')
         # ---------- 6. interacción: resaltar, texto, deshacer, editar texto ----------
         await open_fixture(pg, 'texto.pdf', 'ui.pdf'); await pg.wait_for_timeout(1000)
         async def P(x, y):

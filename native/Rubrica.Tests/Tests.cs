@@ -241,3 +241,81 @@ public class OfficeConverterTests
         Assert.Equal("%PDF", System.Text.Encoding.ASCII.GetString(pdf, 0, 4));
     }
 }
+
+public class SignRawTests
+{
+    [Fact]
+    public void FirmaRsaVerificableYDevuelveLaCadena()
+    {
+        using var rsa = RSA.Create(2048);
+        var req = new CertificateRequest("CN=Firmante RSA", rsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+        using var cert = req.CreateSelfSigned(DateTimeOffset.Now.AddDays(-1), DateTimeOffset.Now.AddDays(30));
+        var data = System.Text.Encoding.UTF8.GetBytes("atributos firmados");
+        var (sig, chain, kind) = CertStore.SignRawWith(cert, data);
+        Assert.Equal("RSA", kind);
+        Assert.True(rsa.VerifyData(data, sig, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1));
+        Assert.Equal(cert.RawData, chain[0]);
+    }
+
+    [Fact]
+    public void FirmaEcEnFormatoDer()
+    {
+        using var ec = ECDsa.Create(ECCurve.NamedCurves.nistP256);
+        var req = new CertificateRequest("CN=Firmante EC", ec, HashAlgorithmName.SHA256);
+        using var cert = req.CreateSelfSigned(DateTimeOffset.Now.AddDays(-1), DateTimeOffset.Now.AddDays(30));
+        var data = new byte[] { 0x31, 0x03, 0x02, 0x01, 0x05 };
+        var (sig, _, kind) = CertStore.SignRawWith(cert, data);
+        Assert.Equal("EC", kind);
+        Assert.Equal(0x30, sig[0]);
+        Assert.True(ec.VerifyData(data, sig, HashAlgorithmName.SHA256, DSASignatureFormat.Rfc3279DerSequence));
+    }
+
+    [Fact]
+    public void RechazaDatosVacios()
+    {
+        using var rsa = RSA.Create(2048);
+        using var cert = new CertificateRequest("CN=X", rsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1).CreateSelfSigned(DateTimeOffset.Now.AddDays(-1), DateTimeOffset.Now.AddDays(1));
+        Assert.Throws<ArgumentException>(() => CertStore.SignRawWith(cert, Array.Empty<byte>()));
+    }
+}
+
+public class NetFetchTests
+{
+    [Theory]
+    [InlineData("file:///C:/Windows/win.ini", "GET")]
+    [InlineData("ftp://servidor/crl", "GET")]
+    [InlineData("no es una url", "GET")]
+    [InlineData("http://ocsp.ejemplo.hn", "DELETE")]
+    [InlineData("http://127.0.0.1:8080/x", "GET")]
+    public void RechazaDireccionesYMetodosNoPermitidos(string url, string method) =>
+        Assert.Throws<ArgumentException>(() => NetFetch.Validate(url, method, 0));
+
+    [Fact]
+    public void AceptaOcspYCrl()
+    {
+        Assert.Equal("ocsp.sar.gob.hn", NetFetch.Validate("http://ocsp.sar.gob.hn/", "POST", 120).Host);
+        Assert.Equal("https", NetFetch.Validate("https://crl.ejemplo.hn/ca.crl", "GET", 0).Scheme);
+        Assert.Throws<ArgumentException>(() => NetFetch.Validate("http://ocsp.sar.gob.hn/", "POST", 70000));
+    }
+}
+
+public class SecretsTests
+{
+    [Fact]
+    public void ProtectRoundTripAndNoPlaintext()
+    {
+        var v = Secrets.Protect("clave-TSA-ñ-123");
+        Assert.DoesNotContain("clave", System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(v)));
+        Assert.Equal("clave-TSA-ñ-123", Secrets.Unprotect(v));
+        Assert.NotEqual(v, Secrets.Protect("clave-TSA-ñ-123")); // cada cifrado es distinto
+    }
+
+    [Fact]
+    public void TamperedValueGivesClearMessage()
+    {
+        var b = Convert.FromBase64String(Secrets.Protect("x")); b[^1] ^= 0xff;
+        var e = Assert.Throws<InvalidOperationException>(() => Secrets.Unprotect(Convert.ToBase64String(b)));
+        Assert.Contains("Preferencias de firma", e.Message);
+        Assert.Throws<InvalidOperationException>(() => Secrets.Unprotect("no es base64"));
+    }
+}

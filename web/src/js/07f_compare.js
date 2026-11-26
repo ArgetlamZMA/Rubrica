@@ -11,15 +11,18 @@ const CMP_COLORS = { ins: '#2da44e', mod: '#f08c00', del: '#d1242f', vis: '#d124
 /** Palabras de un documento en orden de lectura: [{ t, page, x, y, w, h }] (coordenadas de la página visible). */
 async function docWords(d) {
   const out = [];
-  for (let pi = 0; pi < d.pages.length; pi++) {
-    const p = d.pages[pi];
-    const items = (await textItems(d, p)).slice().sort((a, b) => (Math.abs(a.base - b.base) < Math.min(a.size, b.size) * 0.4 ? a.x - b.x : a.base - b.base));
-    for (const it of items) {
-      const s = it.str.normalize('NFC'), total = metricWidth(s, 'Helvetica', false, false, 10) || 1;
-      for (const m of s.matchAll(/\S+/g)) {
-        const x0 = metricWidth(s.slice(0, m.index), 'Helvetica', false, false, 10) / total, x1 = metricWidth(s.slice(0, m.index + m[0].length), 'Helvetica', false, false, 10) / total;
-        out.push({ t: m[0], page: pi, x: it.x + it.w * x0, y: it.y, w: Math.max(1, it.w * (x1 - x0)), h: it.h });
-      }
+  for (let pi = 0; pi < d.pages.length; pi++) out.push(...await pageWords(d, d.pages[pi], pi));
+  return out;
+}
+/** Palabras de una página en orden de lectura, con su rectángulo en la página visible. */
+async function pageWords(d, p, pi = 0) {
+  const out = [];
+  const items = (await textItems(d, p)).slice().sort((a, b) => (Math.abs(a.base - b.base) < Math.min(a.size, b.size) * 0.4 ? a.x - b.x : a.base - b.base));
+  for (const it of items) {
+    const s = it.str.normalize('NFC'), total = metricWidth(s, 'Helvetica', false, false, 10) || 1;
+    for (const m of s.matchAll(/\S+/g)) {
+      const x0 = metricWidth(s.slice(0, m.index), 'Helvetica', false, false, 10) / total, x1 = metricWidth(s.slice(0, m.index + m[0].length), 'Helvetica', false, false, 10) / total;
+      out.push({ t: m[0], page: pi, x: it.x + it.w * x0, y: it.y, w: Math.max(1, it.w * (x1 - x0)), h: it.h });
     }
   }
   return out;

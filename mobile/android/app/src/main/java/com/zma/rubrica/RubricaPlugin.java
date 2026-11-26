@@ -18,6 +18,10 @@ import android.print.PrintDocumentInfo;
 import android.print.PrintManager;
 import android.provider.OpenableColumns;
 import android.security.KeyChain;
+import android.security.keystore.KeyGenParameterSpec;
+import android.security.keystore.KeyProperties;
+import android.speech.tts.TextToSpeech;
+import android.speech.tts.UtteranceProgressListener;
 import android.util.Base64;
 
 import androidx.activity.result.ActivityResult;
@@ -43,6 +47,11 @@ import com.google.mlkit.vision.text.TextRecognition;
 import com.google.mlkit.vision.text.TextRecognizer;
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
 
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.GCMParameterSpec;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -57,6 +66,7 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.PKIXCertPathValidatorResult;
 import java.security.cert.PKIXParameters;
 import java.security.cert.X509Certificate;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -121,6 +131,48 @@ public class RubricaPlugin extends Plugin {
                 notifyListeners("filesReceived", ev, true);
             }
         }).start();
+    }
+
+    /* ---------- Contraseñas de la configuración (p. ej. servidor de marca de tiempo) ----------
+       Se cifran con una clave AES-256-GCM que vive en el Android Keystore y nunca sale de él:
+       el valor guardado en la configuración de la página no sirve fuera de este teléfono. */
+    private static final String SECRET_ALIAS = "rubrica_secrets_v1";
+
+    private SecretKey secretKey() throws Exception {
+        KeyStore ks = KeyStore.getInstance("AndroidKeyStore");
+        ks.load(null);
+        if (ks.containsAlias(SECRET_ALIAS)) return ((KeyStore.SecretKeyEntry) ks.getEntry(SECRET_ALIAS, null)).getSecretKey();
+        KeyGenerator kg = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore");
+        kg.init(new KeyGenParameterSpec.Builder(SECRET_ALIAS, KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT)
+            .setBlockModes(KeyProperties.BLOCK_MODE_GCM).setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE).setKeySize(256).build());
+        return kg.generateKey();
+    }
+
+    @PluginMethod
+    public void secretProtect(PluginCall call) {
+        String text = call.getString("text");
+        if (text == null) { call.reject("Faltan datos"); return; }
+        try {
+            Cipher c = Cipher.getInstance("AES/GCM/NoPadding");
+            c.init(Cipher.ENCRYPT_MODE, secretKey());
+            byte[] iv = c.getIV(), ct = c.doFinal(text.getBytes(StandardCharsets.UTF_8));
+            byte[] out = new byte[iv.length + ct.length];
+            System.arraycopy(iv, 0, out, 0, iv.length); System.arraycopy(ct, 0, out, iv.length, ct.length);
+            JSObject r = new JSObject(); r.put("v", Base64.encodeToString(out, Base64.NO_WRAP)); call.resolve(r);
+        } catch (Exception e) { call.reject("No se pudo proteger la contraseña: " + e.getMessage()); }
+    }
+
+    @PluginMethod
+    public void secretUnprotect(PluginCall call) {
+        String v = call.getString("v");
+        if (v == null) { call.reject("Faltan datos"); return; }
+        try {
+            byte[] in = Base64.decode(v, Base64.NO_WRAP);
+            if (in.length < 13) throw new IllegalArgumentException("corto");
+            Cipher c = Cipher.getInstance("AES/GCM/NoPadding");
+            c.init(Cipher.DECRYPT_MODE, secretKey(), new GCMParameterSpec(128, in, 0, 12));
+            JSObject r = new JSObject(); r.put("text", new String(c.doFinal(in, 12, in.length - 12), StandardCharsets.UTF_8)); call.resolve(r);
+        } catch (Exception e) { call.reject("La contraseña guardada no se puede leer en este teléfono. Escríbala de nuevo en Preferencias de firma."); }
     }
 
     @PluginMethod
@@ -543,6 +595,93 @@ public class RubricaPlugin extends Plugin {
                 if (c != null) c.disconnect();
             }
         }).start();
+    }
+
+    /** Descarga para la validación a largo plazo de firmas (OCSP, CRL, certificados de emisores). */
+    @PluginMethod
+    public void httpRequest(PluginCall call) {
+        String url = call.getString("url"), method = call.getString("method", "GET"), type = call.getString("contentType", "application/octet-stream"), data = call.getString("data", "");
+        if (url == null || !(url.startsWith("http://") || url.startsWith("https://")) || !("GET".equals(method) || "POST".equals(method))) { call.reject("Dirección no válida"); return; }
+        new Thread(() -> {
+            HttpURLConnection c = null;
+            try {
+                c = (HttpURLConnection) new URL(url).openConnection();
+                c.setConnectTimeout(20000); c.setReadTimeout(30000); c.setInstanceFollowRedirects(true);
+                c.setRequestMethod(method);
+                if ("POST".equals(method)) {
+                    byte[] q = Base64.decode(data, Base64.DEFAULT);
+                    if (q.length > 65536) throw new Exception("Solicitud demasiado grande");
+                    c.setDoOutput(true); c.setRequestProperty("Content-Type", type);
+                    try (OutputStream os = c.getOutputStream()) { os.write(q); }
+                }
+                int code = c.getResponseCode();
+                if (code < 200 || code >= 300) throw new Exception(new URL(url).getHost() + " respondió " + code + ".");
+                byte[] body;
+                try (InputStream is = c.getInputStream()) { body = readAll(is); }
+                if (body.length > 20 * 1024 * 1024) throw new Exception("La respuesta es demasiado grande.");
+                JSObject r = new JSObject();
+                r.put("data", Base64.encodeToString(body, Base64.NO_WRAP));
+                call.resolve(r);
+            } catch (Exception e) {
+                call.reject(e.getMessage() != null ? e.getMessage() : "No se pudo descargar", e);
+            } finally {
+                if (c != null) c.disconnect();
+            }
+        }).start();
+    }
+
+    // ---------- Leer en voz alta (el WebView de Android no trae síntesis de voz) ----------
+    private TextToSpeech tts;
+    private boolean ttsReady = false;
+    private final java.util.Map<String, PluginCall> ttsCalls = new java.util.concurrent.ConcurrentHashMap<>();
+    private final java.util.List<Runnable> ttsWaiting = new java.util.ArrayList<>();
+
+    private void withTts(Runnable r) {
+        if (tts != null && ttsReady) { r.run(); return; }
+        synchronized (ttsWaiting) { ttsWaiting.add(r); }
+        if (tts != null) return;
+        tts = new TextToSpeech(getContext(), status -> {
+            ttsReady = status == TextToSpeech.SUCCESS;
+            tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+                @Override public void onStart(String id) { }
+                @Override public void onDone(String id) { PluginCall c = ttsCalls.remove(id); if (c != null) c.resolve(); }
+                @Override public void onError(String id) { PluginCall c = ttsCalls.remove(id); if (c != null) c.reject("No se pudo leer el texto"); }
+                @Override public void onStop(String id, boolean interrupted) { PluginCall c = ttsCalls.remove(id); if (c != null) c.resolve(); }
+            });
+            java.util.List<Runnable> run;
+            synchronized (ttsWaiting) { run = new java.util.ArrayList<>(ttsWaiting); ttsWaiting.clear(); }
+            for (Runnable x : run) x.run();
+        });
+    }
+
+    @PluginMethod
+    public void ttsSpeak(PluginCall call) {
+        String text = call.getString("text", ""), lang = call.getString("lang", "es-HN");
+        double rate = call.getDouble("rate", 1.0);
+        withTts(() -> {
+            if (!ttsReady) { call.reject("Este teléfono no tiene un motor de voz disponible."); return; }
+            java.util.Locale loc = java.util.Locale.forLanguageTag(lang);
+            if (tts.isLanguageAvailable(loc) < TextToSpeech.LANG_AVAILABLE) loc = new java.util.Locale(loc.getLanguage());
+            tts.setLanguage(loc);
+            tts.setSpeechRate((float) Math.max(0.5, Math.min(2.5, rate)));
+            String id = java.util.UUID.randomUUID().toString();
+            ttsCalls.put(id, call);
+            if (tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, id) != TextToSpeech.SUCCESS) { ttsCalls.remove(id); call.reject("No se pudo leer el texto"); }
+        });
+    }
+
+    @PluginMethod
+    public void ttsStop(PluginCall call) {
+        if (tts != null) tts.stop();
+        for (PluginCall c : ttsCalls.values()) c.resolve();
+        ttsCalls.clear();
+        call.resolve();
+    }
+
+    @Override
+    protected void handleOnDestroy() {
+        if (tts != null) { tts.stop(); tts.shutdown(); tts = null; }
+        super.handleOnDestroy();
     }
 
     // ---------- Utilidades ----------

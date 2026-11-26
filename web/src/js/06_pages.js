@@ -9,7 +9,7 @@ function afterStructureChange(keep = true) {
   renderSide(); renderProps(); renderViewer(keep); renderRibbonState();
 }
 function undo() { const d = D(); if (!d || !d.undo.length) return; commitEditing(); d.redo.push(d.snap()); d.restore(d.undo.pop()); S.sel = null; d.setDirty(true); afterStructureChange(); }
-function redo() { const d = D(); if (!d || !d.redo.length) return; d.undo.push(d.snap()); d.restore(d.redo.pop()); S.sel = null; d.setDirty(true); afterStructureChange(); }
+function redo() { const d = D(); if (!d || !d.redo.length) return; d.pushUndo(d.snap()); d.restore(d.redo.pop()); S.sel = null; d.setDirty(true); afterStructureChange(); }
 
 /** páginas objetivo: selección del organizador o página actual */
 function targetPages() {

@@ -22,30 +22,40 @@ El instalador no requiere permisos de administrador, instala WebView2 si falta y
 
 | Área | Funciones |
 |---|---|
-| **Inicio** | Abrir (equipo, OneDrive, Google Drive, arrastrar y soltar, «Abrir con» de Windows), pestañas, recientes, guardar / guardar como, imprimir, combinar, **armar expediente** (portada con datos, índice con enlaces, marcadores, Bates y tamaño máximo; plantillas para aduanas y licitaciones), PDF desde imágenes, documento en blanco, deshacer/rehacer |
-| **Comentar** | Resaltar, subrayar y tachar ajustados al texto; notas (comentarios PDF reales); cuadros de texto; sellos (APROBADO, RECIBIDO CONFORME, LIQUIDADO, AFORADO, COPIA FIEL… o propios, con fecha, hora y nombre); lápiz, rectángulo, elipse, línea, flecha; borrador |
+| **Inicio** | Abrir (equipo, OneDrive, Google Drive, arrastrar y soltar, «Abrir con» de Windows), pestañas, recientes, guardar / guardar como, imprimir, combinar, **armar expediente** (portada con datos, índice con enlaces, marcadores, Bates y tamaño máximo; plantillas para aduanas y licitaciones), PDF desde imágenes, documento en blanco, deshacer/rehacer, **leer en voz alta** (resalta la oración que lee) |
+| **Comentar** | Resaltar, subrayar y tachar ajustados al texto; notas (comentarios PDF reales); cuadros de texto; sellos (APROBADO, RECIBIDO CONFORME, LIQUIDADO, AFORADO, COPIA FIEL… o propios, con fecha, hora y nombre); lápiz, rectángulo, elipse, línea, flecha; borrador; **resumen de resaltados y notas** a Word o Markdown |
 | **Editar** | Editar el texto existente (detecta la fuente original), agregar texto e imágenes, códigos QR y de barras (Code 128), corrector, marca de agua, fondo, encabezado y pie, números de página, numeración Bates, recortar |
 | **Fuentes** | **Aptos** como fuente predeterminada (igual que Microsoft Office), cualquier fuente instalada o de Microsoft 365, fuentes propias (.ttf/.otf); todas se incrustan en el PDF |
 | **Organizar** | Miniaturas con arrastrar para reordenar, girar, insertar, duplicar, eliminar, extraer, dividir, invertir; **comparar versiones** (texto y apariencia) |
-| **Convertir** | A Word, Excel, imágenes y texto; **desde Word, Excel y PowerPoint** (app de Windows, con Office o LibreOffice); OCR sin internet (español, inglés, portugués, francés); comprimir; **ajustar al tamaño de un portal** (comprimir o dividir en partes de máximo X MB); **procesar por lotes** y automatizaciones guardadas |
-| **Formulario** | Rellenar formularios, crear campos (texto, casilla, lista), exportar datos a CSV |
+| **Convertir** | A Word, Excel, imágenes y texto; **desde Word, Excel y PowerPoint** (app de Windows, con Office o LibreOffice); **PDF/A-2b** para archivo (validado con veraPDF); OCR sin internet (español, inglés, portugués, francés); comprimir sin perder el texto; **ajustar al tamaño de un portal** (comprimir o dividir en partes de máximo X MB); **procesar por lotes** y automatizaciones guardadas; **extraer datos a Excel con plantillas** por proveedor o naviera (también de escaneos) |
+| **Formulario** | Rellenar formularios, crear campos (texto, casilla, lista, **firma**), exportar datos a CSV |
 | **Android** | Escáner de documentos con la cámara (bordes, perspectiva, filtros, OCR sin conexión), abrir/guardar en el teléfono, Drive y OneDrive, «Abrir con», compartir, imprimir, interfaz táctil para teléfono y Fold |
-| **Proteger** | **Firma digital** con certificado `.p12/.pfx` (p. ej. el emitido por el SAR) o del almacén de Windows / token USB; verificación de firmas; firma manuscrita; contraseña AES‑256 y permisos; redacción permanente |
+| **Proteger** | **Firma digital PAdES con LTV** con certificado `.p12/.pfx` (p. ej. el emitido por el SAR) o del almacén de Windows / token USB; **pedir firmas a otras personas** en orden; verificación de firmas; firma manuscrita; contraseña AES‑256 y permisos; redacción permanente que conserva el resto del texto; **quitar información oculta** (metadatos, adjuntos, JavaScript, capas ocultas) |
+
+| **Accesibilidad** | WCAG 2.1 AA (comprobada con axe-core en cada compilación): lectores de pantalla (NVDA, Narrador, TalkBack), todo con teclado, foco visible, contraste, tamaño de la interfaz de 90 % a 150 % |
 
 Detalles: [docs/firma-digital.md](docs/firma-digital.md) · [docs/configurar-nube.md](docs/configurar-nube.md) · [docs/arquitectura.md](docs/arquitectura.md)
 
 ## Firma digital
 
-- Firma CMS/PKCS#7 desacoplada con SHA‑256 (`adbe.pkcs7.detached`), validada por Adobe Acrobat/Reader, Poppler y pyHanko.
+- Firma **PAdES** (`ETSI.CAdES.detached`, SHA‑256, *signing-certificate-v2*), validada por Adobe Acrobat/Reader, Poppler y pyHanko.
+- **Validación a largo plazo (LTV)**: con marca de tiempo, el PDF incluye las respuestas OCSP y CRL de toda la cadena; la firma se puede verificar años después sin conexión.
 - Se agrega como actualización incremental: firmar de nuevo o agregar comentarios **no invalida** las firmas anteriores.
 - El panel **Firmas** verifica la integridad de cada firma del documento y muestra titular, emisor, fecha, motivo y ubicación.
 - **Marca de tiempo** de una autoridad TSA (RFC 3161); viene configurada la del SAR.
 - Lista de identificaciones digitales y **estilos de apariencia** del recuadro (Proteger → Preferencias de firma).
-- La contraseña del certificado nunca se guarda.
+- La contraseña del certificado nunca se guarda. La del servidor de marca de tiempo, si lo pide, se guarda cifrada (DPAPI en Windows, Android Keystore en el teléfono).
+- **Campos de firma** para pedir la firma de otras personas, en orden; también se firman en Adobe Acrobat Reader.
 
 ## Atajos de teclado
 
-Los habituales de un editor PDF de escritorio: Ctrl+O/S/P/W, Ctrl+Tab, Ctrl+Z/Y, Ctrl+C/X/V, Ctrl+A, Ctrl+E (editar), Ctrl+F y F3, Ctrl+0/1/2 (vistas), Ctrl+R (girar), Ctrl+G (ir a página). Pulse **F1** en la app para ver la lista completa.
+Los habituales de un editor PDF de escritorio: Ctrl+O/S/P/W, Ctrl+Tab, Ctrl+Z/Y, Ctrl+C/X/V, Ctrl+A, Ctrl+E (editar), Ctrl+F y F3, Ctrl+0/1/2 (vistas), Ctrl+R (girar), Ctrl+G (ir a página), Ctrl+Mayús+Y (leer en voz alta). Las pestañas de la cinta se recorren con las flechas. Pulse **F1** en la app para ver la lista completa.
+
+## Seguridad
+
+- La interfaz declara una **política de seguridad de contenido** (CSP): solo se ejecuta el código de la compilación, identificado por su hash SHA‑256. Un texto de un PDF no puede ejecutar código, cargar complementos ni enviar formularios.
+- Los documentos se procesan en el equipo; Rúbrica solo se conecta a la nube que usted elija y a los servidores de marca de tiempo, OCSP y CRL de las firmas.
+- Redacción permanente y *Quitar información oculta* eliminan del archivo el contenido tapado y los datos ocultos, no solo los cubren.
 
 ## Compilar desde el código
 
@@ -57,7 +67,7 @@ npm ci
 npm run build                     # genera web/dist/index.html
 pip install -r tests/requirements.txt
 python -m playwright install chromium
-python tests/run_all.py           # 35 comprobaciones automáticas
+python tests/run_all.py           # 24 pruebas, más de 300 comprobaciones
 cd ..
 dotnet test native/Rubrica.Tests
 dotnet publish native/Rubrica -c Release -r win-x64 --self-contained -o publish

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Las autoridades de marca de tiempo (RFC 3161) suelen publicarse por http, p. ej. la TSA del SAR.
-     Solo se envía el resumen de la firma y la respuesta está firmada por la TSA, así que http es seguro para este uso. -->
+<!-- Rúbrica solo hace estas conexiones de red: marca de tiempo (RFC 3161), OCSP, listas CRL y certificados de emisores
+     (validación a largo plazo de firmas), y la nube que el usuario conecta. Las autoridades publican las primeras casi
+     siempre por http y en dominios que no se conocen de antemano (cualquier TSA o autoridad certificadora del mundo).
+     Todas esas respuestas están firmadas y Rúbrica las verifica, así que http no compromete su integridad.
+     La interfaz es local: el WebView no carga páginas de internet. -->
 <network-security-config>
-    <base-config cleartextTrafficPermitted="false" />
-    <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="true">sar.gob.hn</domain>
-    </domain-config>
+    <base-config cleartextTrafficPermitted="true" />
 </network-security-config>

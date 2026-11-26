@@ -1,11 +1,11 @@
 /* ============================================================
    04 · Herramientas, interacción con el ratón, panel de propiedades
    ============================================================ */
-const CREATE = new Set(['sigbox', 'highlight', 'underline', 'strike', 'note', 'text', 'ink', 'rect', 'ellipse', 'line', 'arrow', 'stamp', 'image', 'whiteout', 'redact', 'field-text', 'field-check', 'field-drop']);
+const CREATE = new Set(['sigbox', 'highlight', 'underline', 'strike', 'note', 'text', 'ink', 'rect', 'ellipse', 'line', 'arrow', 'stamp', 'image', 'whiteout', 'redact', 'field-text', 'field-check', 'field-drop', 'field-sig', 'zone']);
 const TOOL_NAMES = {
   select: 'Seleccionar', hand: 'Mano', highlight: 'Resaltar', underline: 'Subrayar', strike: 'Tachar', note: 'Nota', text: 'Cuadro de texto', ink: 'Lápiz',
   rect: 'Rectángulo', ellipse: 'Elipse', line: 'Línea', arrow: 'Flecha', stamp: 'Sello', code: 'Código', eraser: 'Borrador', edittext: 'Editar texto', image: 'Imagen',
-  whiteout: 'Corrector (tapar)', redact: 'Redactar', 'field-text': 'Campo de texto', 'field-check': 'Casilla', 'field-drop': 'Lista desplegable',
+  whiteout: 'Corrector (tapar)', redact: 'Redactar', 'field-text': 'Campo de texto', 'field-check': 'Casilla', 'field-drop': 'Lista desplegable', 'field-sig': 'Campo de firma', zone: 'Zona de datos',
   textedit: 'Texto editado', field: 'Campo de formulario', sigbox: 'Recuadro de firma digital'
 };
 const STAMPS = ['APROBADO', 'RECIBIDO', 'RECIBIDO CONFORME', 'REVISADO', 'VERIFICADO', 'PAGADO', 'LIQUIDADO', 'AFORADO', 'DESPACHADO', 'ENTREGADO', 'ORIGINAL', 'COPIA', 'COPIA FIEL', 'NO NEGOCIABLE', 'CONFIDENCIAL', 'URGENTE', 'BORRADOR', 'ANULADO', 'RECHAZADO'];
@@ -108,6 +108,7 @@ function onViewerDbl(e) {
   if (o.type === 'text' || o.type === 'textedit') { startEditing(p, o); }
   else if (o.type === 'note') editNote(p, o);
   else if (o.type === 'field') editFieldProps(p, o);
+  else if (o.type === 'zone') editZone(p, o);
 }
 function startPan(e) {
   const v = viewerEl(), sx = e.clientX, sy = e.clientY, st = v.scrollTop, sl = v.scrollLeft;
@@ -144,7 +145,7 @@ function startDrag(e, pe, pid, oid, mode) {
   };
   const up = () => {
     window.removeEventListener('pointermove', mv); window.removeEventListener('pointerup', up);
-    if (moved) { d.undo.push(snap); d.redo = []; d.setDirty(true); renderOverlays(p); renderProps(); }
+    if (moved) { d.pushUndo(snap); d.redo = []; d.setDirty(true); renderOverlays(p); renderProps(); }
   };
   window.addEventListener('pointermove', mv); window.addEventListener('pointerup', up);
 }
@@ -252,6 +253,29 @@ async function finishCreate(p, t, opt, r, dragged, g) {
       if (opts) await performSign(D(), opts, p, r);
       return;
     }
+    case 'zone': {
+      if (!dragged || r.w < 8 || r.h < 6) { toast(tr('Arrastre para marcar la zona donde está el dato.'), 'err'); return; }
+      const n = d.pages.reduce((a, pp) => a + pp.ov.filter(x => x.type === 'zone').length, 0);
+      const v = await formDialog('Zona de datos', [
+        { key: 'name', label: 'Nombre del dato (columna en Excel)', placeholder: 'Ej.: Número de factura, Contenedor, Peso bruto, Valor FOB' },
+        { key: 'kind', label: 'Tipo', type: 'select', value: 'text', options: ZONE_TYPES }
+      ], { ok: 'Agregar', validate: v => v.name.trim() ? null : 'Escriba el nombre del dato.' });
+      if (!v) return;
+      add.push({ ...base(), type: 'zone', name: v.name.trim(), kind: v.kind, color: ZONE_COLORS[n % ZONE_COLORS.length], ...r });
+      break;
+    }
+    case 'field-sig': {
+      if (!dragged || r.w < 60 || r.h < 24) r = { x: r.x - 90, y: r.y - 25, w: 180, h: 50 };
+      const used = d.pages.flatMap(pp => pp.ov.filter(x => x.type === 'field' && x.ftype === 'sig'));
+      const v = await formDialog('Campo de firma', [
+        { type: 'hint', label: 'Quien reciba el documento firmará dentro de este recuadro, en el orden indicado.' },
+        { key: 'signer', label: '¿Quién firma aquí?', placeholder: 'Nombre como aparece en su certificado' },
+        { key: 'order', label: 'Orden de firma', type: 'number', value: Math.max(0, ...used.map(x => x.order || 0)) + 1, min: 1 }
+      ], { ok: 'Agregar', validate: v => v.signer.trim() ? null : 'Escriba el nombre de quien firma.' });
+      if (!v) return;
+      add.push({ ...base(), type: 'field', ftype: 'sig', name: uniqueFieldName(d, 'Firma'), ...r, signer: v.signer.trim(), order: v.order || 1 });
+      break;
+    }
     case 'field-text': case 'field-drop': case 'field-check': {
       const ft = t.split('-')[1];
       if (!dragged) r = ft === 'check' ? { x: r.x - 7, y: r.y - 7, w: 14, h: 14 } : { x: r.x, y: r.y - 9, w: 150, h: 18 };
@@ -304,11 +328,11 @@ function commitEditing() {
   const e = R.els.get(p.id)?.ol.querySelector(`[data-oid="${id}"]`);
   let txt = e ? (o.type === 'textedit' ? e.textContent.replace(/\n/g, ' ') : e.innerText).replace(/ /g, ' ').replace(/\n$/, '') : o.text;
   const changed = txt !== o.text;
-  if (!txt.trim() && o.type === 'text') { p.ov = p.ov.filter(x => x !== o); S.sel = null; if (S.editSnap && o.text) { d.undo.push(S.editSnap); d.redo = []; d.setDirty(true); } }
+  if (!txt.trim() && o.type === 'text') { p.ov = p.ov.filter(x => x !== o); S.sel = null; if (S.editSnap && o.text) { d.pushUndo(S.editSnap); d.redo = []; d.setDirty(true); } }
   else {
     o.text = txt;
     fitTextBox(o);
-    if (changed || o.type === 'textedit') { if (S.editSnap) d.undo.push(S.editSnap); d.redo = []; d.setDirty(true); }
+    if (changed || o.type === 'textedit') { if (S.editSnap) d.pushUndo(S.editSnap); d.redo = []; d.setDirty(true); }
   }
   S.editSnap = null;
   renderOverlays(p); renderProps(); refreshSideIfComments();
@@ -395,7 +419,8 @@ async function editFieldProps(p, o) {
     { key: 'name', label: 'Nombre del campo', value: o.name },
     ...(o.ftype === 'text' ? [{ key: 'multiline', label: 'Varias líneas', type: 'checkbox', value: o.multiline }, { key: 'value', label: 'Valor inicial', value: o.value || '' }] : []),
     ...(o.ftype === 'drop' ? [{ key: 'options', label: 'Opciones (una por línea)', type: 'textarea', value: o.options }] : []),
-    ...(o.ftype === 'check' ? [{ key: 'checked', label: 'Marcada por defecto', type: 'checkbox', value: o.checked }] : [])
+    ...(o.ftype === 'check' ? [{ key: 'checked', label: 'Marcada por defecto', type: 'checkbox', value: o.checked }] : []),
+    ...(o.ftype === 'sig' ? [{ key: 'signer', label: '¿Quién firma aquí?', value: o.signer || '' }, { key: 'order', label: 'Orden de firma', type: 'number', value: o.order || 1, min: 1 }] : [])
   ], { validate: v => !v.name.trim() ? 'El nombre es obligatorio' : null });
   if (!v) return;
   d.checkpoint(); Object.assign(o, v); o.name = v.name.trim(); renderOverlays(p); renderProps();
@@ -500,6 +525,7 @@ function renderProps() {
     const ta = el('textarea'); ta.value = o.text || ''; ta.onchange = () => { set('text', ta.value); refreshSideIfComments(); };
     pp.append(el('div', { class: 'row' }, el('label', { text: 'Comentario' + (o.author ? ' — ' + o.author : '') }), ta));
   }
+  if (o && o.type === 'zone') pp.append(el('div', { class: 'hint', html: escapeHtml(tr('Zona')) + ` <b>${escapeHtml(o.name)}</b>. ` + escapeHtml(tr('Se usa para extraer datos a Excel; no se guarda en el PDF.')) }), el('button', { class: 'btn sm', text: 'Nombre y tipo…', style: { marginTop: '8px' }, onclick: () => editZone(d.page(S.sel.pid), o) }));
   if (o && o.type === 'field') {
     pp.append(el('div', { class: 'hint', html: `Campo <b>${escapeHtml(o.name)}</b>. Doble clic para cambiar nombre y opciones. Se convierte en un campo rellenable al guardar.` }));
     pp.append(el('button', { class: 'btn sm', text: 'Propiedades…', style: { marginTop: '8px' }, onclick: () => editFieldProps(d.page(S.sel.pid), o) }));

@@ -515,7 +515,7 @@ function renderSide() {
     const inp = el('input', { type: 'text', placeholder: 'Buscar en el documento…', value: SR.q });
     inp.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); if (inp.value === SR.q && SR.hits.length) goToHit(SR.cur + (e.shiftKey ? -1 : 1)); else withBusy('Buscando…', () => runSearch(inp.value)); } };
     const cs = el('input', { type: 'checkbox' }); cs.checked = SR.cs; cs.onchange = () => { SR.cs = cs.checked; };
-    body.append(el('div', { class: 'search-box' }, inp, el('button', { class: 'btn sm', html: ic('search'), onclick: () => withBusy('Buscando…', () => runSearch(inp.value)) })),
+    body.append(el('div', { class: 'search-box' }, inp, el('button', { class: 'btn sm', html: ic('search'), title: 'Buscar', 'aria-label': 'Buscar', onclick: () => withBusy('Buscando…', () => runSearch(inp.value)) })),
       el('label', { class: 'inline hint', style: { marginBottom: '8px' } }, cs, 'Distinguir mayúsculas'), el('div', { id: 'search-results' }));
     renderSearchResults(); setTimeout(() => inp.focus(), 20);
   }
@@ -536,7 +536,7 @@ function renderCommentsList(body) {
   const d = D(); const l = el('div', { class: 'slist' }); let any = false;
   const icon = { highlight: 'highlighter', underline: 'underline', strike: 'strikethrough', note: 'message-square', text: 'type', ink: 'pencil', rect: 'square', ellipse: 'circle', line: 'minus', arrow: 'move-up-right', stamp: 'stamp', image: 'image', whiteout: 'square-dashed', redact: 'eye-off', textedit: 'text-cursor-input', field: 'text-cursor' };
   d.pages.forEach((p, i) => {
-    const items = p.ov.filter(o => o.type !== 'ocrword' && !o.group); if (!items.length) return;
+    const items = p.ov.filter(o => o.type !== 'ocrword' && o.type !== 'zone' && !o.group); if (!items.length) return;
     any = true; l.append(el('div', { class: 'grp', text: 'Página ' + (i + 1) }));
     for (const o of items) {
       const txt = o.type === 'note' ? (o.author ? o.author + ': ' : '') + (o.text || '') : o.text || o.label || o.name || TOOL_NAMES[o.type];
@@ -766,7 +766,7 @@ async function ocrDialog() {
         allText = r.text;
         if (!r.words) throw new Error('No se reconoció texto en las páginas indicadas.');
       } finally { await worker.terminate(); }
-      d.undo.push(snap); d.redo = []; d.setDirty(true);
+      d.pushUndo(snap); d.redo = []; d.setDirty(true);
     });
   } catch (e) { toast(e.message, 'err', 6000); return; }
   SR.hits = []; afterStructureChange();

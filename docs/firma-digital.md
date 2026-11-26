@@ -11,6 +11,15 @@ Rúbrica firma documentos con un certificado digital (por ejemplo, el de firma e
 5. Si es visible, dibuje en la página el recuadro donde aparecerá; el texto se ajusta solo al tamaño.
 6. Elija dónde guardar el PDF firmado (equipo, OneDrive o Google Drive).
 
+## Pedir firmas a otras personas
+
+1. Abra el documento y elija **Formulario → Campo de firma** (o **Proteger → Pedir firma**).
+2. Dibuje el recuadro donde debe firmar cada persona e indique su nombre (como aparece en su certificado) y el orden.
+3. **Proteger → Enviar para firmar**: guarde el PDF y envíelo con el mensaje propuesto (correo, WhatsApp o compartir en Android).
+4. Quien lo recibe lo abre en Rúbrica: el panel **Firmas** muestra las firmas pendientes y quién sigue. Con **Firmar aquí** firma dentro de su campo, y el siguiente recibe el archivo ya firmado.
+
+Rúbrica avisa si alguien firma antes de su turno o si el certificado no parece de la persona indicada. Los campos son estándar: también se pueden firmar con Adobe Acrobat Reader.
+
 ## Preferencias de firma
 
 **Proteger → Preferencias de firma** (o *Configuración → Preferencias de firma…*) tiene tres pestañas, como en PDFelement:
@@ -66,9 +75,14 @@ Rúbrica solo pide a Android que firme el resumen del documento: nunca recibe la
 
 ## Qué tipo de firma se genera
 
-- Formato **CMS/PKCS#7 desacoplado** (`adbe.pkcs7.detached`) con **SHA-256**, el formato estándar que Adobe Acrobat/Reader valida.
-- Se incluye la cadena de certificados que trae el archivo y la hora de firma.
-- Se agrega como **actualización incremental**: un documento puede tener varias firmas y agregar comentarios después no rompe las anteriores (Acrobat lo mostrará como «cambios posteriores a la firma»).
+- Formato **PAdES** (`ETSI.CAdES.detached`, ETSI EN 319 142) con **SHA-256** y el atributo *signing-certificate-v2*, que liga la firma al certificado exacto del firmante. Es el formato de firma electrónica avanzada que validan Adobe Acrobat/Reader y las plataformas europeas y latinoamericanas.
+- Con **marca de tiempo**, la firma es PAdES-B-T: la fecha la certifica la TSA y no el reloj del equipo.
+- Con **validación a largo plazo (LTV)**, activada por omisión cuando hay marca de tiempo, es PAdES-B-LT. Rúbrica descarga las respuestas **OCSP** (o, si no hay, las listas **CRL**) de todos los certificados de la cadena, del firmante y de la TSA, y las guarda en el diccionario **DSS** del PDF. Si a la cadena le falta una autoridad intermedia, la obtiene de la dirección *caIssuers* del certificado. Así la firma se puede comprobar dentro de muchos años, aunque los certificados hayan vencido o los servidores de la autoridad ya no existan.
+- Si un certificado de la cadena está **revocado**, Rúbrica detiene la firma y no la entrega.
+- Si no hay conexión para obtener OCSP/CRL, el documento queda firmado igualmente (PAdES-B-T) y Rúbrica avisa que no incluye LTV.
+- En la versión web, el navegador no deja consultar los servidores OCSP/CRL (CORS): para LTV use la app de Windows o de Android.
+- Se agrega como **actualización incremental**: un documento puede tener varias firmas y agregar comentarios después no rompe las anteriores. La información LTV se agrega en otra actualización incremental que no cuenta como cambio del contenido.
+- En una copia **PDF/A**, la apariencia visible de la firma se dibuja sin fuentes sin incrustar, para que el documento siga cumpliendo PDF/A.
 
 ## Verificar firmas
 
@@ -82,5 +96,5 @@ La **confianza** en la autoridad emisora (que el certificado realmente fue emiti
 
 ## Limitaciones actuales
 
-- Certificados con clave ECDSA: use el almacén de Windows o el certificado instalado en Android (la lectura de archivos `.p12` admite RSA).
+- Certificados con clave ECDSA: use el almacén de Windows o el certificado instalado en Android (la lectura de archivos `.p12` admite RSA). En el almacén de Windows la clave nunca sale del almacén ni del token USB: Rúbrica solo pide que se firme el resumen.
 - No se puede firmar un documento protegido con contraseña: quite la contraseña antes de firmar.
