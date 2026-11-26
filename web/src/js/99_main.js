@@ -10,7 +10,7 @@ const RIBBON = [
     [{ icon: 'undo-2', label: 'Deshacer', act: undo }, { icon: 'redo-2', label: 'Rehacer', act: redo }],
     [T('select'), T('hand')],
     [{ icon: 'workflow', label: 'Automatizaciones', act: automationsMenu, nodoc: true }, { icon: 'git-compare', label: 'Comparar', act: compareDialog, nodoc: true }],
-    [{ icon: 'info', label: 'Propiedades', act: propertiesDialog }]] },
+    [{ icon: 'volume-2', label: 'Leer en voz alta', title: 'Leer en voz alta (Ctrl+Mayús+Y)', act: readAloud }, { icon: 'info', label: 'Propiedades', act: propertiesDialog }]] },
   { id: 'comment', label: 'Comentar', groups: [
     [T('select'), T('hand')], [T('highlight'), T('underline'), T('strike')], [T('note'), T('text'), T('stamp')],
     [T('ink'), T('rect'), T('ellipse'), T('line'), T('arrow')],
@@ -44,9 +44,16 @@ const RIBBON = [
 ];
 function renderRibbon() {
   const tabs = $('#ribbon-tabs'); tabs.innerHTML = '';
-  for (const t of RIBBON) tabs.append(el('button', { class: 'rtab' + (S.ribbonTab === t.id ? ' active' : ''), text: t.label, onclick: () => { S.ribbonTab = t.id; renderRibbon(); } }));
+  // pestañas con semántica ARIA y flechas para moverse entre ellas
+  for (const t of RIBBON) tabs.append(el('button', { class: 'rtab' + (S.ribbonTab === t.id ? ' active' : ''), text: t.label, role: 'tab', id: 'rtab-' + t.id, 'aria-selected': String(S.ribbonTab === t.id), 'aria-controls': 'ribbon', tabindex: S.ribbonTab === t.id ? '0' : '-1', onclick: () => { S.ribbonTab = t.id; renderRibbon(); } }));
+  tabs.onkeydown = e => {
+    const i = RIBBON.findIndex(t => t.id === S.ribbonTab), n = RIBBON.length;
+    const j = e.key === 'ArrowRight' ? (i + 1) % n : e.key === 'ArrowLeft' ? (i - 1 + n) % n : e.key === 'Home' ? 0 : e.key === 'End' ? n - 1 : -1;
+    if (j < 0) return; e.preventDefault(); S.ribbonTab = RIBBON[j].id; renderRibbon(); $('#rtab-' + RIBBON[j].id)?.focus();
+  };
   const rb = $('#ribbon'); rb.innerHTML = '';
   const tab = RIBBON.find(t => t.id === S.ribbonTab) || RIBBON[0];
+  rb.setAttribute('aria-labelledby', 'rtab-' + tab.id);
   for (const g of tab.groups) {
     const ge = el('div', { class: 'rgroup' });
     for (const b of g) {
@@ -117,7 +124,7 @@ const SHORTCUTS = [
   ['Archivo', [['Ctrl+N', 'Nuevo documento en blanco'], ['Ctrl+O', 'Abrir'], ['Ctrl+S', 'Guardar'], ['Ctrl+Mayús+S', 'Guardar como'], ['Ctrl+P', 'Imprimir'], ['Ctrl+W · Ctrl+F4', 'Cerrar el documento'], ['Ctrl+Tab · Ctrl+Mayús+Tab', 'Documento siguiente / anterior'], ['Ctrl+D', 'Propiedades del documento (o duplicar el objeto seleccionado)']]],
   ['Edición', [['Ctrl+Z', 'Deshacer'], ['Ctrl+Y · Ctrl+Mayús+Z', 'Rehacer'], ['Ctrl+C · Ctrl+X · Ctrl+V', 'Copiar, cortar y pegar el objeto seleccionado'], ['Ctrl+A', 'Seleccionar todo el texto de la página (o todas las páginas en Organizar)'], ['Supr', 'Eliminar la selección (o las páginas en Organizar)'], ['Ctrl+E', 'Editar texto e imágenes'], ['Flechas · Mayús+Flechas', 'Mover el objeto 1 / 10 puntos'], ['Esc', 'Quitar la selección / volver a Seleccionar']]],
   ['Buscar', [['Ctrl+F', 'Buscar'], ['F3 · Mayús+F3', 'Resultado siguiente / anterior']]],
-  ['Vista', [['Ctrl++ · Ctrl+-', 'Acercar / alejar'], ['Ctrl+0', 'Ajustar a la página'], ['Ctrl+1', 'Tamaño real (100 %)'], ['Ctrl+2', 'Ajustar al ancho'], ['Ctrl+R · Ctrl+Mayús+R', 'Girar la página a la derecha / izquierda'], ['Ctrl+G', 'Ir a la página…'], ['Inicio · Fin', 'Primera / última página'], ['RePág · AvPág', 'Página anterior / siguiente'], ['F4', 'Mostrar u ocultar el panel lateral'], ['Ctrl+L · F11', 'Pantalla completa']]],
+  ['Vista', [['Ctrl++ · Ctrl+-', 'Acercar / alejar'], ['Ctrl+0', 'Ajustar a la página'], ['Ctrl+1', 'Tamaño real (100 %)'], ['Ctrl+2', 'Ajustar al ancho'], ['Ctrl+R · Ctrl+Mayús+R', 'Girar la página a la derecha / izquierda'], ['Ctrl+G', 'Ir a la página…'], ['Inicio · Fin', 'Primera / última página'], ['RePág · AvPág', 'Página anterior / siguiente'], ['F4', 'Mostrar u ocultar el panel lateral'], ['Ctrl+L · F11', 'Pantalla completa'], ['Ctrl+Mayús+Y', 'Leer en voz alta / pausa'], ['Esc', 'Detener la lectura en voz alta']]],
   ['Herramientas', [['V', 'Seleccionar'], ['H', 'Mano'], ['T', 'Texto'], ['N', 'Nota'], ['P', 'Lápiz'], ['R', 'Rectángulo']]],
   ['Ayuda', [['F1 · Ctrl+/', 'Esta lista de atajos']]]
 ];
@@ -178,6 +185,8 @@ function initKeys() {
     if (ctrl && !shift && k === '2') { stop(); setZoom('fitw'); return; }
     if ((ctrl && k === 'l') || e.key === 'F11') { stop(); toggleFullscreen(); return; }
     if (e.key === 'F3') { stop(); if (d && SR.hits.length) goToHit(SR.cur + (shift ? -1 : 1)); else if (d) { S.side = 'search'; S.sideOpen = true; renderSide(); } return; }
+    if (ctrl && e.shiftKey && k === 'y') { stop(); readAloud(); return; }
+    if (e.key === 'Escape' && TTS.on && !$('#modal-root').children.length) { stop(); ttsStop(); return; }
     if (e.key === 'F4' && !ctrl) { stop(); if (d) { S.sideOpen = !S.sideOpen; renderSide(); renderViewer(true); } return; }
     if (inField) { if (e.key === 'Escape' && S.editing) { e.target.blur(); commitEditing(); } return; }
     if (!d) return;
@@ -242,6 +251,8 @@ function initPwa() {
   if (handleAuthCallback()) return;
   if (S.settings.dark) document.documentElement.classList.add('dark');
   applyLang(S.settings.lang || 'auto');
+  applyUiScale();
+  startA11y();
   initChrome(); initViewerEvents(); initKeys(); initDnD();
   try { await initMobile(); } catch (e) { console.warn('móvil', e); }
   renderTabs(); renderRibbon(); renderViewer(); renderSide(); renderProps(); updateCloudStatus(); setTool('select');

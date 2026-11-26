@@ -18,6 +18,8 @@ import android.print.PrintDocumentInfo;
 import android.print.PrintManager;
 import android.provider.OpenableColumns;
 import android.security.KeyChain;
+import android.speech.tts.TextToSpeech;
+import android.speech.tts.UtteranceProgressListener;
 import android.util.Base64;
 
 import androidx.activity.result.ActivityResult;
@@ -576,6 +578,60 @@ public class RubricaPlugin extends Plugin {
                 if (c != null) c.disconnect();
             }
         }).start();
+    }
+
+    // ---------- Leer en voz alta (el WebView de Android no trae síntesis de voz) ----------
+    private TextToSpeech tts;
+    private boolean ttsReady = false;
+    private final java.util.Map<String, PluginCall> ttsCalls = new java.util.concurrent.ConcurrentHashMap<>();
+    private final java.util.List<Runnable> ttsWaiting = new java.util.ArrayList<>();
+
+    private void withTts(Runnable r) {
+        if (tts != null && ttsReady) { r.run(); return; }
+        synchronized (ttsWaiting) { ttsWaiting.add(r); }
+        if (tts != null) return;
+        tts = new TextToSpeech(getContext(), status -> {
+            ttsReady = status == TextToSpeech.SUCCESS;
+            tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+                @Override public void onStart(String id) { }
+                @Override public void onDone(String id) { PluginCall c = ttsCalls.remove(id); if (c != null) c.resolve(); }
+                @Override public void onError(String id) { PluginCall c = ttsCalls.remove(id); if (c != null) c.reject("No se pudo leer el texto"); }
+                @Override public void onStop(String id, boolean interrupted) { PluginCall c = ttsCalls.remove(id); if (c != null) c.resolve(); }
+            });
+            java.util.List<Runnable> run;
+            synchronized (ttsWaiting) { run = new java.util.ArrayList<>(ttsWaiting); ttsWaiting.clear(); }
+            for (Runnable x : run) x.run();
+        });
+    }
+
+    @PluginMethod
+    public void ttsSpeak(PluginCall call) {
+        String text = call.getString("text", ""), lang = call.getString("lang", "es-HN");
+        double rate = call.getDouble("rate", 1.0);
+        withTts(() -> {
+            if (!ttsReady) { call.reject("Este teléfono no tiene un motor de voz disponible."); return; }
+            java.util.Locale loc = java.util.Locale.forLanguageTag(lang);
+            if (tts.isLanguageAvailable(loc) < TextToSpeech.LANG_AVAILABLE) loc = new java.util.Locale(loc.getLanguage());
+            tts.setLanguage(loc);
+            tts.setSpeechRate((float) Math.max(0.5, Math.min(2.5, rate)));
+            String id = java.util.UUID.randomUUID().toString();
+            ttsCalls.put(id, call);
+            if (tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, id) != TextToSpeech.SUCCESS) { ttsCalls.remove(id); call.reject("No se pudo leer el texto"); }
+        });
+    }
+
+    @PluginMethod
+    public void ttsStop(PluginCall call) {
+        if (tts != null) tts.stop();
+        for (PluginCall c : ttsCalls.values()) c.resolve();
+        ttsCalls.clear();
+        call.resolve();
+    }
+
+    @Override
+    protected void handleOnDestroy() {
+        if (tts != null) { tts.stop(); tts.shutdown(); tts = null; }
+        super.handleOnDestroy();
     }
 
     // ---------- Utilidades ----------

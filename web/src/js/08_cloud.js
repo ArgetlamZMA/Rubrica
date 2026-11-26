@@ -334,6 +334,7 @@ async function settingsDialog(focus) {
     { type: 'hint', label: `${FONTS.list.size} familias de fuentes disponibles${FONTS.provider === 'native' ? ' (incluye fuentes de Microsoft 365)' : ''}. Si una fuente no existe, se usa Helvetica.` },
     { type: 'heading', label: 'General' },
     { key: 'lang', label: 'Idioma de la interfaz', type: 'select', value: S.settings.lang || 'auto', options: [['auto', 'Automático (idioma del sistema)'], ['es', 'Español'], ['en', 'English'], ['pt', 'Português']] },
+    { key: 'uiScale', label: 'Tamaño de la interfaz (menús, paneles y ventanas)', type: 'select', value: String(S.settings.uiScale || 1), options: [['0.9', '90 %'], ['1', '100 %'], ['1.15', '115 %'], ['1.3', '130 %'], ['1.5', '150 %']], row: 'cols' },
     { key: 'author', label: 'Nombre del autor (notas y firmas)', value: S.settings.author },
     ...(NATIVE ? [{ key: 'autoUpdate', label: 'Buscar actualizaciones al iniciar', type: 'checkbox', value: S.settings.autoUpdate !== false }] : [])
   ], {
@@ -347,6 +348,7 @@ async function settingsDialog(focus) {
   if (!v) return;
   const fontChanged = (v.defaultFont || 'Aptos') !== (S.settings.defaultFont || 'Aptos');
   S.settings.defaultFont = v.defaultFont; S.settings.detectFonts = v.detectFonts; if ('autoUpdate' in v) S.settings.autoUpdate = v.autoUpdate;
+  if (+v.uiScale !== (S.settings.uiScale || 1)) { S.settings.uiScale = +v.uiScale; applyUiScale(); }
   if ((v.lang || 'auto') !== (S.settings.lang || 'auto')) { S.settings.lang = v.lang; applyLang(v.lang); renderRibbon(); renderSide(); renderProps(); }
   if (fontChanged) { S.toolOpts.text.font = defaultFont(); S.toolOpts.text._fontSet = false; saveToolOpts(); if (!isStdFont(defaultFont())) ensureFont(defaultFont(), false, false); }
   if ('scanPageSize' in v) { S.settings.scanPageSize = v.scanPageSize; S.settings.scanOcr = v.scanOcr; }

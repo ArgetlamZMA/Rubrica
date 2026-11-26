@@ -515,7 +515,7 @@ function renderSide() {
     const inp = el('input', { type: 'text', placeholder: 'Buscar en el documento…', value: SR.q });
     inp.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); if (inp.value === SR.q && SR.hits.length) goToHit(SR.cur + (e.shiftKey ? -1 : 1)); else withBusy('Buscando…', () => runSearch(inp.value)); } };
     const cs = el('input', { type: 'checkbox' }); cs.checked = SR.cs; cs.onchange = () => { SR.cs = cs.checked; };
-    body.append(el('div', { class: 'search-box' }, inp, el('button', { class: 'btn sm', html: ic('search'), onclick: () => withBusy('Buscando…', () => runSearch(inp.value)) })),
+    body.append(el('div', { class: 'search-box' }, inp, el('button', { class: 'btn sm', html: ic('search'), title: 'Buscar', 'aria-label': 'Buscar', onclick: () => withBusy('Buscando…', () => runSearch(inp.value)) })),
       el('label', { class: 'inline hint', style: { marginBottom: '8px' } }, cs, 'Distinguir mayúsculas'), el('div', { id: 'search-results' }));
     renderSearchResults(); setTimeout(() => inp.focus(), 20);
   }

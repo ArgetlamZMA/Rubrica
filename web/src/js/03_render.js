@@ -310,7 +310,7 @@ function ovEl(o, s, d) {
     case 'whiteout': e.style.background = o.color || '#fff'; break;
     case 'redact': break;
     case 'note': e.style.background = o.color || '#ffd400'; e.innerHTML = ic('message-square'); e.title = (o.author ? o.author + ': ' : '') + (o.text || ''); break;
-    case 'image': { const a = d.assets[o.asset]; e.append(el('img', { src: a ? a.url : '', draggable: 'false' })); break; }
+    case 'image': { const a = d.assets[o.asset]; e.append(el('img', { src: a ? a.url : '', alt: '', draggable: 'false' })); break; }
     case 'code': e.innerHTML = codeSvg(o); break;
     case 'stamp': {
       const bw = Math.max(1.5, o.h * 0.06);
@@ -420,7 +420,7 @@ function thumbImg(d, p, box, maxW, maxH) {
   const [w, h] = dims(p); const k = Math.min(maxW / w, maxH / h);
   const ph = el('div', { style: { width: w * k + 'px', height: h * k + 'px', background: '#fff' } });
   box.append(ph);
-  const load = () => getThumb(d, p).then(u => { const i = el('img', { src: u, style: { width: w * k + 'px', height: h * k + 'px', display: 'block' }, draggable: 'false' }); ph.replaceWith(i); }).catch(() => { });
+  const load = () => getThumb(d, p).then(u => { const i = el('img', { src: u, alt: tr(`Página ${d.pages.indexOf(p) + 1}`), style: { width: w * k + 'px', height: h * k + 'px', display: 'block' }, draggable: 'false' }); ph.replaceWith(i); }).catch(() => { });
   if (!R.thumbIO) R.thumbIO = new IntersectionObserver(es => { for (const e of es) if (e.isIntersecting) { R.thumbIO.unobserve(e.target); e.target._load && e.target._load(); } }, { rootMargin: '300px' });
   ph._load = load; R.thumbIO.observe(ph);
 }
