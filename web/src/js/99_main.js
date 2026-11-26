@@ -14,7 +14,8 @@ const RIBBON = [
   { id: 'comment', label: 'Comentar', groups: [
     [T('select'), T('hand')], [T('highlight'), T('underline'), T('strike')], [T('note'), T('text'), T('stamp')],
     [T('ink'), T('rect'), T('ellipse'), T('line'), T('arrow')],
-    [T('eraser'), { icon: 'eye', label: 'Mostrar / ocultar', act: () => document.body.classList.toggle('hide-ann') }]] },
+    [T('eraser'), { icon: 'eye', label: 'Mostrar / ocultar', act: () => document.body.classList.toggle('hide-ann') }],
+    [{ icon: 'notebook-pen', label: 'Resumen', title: 'Resumen de resaltados y notas (Word o Markdown)', act: studySummaryDialog }]] },
   { id: 'edit', label: 'Editar', groups: [
     [T('edittext'), { ...T('text'), label: 'Agregar texto' }, { icon: 'image-plus', label: 'Imagen', act: insertImage }, { icon: 'qr-code', label: 'Código QR / barras', act: insertCodeDialog }, T('whiteout')],
     [{ icon: 'droplets', label: 'Marca de agua', act: watermarkDialog }, { icon: 'paint-bucket', label: 'Fondo', act: backgroundDialog }, { icon: 'panel-top', label: 'Encabezado y pie', act: headerFooterDialog }, { icon: 'list-ordered', label: 'Números de página', act: pageNumbersDialog }, { icon: 'hash', label: 'Bates', act: batesDialog }],

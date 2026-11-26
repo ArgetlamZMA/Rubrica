@@ -8,6 +8,7 @@
 - En Windows, la firma con el almacén o un token USB ahora solo firma el resumen; la clave nunca sale del almacén (igual que en Android). Se agregan claves EC.
 - Firmar una copia PDF/A con firma visible mantiene el cumplimiento de PDF/A.
 - Android: se permite http para marca de tiempo, OCSP y CRL de cualquier autoridad (antes solo el SAR). Son respuestas firmadas y Rúbrica las verifica.
+- **Resumen de resaltados y notas** (*Comentar → Resumen*, modo estudio): exporta a Word o Markdown, o copia al portapapeles, los resaltados, subrayados, tachados y notas, con el texto marcado, su página y su autor, agrupados por página o por tipo. Incluye las marcas hechas en otros programas (Acrobat, Edge, lectores de tabletas), y los resaltados de varias líneas salen como una sola cita.
 - La compilación se detiene si dos archivos de la interfaz declaran el mismo nombre (antes la app no arrancaba).
 
 ## 1.4.0 — en preparación

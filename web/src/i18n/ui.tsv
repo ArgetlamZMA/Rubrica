@@ -82,6 +82,7 @@ Agregue imágenes (JPG, PNG…)	Add images (JPG, PNG…)	Adicione imagens (JPG, 
 Agregue los archivos a procesar (PDF, imágenes u Office en Windows)	Add the files to process (PDF, images, or Office on Windows)	Adicione os arquivos a processar (PDF, imagens ou Office no Windows)
 Agregue los documentos del expediente (PDF o imágenes)	Add the dossier documents (PDF or images)	Adicione os documentos do dossiê (PDF ou imagens)
 Agregue pasos con el menú de abajo	Add steps with the menu below	Adicione etapas com o menu abaixo
+Agrupar por	Group by	Agrupar por
 Ahora	Now	Agora
 Ahora: «{0}»	Now: "{0}"	Agora: «{0}»
 Ajustando el documento…	Adjusting the document…	Ajustando o documento…
@@ -301,6 +302,7 @@ Convirtiendo {0} página(s) que no pueden cumplir…	Converting {0} page(s) that
 Convirtiendo…	Converting…	Convertendo…
 Copiado.	Copied.	Copiado.
 Copiar	Copy	Copiar
+Copiar al portapapeles (Markdown)	Copy to clipboard (Markdown)	Copiar para a área de transferência (Markdown)
 Copiar texto	Copy text	Copiar texto
 Copiar texto e imágenes	Copy text and images	Copiar texto e imagens
 Copiar, cortar y pegar el objeto seleccionado	Copy, cut and paste the selected object	Copiar, recortar e colar o objeto selecionado
@@ -309,12 +311,14 @@ Corrector (tapar)	Correction (cover)	Corretivo (cobrir)
 Crea una copia limpia para publicar o entregar. Lo que marque se borra del archivo, no solo de la vista. Revise la copia antes de guardarla.	Creates a clean copy to publish or hand over. What you select is erased from the file, not just from view. Review the copy before saving it.	Cria uma cópia limpa para publicar ou entregar. O que você marcar é apagado do arquivo, não só da visualização. Revise a cópia antes de salvá-la.
 Creando PDF/A…	Creating PDF/A…	Criando PDF/A…
 Creando PDF…	Creating PDF…	Criando PDF…
+Creando el resumen…	Creating the summary…	Criando o resumo…
 Crear	Create	Criar
 Crear PDF	Create PDF	Criar PDF
 Crear PDF desde imágenes	Create PDF from images	Criar PDF a partir de imagens
 Crear copia PDF/A	Create PDF/A copy	Criar cópia PDF/A
 Crear copia limpia	Create clean copy	Criar cópia limpa
 Crear credenciales	Create credentials	Criar credenciais
+Crear resumen	Create summary	Criar resumo
 Credenciales	Credentials	Credenciais
 Ctrl+Mayús+R	Ctrl+Shift+R	Ctrl+Shift+R
 Ctrl+Mayús+S	Ctrl+Shift+S	Ctrl+Shift+S
@@ -411,6 +415,7 @@ El documento no tiene campos de formulario.	The document has no form fields.	O d
 El documento no tiene contraseña.	The document has no password.	O documento não tem senha.
 El documento no tiene firmas.	The document has no signatures.	O documento não tem assinaturas.
 El documento no tiene páginas.	The document has no pages.	O documento não tem páginas.
+El documento no tiene resaltados ni notas de los tipos elegidos.	The document has no highlights or notes of the chosen types.	O documento não tem destaques nem notas dos tipos escolhidos.
 El documento no tiene un formulario existente.	The document has no existing form.	O documento não tem um formulário existente.
 El documento quedó firmado y guardado, pero no se pudo incluir la información para validarlo a largo plazo:	The document was signed and saved, but the long-term validation information could not be included:	O documento foi assinado e salvo, mas não foi possível incluir as informações para validá-lo a longo prazo:
 El escáner está disponible en la app de Android. Aquí puede usar «PDF desde imágenes».	The scanner is available in the Android app. Here you can use "PDF from images".	O scanner está disponível no aplicativo Android. Aqui você pode usar "PDF de imagens".
@@ -614,6 +619,7 @@ Importar certificado (.cer / .crt / .pem)	Import certificate (.cer / .crt / .pem
 Importar certificados de confianza	Import trusted certificates	Importar certificados confiáveis
 Imprimir	Print	Imprimir
 Incluido	Included	Incluído
+Incluir	Include	Incluir
 Incluir fecha	Include date	Incluir data
 Incluir hora	Include time	Incluir hora
 Incluir mi nombre	Include my name	Incluir meu nome
@@ -667,6 +673,7 @@ Las contraseñas no coinciden.	The passwords do not match.	As senhas não coinci
 Las firmas emitidas por «{0}» dejarán de mostrarse como de confianza.	Signatures issued by "{0}" will no longer be shown as trusted.	As assinaturas emitidas por "{0}" deixarão de ser mostradas como confiáveis.
 Las páginas con capas ocultas se convirtieron en imagen sin texto, para que lo oculto no quede en el archivo. Si necesita buscar en ellas, aplique OCR a la copia.	Pages with hidden layers were converted to images without text, so the hidden content does not remain in the file. If you need to search them, run OCR on the copy.	As páginas com camadas ocultas foram convertidas em imagem sem texto, para que o conteúdo oculto não fique no arquivo. Se precisar pesquisar nelas, aplique OCR à cópia.
 Leyendo el texto…	Reading the text…	Lendo o texto…
+Leyendo la página {0} de {1}…	Reading page {0} of {1}…	Lendo a página {0} de {1}…
 LibreOffice no pudo convertir el archivo: {0}	LibreOffice could not convert the file: {0}	O LibreOffice não conseguiu converter o arquivo: {0}
 LibreOffice tardó demasiado en convertir el archivo.	LibreOffice took too long to convert the file.	O LibreOffice demorou demais para converter o arquivo.
 Licitación / propuesta	Tender / proposal	Licitação / proposta
@@ -697,6 +704,7 @@ Marcada por defecto	Checked by default	Marcada por padrão
 Marcadores	Bookmarks	Marcadores
 Marcadores por documento	Bookmarks per document	Marcadores por documento
 Margen (mm)	Margin (mm)	Margem (mm)
+Markdown (.md, para Obsidian, Notion, GitHub…)	Markdown (.md, for Obsidian, Notion, GitHub…)	Markdown (.md, para Obsidian, Notion, GitHub…)
 Marque las zonas a ocultar.	Mark the areas to hide.	Marque as áreas a ocultar.
 Mayús+F3	Shift+F3	Shift+F3
 Mayús+Flechas	Shift+Arrows	Shift+Setas
@@ -899,6 +907,7 @@ Página anterior / siguiente	Previous / next page	Página anterior / seguinte
 Página completa	Full page	Página inteira
 Página nueva	New page	Página nova
 Página nueva: no está en el documento original.	New page: not in the original document.	Página nova: não está no documento original.
+Página {0}	Page {0}	Página {0}
 Página {0} ({1} de {2})…	Page {0} ({1} of {2})…	Página {0} ({1} de {2})…
 Página {0} de {1}…	Page {0} of {1}…	Página {0} de {1}…
 Página {0}…	Page {0}…	Página {0}…
@@ -960,6 +969,8 @@ Rellenar formularios	Fill in forms	Preencher formulários
 Relleno	Fill	Preenchimento
 Representante legal	Legal representative	Representante legal
 Requiere configuración (una sola vez)	Requires setup (once)	Requer configuração (uma única vez)
+Resaltado	Highlight	Destaque
+Resaltados	Highlights	Destaques
 Resaltar	Highlight	Realçar
 Resaltar campos	Highlight fields	Realçar campos
 Resolución	Resolution	Resolução
@@ -970,8 +981,15 @@ Restablecer formulario	Reset form	Redefinir formulário
 Resultado de la comparación	Comparison result	Resultado da comparação
 Resultado siguiente / anterior	Next / previous result	Resultado seguinte / anterior
 Resultados de «{0}»	Results for "{0}"	Resultados de "{0}"
+Resumen	Summary	Resumo
+Resumen copiado: {0} anotaciones.	Summary copied: {0} annotations.	Resumo copiado: {0} anotações.
+Resumen creado: {0} anotaciones.	Summary created: {0} annotations.	Resumo criado: {0} anotações.
+Resumen de	Summary of	Resumo de
+Resumen de resaltados y notas	Highlights and notes summary	Resumo de destaques e notas
+Resumen de resaltados y notas (Word o Markdown)	Highlights and notes summary (Word or Markdown)	Resumo de destaques e notas (Word ou Markdown)
 Revisando el documento…	Reviewing the document…	Revisando o documento…
 Revisando fuentes y colores…	Checking fonts and colors…	Verificando fontes e cores…
+Reúne lo que marcó en el documento (y lo que ya traía de otros programas) con el texto resaltado y su página, para repasar, citar o entregar.	Gathers what you marked in the document (and what it already had from other programs) with the highlighted text and its page, to review, quote or hand in.	Reúne o que você marcou no documento (e o que ele já trazia de outros programas) com o texto destacado e a página, para revisar, citar ou entregar.
 Rotación (°)	Rotation (°)	Rotação (°)
 Rápida (144 ppp)	Fast (144 dpi)	Rápida (144 ppp)
 Régimen	Customs regime	Regime
@@ -1015,11 +1033,15 @@ Solo las verticales	Portrait only	Somente as verticais
 Soy el autor de este documento	I am the author of this document	Sou o autor deste documento
 Subiendo a	Uploading to	Enviando para
 Subir	Move up	Subir
+Subrayado	Underline	Sublinhado
+Subrayados	Underlines	Sublinhados
 Subrayar	Underline	Sublinhar
 Sufijo	Suffix	Sufixo
 Superior	Top	Superior
 Supr	Del	Del
 Sí	Yes	Sim
+Tachado	Strikethrough	Tachado
+Tachados	Strikethroughs	Tachados
 Tachar	Strikethrough	Tachar
 Tamaño	Size	Tamanho
 Tamaño (pt)	Size (pt)	Tamanho (pt)
@@ -1042,6 +1064,7 @@ Texto reconocido	Recognized text	Texto reconhecido
 Tiene la última versión ({0}).	You have the latest version ({0}).	Você tem a versão mais recente ({0}).
 Tipo	Type	Tipo
 Tipo de expediente	Dossier type	Tipo de dossiê
+Tipo de marca	Mark type	Tipo de marca
 Todas	All	Todas
 Todas las páginas	All pages	Todas as páginas
 Todos los documentos abiertos ya están en la lista.	All open documents are already in the list.	Todos os documentos abertos já estão na lista.
@@ -1079,6 +1102,7 @@ Vista previa	Preview	Visualização
 Volver al visor	Back to viewer	Voltar ao visualizador
 Válido desde	Valid from	Válido desde
 Válido hasta	Valid until	Válido até
+Word (.docx)	Word (.docx)	Word (.docx)
 Ya estaban en la lista.	They were already in the list.	Já estavam na lista.
 Ya existe «{0}» en esta carpeta. ¿Reemplazarlo?	"{0}" already exists in this folder. Replace it?	"{0}" já existe nesta pasta. Substituí-lo?
 Ya puede cerrar esta ventana.	You can close this window now.	Já pode fechar esta janela.
@@ -1119,6 +1143,7 @@ nº de página ·	page no. ·	nº da página ·
 o hasta un certificado de CA instalado en Android	or up to a CA certificate installed on Android	ou até um certificado de AC instalado no Android
 o hasta una raíz del almacén de Windows	or up to a root in the Windows store	ou até uma raiz do repositório do Windows
 o use una firma manuscrita guardada…	or use a saved handwritten signature…	ou use uma assinatura manuscrita salva…
+p.	p.	p.
 p. {0}	p. {0}	p. {0}
 página de la versión	release page	página da versão
 página(s).	page(s).	página(s).
@@ -1131,6 +1156,7 @@ sus certificados de confianza	your trusted certificates	seus certificados confi�
 total ·	total ·	total ·
 y cree un proyecto (p. ej.	and create a project (e.g.	e crie um projeto (ex.:
 y péguelo abajo.	and paste it below.	e cole abaixo.
+{0} anotaciones · {1}	{0} annotations · {1}	{0} anotações · {1}
 {0} archivo(s)	{0} file(s)	{0} arquivo(s)
 {0} certificado(s) de confianza agregado(s).	{0} trusted certificate(s) added.	{0} certificado(s) confiável(is) adicionado(s).
 {0} coincidencias marcadas para redacción. Se aplicará al guardar.	{0} matches marked for redaction. It will be applied when saving.	{0} ocorrências marcadas para tarja. Será aplicada ao salvar.
